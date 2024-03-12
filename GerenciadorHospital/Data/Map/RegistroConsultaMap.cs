@@ -11,6 +11,8 @@ namespace GerenciadorHospital.Data.Map
             builder.HasKey(x => x.Id);
             builder.Property(x => x.DataConsulta);
             builder.Property(x => x.PacienteId);
+            //Para incluir na migration
+            //builder.Property(x => x.Valor);
             builder.HasOne(x => x.Paciente);
             builder.Property(x => x.MedicoId);
             builder.HasOne(x => x.Medico);

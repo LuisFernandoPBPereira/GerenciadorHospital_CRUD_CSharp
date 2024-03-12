@@ -6,6 +6,9 @@
         public int? PacienteId { get; set; }
         public int? MedicoId { get; set; }
         public DateTime DataConsulta {  get; set; }
+        //===========PARA CRIAR NOVA MIGRATION=======
+        //public decimal Valor { get; set; }
+
         /*
          * Pegamos os objetos paciente e médico
         */

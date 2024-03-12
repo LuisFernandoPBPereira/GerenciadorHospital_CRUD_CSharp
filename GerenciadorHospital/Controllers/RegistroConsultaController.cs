@@ -10,9 +10,12 @@ namespace GerenciadorHospital.Controllers
     public class RegistroConsultaController : ControllerBase
     {
         private readonly IRegistroConsultaRepositorio _consultaRepositorio;
-        public RegistroConsultaController(IRegistroConsultaRepositorio consultaRepositorio)
+        //private readonly IPacienteRepositorio _pacienteRepositorio;
+        public RegistroConsultaController(IRegistroConsultaRepositorio consultaRepositorio, 
+                                          IPacienteRepositorio pacienteRepositorio)
         {
             _consultaRepositorio = consultaRepositorio;
+            //_pacienteRepositorio = pacienteRepositorio;
         }
 
         [HttpGet]
