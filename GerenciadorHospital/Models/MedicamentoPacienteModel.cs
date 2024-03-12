@@ -7,7 +7,5 @@
         public string Composicao { get; set; }
         public DateTime DataFabricacao { get; set; }
         public DateTime DataValidade { get; set; }
-        public int PacienteId { get; set; }
-        public virtual PacienteModel Paciente { get; set; }
     }
 }

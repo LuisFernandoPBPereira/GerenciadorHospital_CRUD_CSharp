@@ -30,7 +30,7 @@ namespace GerenciadorHospital.Controllers
             return Ok(convenio);
         }
 
-        //Método POST com requisição pelo body para a criação do usuário de forma assíncrona
+        //Método POST com requisição pelo body para a criação do convênio de forma assíncrona
         [HttpPost]
         public async Task<ActionResult<ConvenioModel>> Adicionar([FromBody] ConvenioModel convenioModel)
         {
@@ -38,7 +38,7 @@ namespace GerenciadorHospital.Controllers
             return Ok(convenio);
         }
 
-        //Método PUT com requisição pelo body para a atualização do usuário de forma assíncrona
+        //Método PUT com requisição pelo body para a atualização do convênio de forma assíncrona
         [HttpPut("{id}")]
         public async Task<ActionResult<ConvenioModel>> Atualizar([FromBody] ConvenioModel convenioModel, int id)
         {
@@ -47,7 +47,7 @@ namespace GerenciadorHospital.Controllers
             return Ok(convenio);
         }
 
-        //Método DELETE que busca o usuário pelo ID para deletar o usuário
+        //Método DELETE que busca o convênio pelo ID para deletar o convênio
         [HttpDelete("{id}")]
         public async Task<ActionResult<ConvenioModel>> Apagar(int id)
         {

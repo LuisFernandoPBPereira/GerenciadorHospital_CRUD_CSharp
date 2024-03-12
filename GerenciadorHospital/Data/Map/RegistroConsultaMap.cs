@@ -9,8 +9,11 @@ namespace GerenciadorHospital.Data.Map
         public void Configure(EntityTypeBuilder<RegistroConsultaModel> builder)
         {
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.DataConsulta);
             builder.Property(x => x.PacienteId);
             builder.HasOne(x => x.Paciente);
+            builder.Property(x => x.MedicoId);
+            builder.HasOne(x => x.Medico);
         }
     }
 }

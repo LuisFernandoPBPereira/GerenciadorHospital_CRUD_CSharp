@@ -20,13 +20,20 @@ namespace GerenciadorHospital
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            //Configuramos o EntityFramework
             builder.Services.AddEntityFrameworkSqlServer().
                 AddDbContext<BancoContext>(
                     options => options.UseSqlServer(builder.Configuration.GetConnectionString("DataBase"))
                 );
+
+            //Configuramos as injeções de dependências para podermos acessar a controller
             builder.Services.AddScoped<IPacienteRepositorio, PacienteRepositorio>();
             builder.Services.AddScoped<IConvenioRepositorio, ConvenioRepositorio>();
             builder.Services.AddScoped<IMedicoRepositorio, MedicoRepositorio>();
+            builder.Services.AddScoped<IMedicamentosPacienteRepositorio, MedicamentoPacienteRepositorio>();
+            builder.Services.AddScoped<IRegistroConsultaRepositorio, RegistroConsultaRepositorio>();
+            builder.Services.AddScoped<ILaudoRepositorio, LaudoRepositorio>();
+            builder.Services.AddScoped<ITipoExameRepositorio, TipoExameRepositorio>();
 
             var app = builder.Build();
 

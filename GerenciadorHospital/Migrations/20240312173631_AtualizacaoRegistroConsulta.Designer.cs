@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GerenciadorHospital.Migrations
 {
     [DbContext(typeof(BancoContext))]
-    [Migration("20240312142743_AtualizacaoPaciente")]
-    partial class AtualizacaoPaciente
+    [Migration("20240312173631_AtualizacaoRegistroConsulta")]
+    partial class AtualizacaoRegistroConsulta
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -94,12 +94,7 @@ namespace GerenciadorHospital.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
-                    b.Property<int>("PacienteId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("PacienteId");
 
                     b.ToTable("MedicamentosPaciente");
                 });
@@ -137,9 +132,6 @@ namespace GerenciadorHospital.Migrations
                     b.Property<int?>("ConvenioId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ConvenioMedicoId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Cpf")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -160,6 +152,9 @@ namespace GerenciadorHospital.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("MedicamentoId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -172,6 +167,8 @@ namespace GerenciadorHospital.Migrations
 
                     b.HasIndex("ConvenioId");
 
+                    b.HasIndex("MedicamentoId");
+
                     b.ToTable("Pacientes");
                 });
 
@@ -182,6 +179,9 @@ namespace GerenciadorHospital.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DataConsulta")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("MedicoId")
                         .HasColumnType("int");
@@ -227,24 +227,19 @@ namespace GerenciadorHospital.Migrations
                     b.Navigation("Paciente");
                 });
 
-            modelBuilder.Entity("GerenciadorHospital.Models.MedicamentoPacienteModel", b =>
-                {
-                    b.HasOne("GerenciadorHospital.Models.PacienteModel", "Paciente")
-                        .WithMany()
-                        .HasForeignKey("PacienteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Paciente");
-                });
-
             modelBuilder.Entity("GerenciadorHospital.Models.PacienteModel", b =>
                 {
                     b.HasOne("GerenciadorHospital.Models.ConvenioModel", "Convenio")
                         .WithMany()
                         .HasForeignKey("ConvenioId");
 
+                    b.HasOne("GerenciadorHospital.Models.MedicamentoPacienteModel", "Medicamento")
+                        .WithMany()
+                        .HasForeignKey("MedicamentoId");
+
                     b.Navigation("Convenio");
+
+                    b.Navigation("Medicamento");
                 });
 
             modelBuilder.Entity("GerenciadorHospital.Models.RegistroConsultaModel", b =>

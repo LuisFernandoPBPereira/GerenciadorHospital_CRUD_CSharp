@@ -29,7 +29,7 @@ namespace GerenciadorHospital.Controllers
             return Ok(paciente);
         }
 
-        //Método POST com requisição pelo body para a criação do usuário de forma assíncrona
+        //Método POST com requisição pelo body para a criação do paciente de forma assíncrona
         [HttpPost]
         public async Task<ActionResult<PacienteModel>> Adicionar([FromBody] PacienteModel pacienteModel)
         {
@@ -37,7 +37,7 @@ namespace GerenciadorHospital.Controllers
             return Ok(paciente);
         }
 
-        //Método PUT com requisição pelo body para a atualização do usuário de forma assíncrona
+        //Método PUT com requisição pelo body para a atualização do paciente de forma assíncrona
         [HttpPut("{id}")]
         public async Task<ActionResult<PacienteModel>> Atualizar([FromBody] PacienteModel pacienteModel, int id)
         {
@@ -46,7 +46,7 @@ namespace GerenciadorHospital.Controllers
             return Ok(paciente);
         }
 
-        //Método DELETE que busca o usuário pelo ID para deletar o usuário
+        //Método DELETE que busca o paciente pelo ID para deletar o paciente
         [HttpDelete("{id}")]
         public async Task<ActionResult<PacienteModel>> Apagar(int id)
         {

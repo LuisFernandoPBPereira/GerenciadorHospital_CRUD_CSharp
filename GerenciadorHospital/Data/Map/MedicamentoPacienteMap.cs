@@ -13,8 +13,6 @@ namespace GerenciadorHospital.Data.Map
             builder.Property(x => x.Composicao).IsRequired().HasMaxLength(150);
             builder.Property(x => x.DataFabricacao).IsRequired();
             builder.Property(x => x.DataValidade).IsRequired();
-            builder.Property(x => x.PacienteId).IsRequired();
-            builder.HasOne(x => x.Paciente);
         }
     }
 }

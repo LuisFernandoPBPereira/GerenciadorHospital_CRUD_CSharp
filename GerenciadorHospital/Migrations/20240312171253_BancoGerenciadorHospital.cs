@@ -26,6 +26,22 @@ namespace GerenciadorHospital.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "MedicamentosPaciente",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nome = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    Composicao = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    DataFabricacao = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataValidade = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MedicamentosPaciente", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Medicos",
                 columns: table => new
                 {
@@ -37,26 +53,6 @@ namespace GerenciadorHospital.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Medicos", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Pacientes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Cpf = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Endereco = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    DataNasc = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TemConvenio = table.Column<bool>(type: "bit", nullable: false),
-                    ConvenioMedico = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ImgCarteiraDoConvenio = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ImgDocumento = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Pacientes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -73,6 +69,37 @@ namespace GerenciadorHospital.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Pacientes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nome = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Cpf = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Endereco = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    DataNasc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TemConvenio = table.Column<bool>(type: "bit", nullable: false),
+                    ImgCarteiraDoConvenio = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImgDocumento = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ConvenioId = table.Column<int>(type: "int", nullable: true),
+                    MedicamentoId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Pacientes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Pacientes_Convenios_ConvenioId",
+                        column: x => x.ConvenioId,
+                        principalTable: "Convenios",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Pacientes_MedicamentosPaciente_MedicamentoId",
+                        column: x => x.MedicamentoId,
+                        principalTable: "MedicamentosPaciente",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Laudos",
                 columns: table => new
                 {
@@ -86,29 +113,6 @@ namespace GerenciadorHospital.Migrations
                     table.PrimaryKey("PK_Laudos", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Laudos_Pacientes_PacienteId",
-                        column: x => x.PacienteId,
-                        principalTable: "Pacientes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "MedicamentosPaciente",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
-                    Composicao = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
-                    DataFabricacao = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DataValidade = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PacienteId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MedicamentosPaciente", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_MedicamentosPaciente_Pacientes_PacienteId",
                         column: x => x.PacienteId,
                         principalTable: "Pacientes",
                         principalColumn: "Id",
@@ -147,9 +151,14 @@ namespace GerenciadorHospital.Migrations
                 column: "PacienteId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MedicamentosPaciente_PacienteId",
-                table: "MedicamentosPaciente",
-                column: "PacienteId");
+                name: "IX_Pacientes_ConvenioId",
+                table: "Pacientes",
+                column: "ConvenioId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Pacientes_MedicamentoId",
+                table: "Pacientes",
+                column: "MedicamentoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RegistrosConsultas_MedicoId",
@@ -166,13 +175,7 @@ namespace GerenciadorHospital.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Convenios");
-
-            migrationBuilder.DropTable(
                 name: "Laudos");
-
-            migrationBuilder.DropTable(
-                name: "MedicamentosPaciente");
 
             migrationBuilder.DropTable(
                 name: "RegistrosConsultas");
@@ -185,6 +188,12 @@ namespace GerenciadorHospital.Migrations
 
             migrationBuilder.DropTable(
                 name: "Pacientes");
+
+            migrationBuilder.DropTable(
+                name: "Convenios");
+
+            migrationBuilder.DropTable(
+                name: "MedicamentosPaciente");
         }
     }
 }

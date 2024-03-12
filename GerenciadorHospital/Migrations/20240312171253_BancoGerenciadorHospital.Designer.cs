@@ -4,6 +4,7 @@ using GerenciadorHospital.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GerenciadorHospital.Migrations
 {
     [DbContext(typeof(BancoContext))]
-    partial class BancoContextModelSnapshot : ModelSnapshot
+    [Migration("20240312171253_BancoGerenciadorHospital")]
+    partial class BancoGerenciadorHospital
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,7 +60,7 @@ namespace GerenciadorHospital.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<int?>("PacienteId")
+                    b.Property<int>("PacienteId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -177,13 +180,10 @@ namespace GerenciadorHospital.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("DataConsulta")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("MedicoId")
+                    b.Property<int>("MedicoId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PacienteId")
+                    b.Property<int>("PacienteId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -217,7 +217,9 @@ namespace GerenciadorHospital.Migrations
                 {
                     b.HasOne("GerenciadorHospital.Models.PacienteModel", "Paciente")
                         .WithMany()
-                        .HasForeignKey("PacienteId");
+                        .HasForeignKey("PacienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Paciente");
                 });
@@ -241,11 +243,15 @@ namespace GerenciadorHospital.Migrations
                 {
                     b.HasOne("GerenciadorHospital.Models.MedicoModel", "Medico")
                         .WithMany()
-                        .HasForeignKey("MedicoId");
+                        .HasForeignKey("MedicoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("GerenciadorHospital.Models.PacienteModel", "Paciente")
                         .WithMany()
-                        .HasForeignKey("PacienteId");
+                        .HasForeignKey("PacienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Medico");
 
