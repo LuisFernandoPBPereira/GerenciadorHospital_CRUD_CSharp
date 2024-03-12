@@ -1,0 +1,11 @@
+﻿namespace GerenciadorHospital.Models
+{
+    public class RegistroConsultaModel
+    {
+        public int Id { get; set; }
+        public int PacienteId { get; set; }
+        public int MedicoId { get; set; }
+        public virtual PacienteModel Paciente { get; set; }
+        public virtual MedicoModel Medico { get; set; }
+    }
+}
