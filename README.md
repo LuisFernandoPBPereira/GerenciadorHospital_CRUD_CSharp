@@ -19,8 +19,8 @@
 	public string Endereco { get; set; }
 	public DateTime DataNasc {  get; set; }
 	public bool TemConvenio { get; set; }
-	public string ImgCarteiraDoConvenio { get; set; }
-	public string ImgDocumento { get; set; }
+	public string? ImgCarteiraDoConvenio { get; set; }
+	public string? ImgDocumento { get; set; }
 	public int? ConvenioId { get; set; }
 	public int? MedicamentoId { get; set; }
 	public virtual ConvenioModel? Convenio {  get; set; }
@@ -45,11 +45,14 @@
 
 	REGISTRO CONSULTAS
 	public int Id { get; set; }
-	public int? PacienteId { get; set; }
-	public int? MedicoId { get; set; }
-	public DateTime DataConsulta {  get; set; }
-	public virtual PacienteModel? Paciente { get; set; }
-	public virtual MedicoModel? Medico { get; set; }
+        public int PacienteId { get; set; }
+        public int? MedicoId { get; set; }
+        public DateTime DataConsulta {  get; set; }
+        public decimal? Valor { get; set; }
+        public DateTime? DataRetorno { get; set; }
+        public StatusConsulta? EstadoConsulta { get; set; }
+        public virtual PacienteModel? Paciente { get; set; }
+        public virtual MedicoModel? Medico { get; set; }
 
 	LAUDOS
 	public int Id { get; set; }
@@ -65,30 +68,9 @@
 	public DateTime DataFabricacao { get; set; }
 	public DateTime DataValidade { get; set; }
 
- <h2>Regras de negócio para serem aplicadas:</h2>
+<h2>Regras de negócio para serem aplicadas:</h2>
 
-<h3 align="center">COBRANÇA</h3>
-
-<p>
-  Uma tabela que contenha os dados do paciente, médico, e as informações da consulta, dizendo o valor (ou de graça se for público)
-  Ao marcarm uma consulta, são inseridos esses dados nesta tabela, e podemos consulá-los em um endpoint
-</p>
-
-<h3 align="center">RETORNO DE CONSULTA</h3>
-
-<p>
-  Ao passar 30 dias, podemos fazer um método que busca o usuário e verifica se 30 dias foram passados,
-  se esse tempo expirar, será cobrado (caso seja convênio), se for público, a consulta será desmarcada
-</p>
-
-<h3 align="center">LEMBRETE:</h3>
+<h3 align="center">IMAGENS:</h3>
 <ul>
-  <li>Alterar a tabela de consulta, e inserir um campo que contenha a data de 30 dias no futuro</li>
-  <li>Alterar a tabela de consulta, inserir um campo que contenha o status da consulta: Agendada, Atendida, Cancelada, Expirada</li>
-  <ul>
-    <li>Agendada: significa que o paciente não foi atendido ainda</li>
-    <li>Atendida: a consulta foi realizada e o paciente tem direito ao retorno</li>
-    <li>Cancelada: cancelada pelo paciente</li>
-    <li>Expirada: o paciente não compareceu à consulta, e será cobrada (caso haja convenio)</li>
-  </ul>
+	<li>Implementar um meio de cadastrar as imagens via Swagger e salvá-las em uma pasta no computador<br/>OBS.: O retorno do caminho das imagens funciona</li>
 </ul>
