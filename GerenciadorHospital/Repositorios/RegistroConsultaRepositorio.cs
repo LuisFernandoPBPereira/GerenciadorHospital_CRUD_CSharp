@@ -49,8 +49,10 @@ namespace GerenciadorHospital.Repositorios
             }
 
             //Atualizamos os devidos campos
-            consultaPorId.MedicoId = registroConsulta.MedicoId;
-            consultaPorId.PacienteId = registroConsulta.PacienteId;
+            consultaPorId.EstadoConsulta = registroConsulta.EstadoConsulta;
+            consultaPorId.DataConsulta = registroConsulta.DataConsulta;
+            consultaPorId.DataRetorno = registroConsulta.DataRetorno;
+            consultaPorId.Valor = registroConsulta.Valor;
 
             //Atualizamos no banco de dados e salvamos as alterações
             _bancoContext.RegistrosConsultas.Update(consultaPorId);

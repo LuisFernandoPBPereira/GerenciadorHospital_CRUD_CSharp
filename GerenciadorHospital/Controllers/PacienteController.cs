@@ -33,6 +33,19 @@ namespace GerenciadorHospital.Controllers
         [HttpPost]
         public async Task<ActionResult<PacienteModel>> Adicionar([FromBody] PacienteModel pacienteModel)
         {
+            //Passamos os caminhos das imagens
+            string caminhoCarteiraConvenio = "../../../Imagens/documentoConvenio.jpg";
+            string caminhoDocumento = "../../../Imagens/documento.jpg";
+
+            //Todos pacientes recebem a imagem de documento
+            pacienteModel.ImgDocumento = caminhoDocumento;
+
+            //Se o paciente tem comvênio, ele recebe a imagem da carteira do convênio
+            if (pacienteModel.TemConvenio)
+            {
+                pacienteModel.ImgCarteiraDoConvenio = caminhoCarteiraConvenio;
+            }
+
             PacienteModel paciente = await _pacienteRepositorio.Adicionar(pacienteModel);
             return Ok(paciente);
         }
