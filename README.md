@@ -106,38 +106,43 @@ public string Composicao { get; set; }
 public DateTime DataFabricacao { get; set; }
 public DateTime DataValidade { get; set; }
 ```
+
+<h2>Campos dos atributos da PacienteRequestDto (DTO: Data Transfer Object -> Objeto de Transferência de Dados)</h2>
+
+```
+public class PacienteResquestDto : PacienteModel
+{
+    public IFormFile Doc { get; set; }
+    public IFormFile DocConvenio { get; set; }
+}
+
+```
+<ul>
+	<li>Aqui nós recebemos os uploads das fotos de documento e o documento do convênio</li>
+</ul>
+<br/>
+
 <p>Essas entidades possuem relação, então devemos aplicar algumas regras de negócio que ainda não estão concluídas</p>
 <h2>Regras de negócio para serem aplicadas:</h2>
 
-<h3 align="center">IMAGENS:</h3>
+<h3 align="center">MUDAR ALGUMAS TABELAS:</h3>
 <ul>
-	<li>Implementar um meio de cadastrar as imagens via Swagger e salvá-las em uma pasta no computador<br/>OBS.: O retorno do caminho das imagens funciona</li>
+	<li>Médico</li>
+	<ul>
+		<li>Criar campo de "Crm"</li>
+		<li>Criar campo de "Especializacao"</li>
+		<li>Criar campo de "ConsultaId"</li>
+		<li>Criar public virtual RegistroConsultaModel? Consulta</li>
+	</ul>
+	<li>Paciente</li>
+	<ul>
+		<li>Criar campo de "LaudoId"</li>
+		<li>Criar public virtual LaudoModel Laudo</li>
+		<li>Criar campo de "ExameId"</li>
+		<li>Criar public virtual TipoExameModel? Exame</li>
+		<li>Criar campo de "LaudoId"</li>
+		<li>Criar public virtual LaudoModel? Laudo</li>
+	</ul>
 </ul>
 <br/>
-<h2>PARA TESTAR A IMPLEMENTAÇÃO DA IMAGEM:</h2>
 
-```
-using Microsoft.AspNetCore.Mvc;
-using System.IO;
-using System.Threading.Tasks;
-[ApiController]
-[Route("[controller]")]
-public class PhotoController : ControllerBase
-{
-    [HttpPost]
-    public async Task<IActionResult> PostPhoto(IFormFile photo)
-    {
-        if (photo == null || photo.Length == 0)
-            return BadRequest("Nenhuma foto recebida.");
-
-        var filePath = Path.Combine("C:/Caminho/Para/Pasta/Destino", photo.FileName);
-
-        using (var stream = new FileStream(filePath, FileMode.Create))
-        {
-            await photo.CopyToAsync(stream);
-        }
-
-        return Ok($"Foto salva em: {filePath}");
-    }
-}
-```
