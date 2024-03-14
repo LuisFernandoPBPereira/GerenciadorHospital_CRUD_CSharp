@@ -149,9 +149,25 @@ public class PacienteResquestDto : PacienteModel
 [HttpGet]
 public IActionResult Get()
 {            
-    Byte[] b = System.IO.File.ReadAllBytes(@"E:\\Test.jpg");         
+    Byte[] b = System.IO.File.ReadAllBytes(@"C:\\arquivo.jpg");         
     return File(b, "image/jpeg");
 }
+```
+
+<h3 align="center">IMPLEMENTAR SUMMARY COMO DOCUMENTAÇÃO:</h3>
+<ul>
+	<li>Usando o summary, podemos fazer com que as regras de negócio fiquem mais claras e evidentes, podendo evitar erros:</li>
+</ul>
+<br/>
+
+```
+/// <summary>
+/// Faz tal ação
+/// </summary>
+/// <remarks></remarks>
+/// <response code="200">Exemplo de status code 200</response>
+/// <response code="400">Exemplo de status code 400</response>
+/// <response code="500">Exemplo de status code 500</response>
 ```
 <h3 align="center">CRIAR VARIÁVEL DE AMBIENTE OU USAR GITIGNORE:</h3>
 <ul>
