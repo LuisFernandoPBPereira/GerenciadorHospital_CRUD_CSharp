@@ -1,6 +1,6 @@
-﻿using GerenciadorHospital.Models;
+﻿using GerenciadorHospital.Dto;
+using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GerenciadorHospital.Controllers
@@ -31,22 +31,46 @@ namespace GerenciadorHospital.Controllers
 
         //Método POST com requisição pelo body para a criação do paciente de forma assíncrona
         [HttpPost]
-        public async Task<ActionResult<PacienteModel>> Adicionar([FromBody] PacienteModel pacienteModel)
-        {
+        public async Task<ActionResult<PacienteModel>> Adicionar(PacienteResquestDto requestDto)
+        {     
+            //Se as fotos não forem carregadas, será retornado uma BadRequest
+            if (requestDto.Doc == null || requestDto.Doc.Length == 0)
+            {
+                return BadRequest("Nenhuma foto de documento foi carregada");
+            }
+            if (requestDto.DocConvenio == null || requestDto.DocConvenio.Length == 0)
+            {
+                return BadRequest("Nenhuma foto de convênio foi carregada");
+            }
+            
             //Passamos os caminhos das imagens
-            string caminhoCarteiraConvenio = "../../../Imagens/documentoConvenio.jpg";
-            string caminhoDocumento = "../../../Imagens/documento.jpg";
+            var caminhoDoc = Path.Combine("Imagens/", requestDto.Doc.FileName);
+            var caminhoConvenio = Path.Combine("Imagens/", requestDto.DocConvenio.FileName);
 
             //Todos pacientes recebem a imagem de documento
-            pacienteModel.ImgDocumento = caminhoDocumento;
+            requestDto.ImgDocumento = caminhoConvenio;
 
-            //Se o paciente tem comvênio, ele recebe a imagem da carteira do convênio
-            if (pacienteModel.TemConvenio)
+            using (var stream = new FileStream(caminhoDoc, FileMode.Create))
             {
-                pacienteModel.ImgCarteiraDoConvenio = caminhoCarteiraConvenio;
+                await requestDto.Doc.CopyToAsync(stream);
             }
 
-            PacienteModel paciente = await _pacienteRepositorio.Adicionar(pacienteModel);
+            using (var stream = new FileStream(caminhoConvenio, FileMode.Create))
+            {
+                await requestDto.DocConvenio.CopyToAsync(stream);
+            }
+
+            //Se o paciente tem comvênio, ele recebe a imagem da carteira do convênio
+            
+            if (requestDto.TemConvenio)
+            {
+                requestDto.ImgCarteiraDoConvenio = $"../../../Imagens/{requestDto.DocConvenio.FileName}";
+            }
+
+            requestDto.ImgDocumento = $"../../../Imagens/{requestDto.Doc.FileName}";
+            
+            PacienteModel paciente = await _pacienteRepositorio.Adicionar(requestDto);
+            
             return Ok(paciente);
         }
 
