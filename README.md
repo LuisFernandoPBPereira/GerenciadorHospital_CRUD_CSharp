@@ -139,6 +139,20 @@ public class PacienteResquestDto : PacienteModel
 </ul>
 <br/>
 
+<h3 align="center">IMPLEMENTAR UM RETORNO DE IMAGEM VIA HTTP GET:</h3>
+<ul>
+	<li>Podemos retornar uma imagem usando o método abaixo (PARA TESTAR):</li>
+</ul>
+<br/>
+
+```
+[HttpGet]
+public IActionResult Get()
+{            
+    Byte[] b = System.IO.File.ReadAllBytes(@"E:\\Test.jpg");         
+    return File(b, "image/jpeg");
+}
+```
 <h3 align="center">CRIAR VARIÁVEL DE AMBIENTE OU USAR GITIGNORE:</h3>
 <ul>
 	<li>Não devemos expor nossa string de conexão, é um dado sensível, então podemos ignorar o upload do appsettings.Development.json, ou criar uma variável de ambiente</li>
