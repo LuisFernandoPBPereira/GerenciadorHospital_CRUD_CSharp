@@ -65,8 +65,10 @@ public string? ImgCarteiraDoConvenio { get; set; }
 public string? ImgDocumento { get; set; }
 public int? ConvenioId { get; set; }
 public int? MedicamentoId { get; set; }
+public int? ExameId { get; set; }
 public virtual ConvenioModel? Convenio {  get; set; }
 public virtual MedicamentoPacienteModel? Medicamento {  get; set; }
+public virtual TipoExameModel? Exame {  get; set; }
 
 
 
@@ -74,6 +76,8 @@ MÉDICO
 public int Id { get; set; }
 public string Nome { get; set; }
 public string Cpf { get; set; }
+public string Crm { get; set; }
+public string Especializacao { get; set; }
 
 
 CONVÊNIOS
@@ -129,25 +133,11 @@ public class PacienteResquestDto : PacienteModel
 <p>Essas entidades possuem relação, então devemos aplicar algumas regras de negócio que ainda não estão concluídas</p>
 <h2>Regras de negócio para serem aplicadas:</h2>
 
-<h3 align="center">MUDAR ALGUMAS TABELAS:</h3>
+<h3 align="center">IMPLEMENTAR FILE.TYPECHECKER (Nuget Package):</h3>
 <ul>
-	<li>Médico</li>
-	<ul>
-		<li>Criar campo de "Crm"</li>
-		<li>Criar campo de "Especializacao"</li>
-		<li>Criar campo de "ConsultaId"</li>
-		<li>Criar public virtual RegistroConsultaModel? Consulta</li>
-	</ul>
-	<li>Paciente</li>
-	<ul>
-		<li>Criar campo de "LaudoId"</li>
-		<li>Criar public virtual LaudoModel Laudo</li>
-		<li>Criar campo de "ExameId"</li>
-		<li>Criar public virtual TipoExameModel? Exame</li>
-		<li>Criar campo de "LaudoId"</li>
-		<li>Criar public virtual LaudoModel? Laudo</li>
-	</ul>
+	<li>Ao instalarmos este pacote, podemos verificar se o arquivo que está sendo carregado, realmente é do tipo que precisamos, evitando erros e vazamento de exceções</li>
 </ul>
+<br/>
 
 <h3 align="center">CRIAR VARIÁVEL DE AMBIENTE OU USAR GITIGNORE:</h3>
 <ul>
