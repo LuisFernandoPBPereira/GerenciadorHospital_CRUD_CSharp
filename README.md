@@ -38,6 +38,10 @@
 	<p>
 		Onde controlamos as ações da API, com os métodos HTTP GET, POST, PUT e DELETE, onde também é aplicada a regra de negócio da aplicação.
 	</p>
+	<h3><li>DTO (Data Transfer Object):</li></h3><br/>
+	<p>
+		Classe onde podemos fazer uma transferência de ojetos, é útil para criar campos que não foram necessariamente mapeados e modelados.
+	</p>
 	<h3><li>Program.cs:</li></h3><br/>
 	<p>
 		Não podemos nos esquecer de adicionar o escopo das injeções de dependência das nossas interfaces, além de configurarmos o EntityFramework.
