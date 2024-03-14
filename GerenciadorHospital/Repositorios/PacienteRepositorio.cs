@@ -55,6 +55,8 @@ namespace GerenciadorHospital.Repositorios
             pacientePorId.Endereco = paciente.Endereco;
             pacientePorId.DataNasc = paciente.DataNasc;
             pacientePorId.TemConvenio = paciente.TemConvenio;
+            pacientePorId.ExameId = paciente.ExameId;
+            pacientePorId.MedicamentoId = paciente.MedicamentoId;
             pacientePorId.ConvenioId = paciente.ConvenioId;
             pacientePorId.ImgCarteiraDoConvenio = paciente.ImgCarteiraDoConvenio;
             pacientePorId.ImgDocumento = paciente.ImgDocumento;
@@ -76,6 +78,7 @@ namespace GerenciadorHospital.Repositorios
             return await _bancoContext.Pacientes
                 .Include(x => x.Convenio)
                 .Include(x => x.Medicamento)
+                .Include(x => x.Exame)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 
@@ -86,6 +89,7 @@ namespace GerenciadorHospital.Repositorios
             return await _bancoContext.Pacientes
                 .Include(x => x.Convenio)
                 .Include(x => x.Medicamento)
+                .Include(x => x.Exame)
                 .ToListAsync();
         }
     }

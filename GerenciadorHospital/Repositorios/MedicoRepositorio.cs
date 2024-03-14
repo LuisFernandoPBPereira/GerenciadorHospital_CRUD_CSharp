@@ -52,6 +52,8 @@ namespace GerenciadorHospital.Repositorios
             //Atualizamos os devidos campos
             medicoPorId.Nome = medico.Nome;
             medicoPorId.Cpf = medico.Cpf;
+            medicoPorId.Crm = medico.Crm;
+            medicoPorId.Especializacao = medico.Especializacao;
 
             //Atualizamos o banco de dados e salvamos as alterações
             _bancoContext.Medicos.Update(medicoPorId);
