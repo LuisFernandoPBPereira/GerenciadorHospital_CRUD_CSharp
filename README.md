@@ -49,62 +49,63 @@
 
 <h2>Campos dos atributos (também como tabelas do banco de dados)</h2>
 
-	PACIENTE
-	public int Id {  get; set; }
-	public string Nome { get; set; }
-	public string Cpf { get; set; }
-	public string Endereco { get; set; }
-	public DateTime DataNasc {  get; set; }
-	public bool TemConvenio { get; set; }
-	public string? ImgCarteiraDoConvenio { get; set; }
-	public string? ImgDocumento { get; set; }
-	public int? ConvenioId { get; set; }
-	public int? MedicamentoId { get; set; }
-	public virtual ConvenioModel? Convenio {  get; set; }
-	public virtual MedicamentoPacienteModel? Medicamento {  get; set; }
+```
+PACIENTE
+public int Id {  get; set; }
+public string Nome { get; set; }
+public string Cpf { get; set; }
+public string Endereco { get; set; }
+public DateTime DataNasc {  get; set; }
+public bool TemConvenio { get; set; }
+public string? ImgCarteiraDoConvenio { get; set; }
+public string? ImgDocumento { get; set; }
+public int? ConvenioId { get; set; }
+public int? MedicamentoId { get; set; }
+public virtual ConvenioModel? Convenio {  get; set; }
+public virtual MedicamentoPacienteModel? Medicamento {  get; set; }
 
 
 
-	MÉDICO
-	public int Id { get; set; }
-	public string Nome { get; set; }
-	public string Cpf { get; set; }
+MÉDICO
+public int Id { get; set; }
+public string Nome { get; set; }
+public string Cpf { get; set; }
 
 
-	CONVÊNIOS
-	public int Id { get; set; }
-	public string Nome { get; set; }
-	public float Preco { get; set; }
+CONVÊNIOS
+public int Id { get; set; }
+public string Nome { get; set; }
+public float Preco { get; set; }
 
-	TIPOS EXAMES
-	public int Id { get; set; }
-	public string Nome { get; set; }
+TIPOS EXAMES
+public int Id { get; set; }
+public string Nome { get; set; }
 
-	REGISTRO CONSULTAS
-	public int Id { get; set; }
-        public int PacienteId { get; set; }
-        public int? MedicoId { get; set; }
-        public DateTime DataConsulta {  get; set; }
-        public decimal? Valor { get; set; }
-        public DateTime? DataRetorno { get; set; }
-        public StatusConsulta? EstadoConsulta { get; set; }
-        public virtual PacienteModel? Paciente { get; set; }
-        public virtual MedicoModel? Medico { get; set; }
+REGISTRO CONSULTAS
+public int Id { get; set; }
+public int PacienteId { get; set; }
+public int? MedicoId { get; set; }
+public DateTime DataConsulta {  get; set; }
+public decimal? Valor { get; set; }
+public DateTime? DataRetorno { get; set; }
+public StatusConsulta? EstadoConsulta { get; set; }
+public virtual PacienteModel? Paciente { get; set; }
+public virtual MedicoModel? Medico { get; set; }
 
-	LAUDOS
-	public int Id { get; set; }
-	public string Descricao { get; set; }
-	public int? PacienteId { get; set; }
-	public virtual PacienteModel? Paciente { get; set; }
+LAUDOS
+public int Id { get; set; }
+public string Descricao { get; set; }
+public int? PacienteId { get; set; }
+public virtual PacienteModel? Paciente { get; set; }
 
-	MEDICAMENTOS DO PACIENTE
+MEDICAMENTOS DO PACIENTE
 
-	public int Id { get; set; }
-	public string Nome { get; set; }
-	public string Composicao { get; set; }
-	public DateTime DataFabricacao { get; set; }
-	public DateTime DataValidade { get; set; }
-
+public int Id { get; set; }
+public string Nome { get; set; }
+public string Composicao { get; set; }
+public DateTime DataFabricacao { get; set; }
+public DateTime DataValidade { get; set; }
+```
 <p>Essas entidades possuem relação, então devemos aplicar algumas regras de negócio que ainda não estão concluídas</p>
 <h2>Regras de negócio para serem aplicadas:</h2>
 
@@ -112,3 +113,31 @@
 <ul>
 	<li>Implementar um meio de cadastrar as imagens via Swagger e salvá-las em uma pasta no computador<br/>OBS.: O retorno do caminho das imagens funciona</li>
 </ul>
+<br/>
+<h2>PARA TESTAR A IMPLEMENTAÇÃO DA IMAGEM:</h2>
+
+```
+using Microsoft.AspNetCore.Mvc;
+using System.IO;
+using System.Threading.Tasks;
+[ApiController]
+[Route("[controller]")]
+public class PhotoController : ControllerBase
+{
+    [HttpPost]
+    public async Task<IActionResult> PostPhoto(IFormFile photo)
+    {
+        if (photo == null || photo.Length == 0)
+            return BadRequest("Nenhuma foto recebida.");
+
+        var filePath = Path.Combine("C:/Caminho/Para/Pasta/Destino", photo.FileName);
+
+        using (var stream = new FileStream(filePath, FileMode.Create))
+        {
+            await photo.CopyToAsync(stream);
+        }
+
+        return Ok($"Foto salva em: {filePath}");
+    }
+}
+```
