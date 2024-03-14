@@ -17,9 +17,12 @@ namespace GerenciadorHospital.Data.Map
             builder.Property(x => x.ImgCarteiraDoConvenio).IsRequired();
             builder.Property(x => x.ImgDocumento).IsRequired();
             builder.Property(x => x.MedicamentoId);
-            builder.HasOne(x => x.Medicamento);
             builder.Property(x => x.ConvenioId);
+            builder.Property(x => x.ExameId);
+
+            builder.HasOne(x => x.Medicamento);
             builder.HasOne(x => x.Convenio);
+            builder.HasOne(x => x.Exame);
 
         }
     }
