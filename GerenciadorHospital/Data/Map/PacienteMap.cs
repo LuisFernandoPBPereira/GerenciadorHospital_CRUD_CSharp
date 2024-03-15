@@ -14,7 +14,7 @@ namespace GerenciadorHospital.Data.Map
             builder.Property(x => x.Endereco).IsRequired().HasMaxLength(255);
             builder.Property(x => x.DataNasc).IsRequired();
             builder.Property(x => x.TemConvenio).IsRequired();
-            builder.Property(x => x.ImgCarteiraDoConvenio).IsRequired();
+            builder.Property(x => x.ImgCarteiraDoConvenio);
             builder.Property(x => x.ImgDocumento).IsRequired();
             builder.Property(x => x.MedicamentoId);
             builder.Property(x => x.ConvenioId);

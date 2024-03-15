@@ -9,6 +9,6 @@ namespace GerenciadorHospital.Dto
     public class PacienteResquestDto : PacienteModel
     {
         public IFormFile Doc { get; set; }
-        public IFormFile DocConvenio { get; set; }
+        public IFormFile? DocConvenio { get; set; }
     }
 }

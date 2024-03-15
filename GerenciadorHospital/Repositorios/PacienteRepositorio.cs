@@ -82,6 +82,25 @@ namespace GerenciadorHospital.Repositorios
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<PacienteModel> BuscarDocConvenioPorId(int id)
+        {
+            /*
+             * Retornamos o primeiro paciente ou o padrão por ID,
+             * incluindo os objetos convenio e medicamento
+            */
+            return await _bancoContext.Pacientes
+                .FirstOrDefaultAsync(x => x.Id == id);
+        }
+        public async Task<PacienteModel> BuscarDocPorId(int id)
+        {
+            /*
+             * Retornamos o primeiro paciente ou o padrão por ID,
+             * incluindo os objetos convenio e medicamento
+            */
+            return await _bancoContext.Pacientes
+                .FirstOrDefaultAsync(x => x.Id == id);
+        }
+
         //Método BuscarTodosUsuarios, que lista todos os usuários do banco
         public async Task<List<PacienteModel>> BuscarTodosPacientes()
         {
