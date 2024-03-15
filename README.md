@@ -137,10 +137,18 @@ public class PacienteResquestDto : PacienteModel
 public async Task<ActionResult<List<PacienteModel>>> BuscarDocPorId(int id)
 {
     PacienteModel paciente = await _pacienteRepositorio.BuscarDocPorId(id);
+    
     var caminho = paciente.ImgDocumento;
-
     Byte[] b = System.IO.File.ReadAllBytes($"{caminho}");
-    return File(b, "image/png");
+
+    if (paciente.ImgDocumento.Contains(".png"))
+        return File(b, "image/png");
+    if (paciente.ImgDocumento.Contains(".jpg"))
+        return File(b, "image/jpg");
+    if (paciente.ImgDocumento.Contains(".jpeg"))
+        return File(b, "image/jpeg");
+
+    return BadRequest("Não foi possível buscar a imagem");
 }
 ```
 <ul>
@@ -174,10 +182,59 @@ public async Task<ActionResult<List<PacienteModel>>> BuscarDocConvenioPorId(int 
     }
 
     Byte[] b = System.IO.File.ReadAllBytes($"{caminho}");
-    return File(b, "image/png");
+
+    if (paciente.ImgDocumento.Contains(".png"))
+        return File(b, "image/png");
+    if (paciente.ImgDocumento.Contains(".jpg"))
+        return File(b, "image/jpg");
+    if (paciente.ImgDocumento.Contains(".jpeg"))
+        return File(b, "image/jpeg");
+
+    return BadRequest("Não foi possível buscar a imagem");
 }
 ```
 <br/>
+
+<h2>Verificações e Tratativas de Imagem</h2>
+<ul>
+	<li>Verificamos tanto a inserção quanto o retorno:</li>
+	<li>A seguir, a inserção:</li>
+</ul>
+
+```
+ //Lemos os arquivos que supostamente devem ser imagens
+ var arquivoDocConvenio = requestDto.DocConvenio.OpenReadStream();
+ var arquivoDoc = requestDto.Doc.OpenReadStream();
+ var isValidDocConvenio = FileTypeValidator.IsImage(arquivoDocConvenio);
+ var isValidDoc = FileTypeValidator.IsImage(arquivoDoc);
+ 
+ //Verificamos se os documentos são válidos, verificando se são imagens ou não
+ if(isValidDoc == false || isValidDocConvenio == false)
+     return BadRequest("O arquivo carregado não é uma imagem");
+```
+<ul>
+	<li>Agora o retorno:</li>
+</ul>
+
+```
+PacienteModel paciente = await _pacienteRepositorio.BuscarDocPorId(id);
+
+var caminho = paciente.ImgDocumento;
+Byte[] b = System.IO.File.ReadAllBytes($"{caminho}");
+
+if (paciente.ImgDocumento.Contains(".png"))
+    return File(b, "image/png");
+if (paciente.ImgDocumento.Contains(".jpg"))
+    return File(b, "image/jpg");
+if (paciente.ImgDocumento.Contains(".jpeg"))
+    return File(b, "image/jpeg");
+
+return BadRequest("Não foi possível buscar a imagem");
+```
+
+<br/>
+
+
 
 <h2>Usando Summary:</h2>
 <ul>
@@ -228,18 +285,6 @@ builder.Services.AddSwaggerGen(c =>
 <br/>
 
 <h2>Regras de negócio para serem aplicadas:</h2>
-
-<h3 align="center">VERIFICAR SE EXISTE UMA CONSULTA MARCADA EM DETERMINADA DATA:</h3>
-<ul>
-	<li>Isso pode gerar confusões, então devemos evitar fazendo uma tratativa quando cadastrar uma consulta</li>
-</ul>
-<br/>
-
-<h3 align="center">IMPLEMENTAR FILE.TYPECHECKER (Nuget Package):</h3>
-<ul>
-	<li>Ao instalarmos este pacote, podemos verificar se o arquivo que está sendo carregado, realmente é do tipo que precisamos, evitando erros e vazamento de exceções</li>
-</ul>
-<br/>
 
 <h3 align="center">CRIAR VARIÁVEL DE AMBIENTE OU USAR GITIGNORE:</h3>
 <ul>
