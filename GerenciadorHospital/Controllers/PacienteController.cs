@@ -1,4 +1,6 @@
-﻿using GerenciadorHospital.Dto;
+﻿using FileTypeChecker;
+using FileTypeChecker.Abstracts;
+using GerenciadorHospital.Dto;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -73,7 +75,15 @@ public class PacienteController : ControllerBase
         }
 
         Byte[] b = System.IO.File.ReadAllBytes($"{caminho}");
-        return File(b, "image/png");
+
+        if (paciente.ImgDocumento.Contains(".png"))
+            return File(b, "image/png");
+        if (paciente.ImgDocumento.Contains(".jpg"))
+            return File(b, "image/jpg");
+        if (paciente.ImgDocumento.Contains(".jpeg"))
+            return File(b, "image/jpeg");
+
+        return BadRequest("Não foi possível buscar a imagem");
     }
 
     /// <summary>
@@ -86,10 +96,18 @@ public class PacienteController : ControllerBase
     public async Task<ActionResult<List<PacienteModel>>> BuscarDocPorId(int id)
     {
         PacienteModel paciente = await _pacienteRepositorio.BuscarDocPorId(id);
+        
         var caminho = paciente.ImgDocumento;
-
         Byte[] b = System.IO.File.ReadAllBytes($"{caminho}");
-        return File(b, "image/png");
+
+        if (paciente.ImgDocumento.Contains(".png"))
+            return File(b, "image/png");
+        if (paciente.ImgDocumento.Contains(".jpg"))
+            return File(b, "image/jpg");
+        if (paciente.ImgDocumento.Contains(".jpeg"))
+            return File(b, "image/jpeg");
+
+        return BadRequest("Não foi possível buscar a imagem");
     }
 
     /// <summary>
@@ -101,29 +119,33 @@ public class PacienteController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<PacienteModel>> Adicionar(PacienteResquestDto requestDto)
     {
+        //Lemos os arquivos que supostamente devem ser imagens
+        var arquivoDocConvenio = requestDto.DocConvenio.OpenReadStream();
+        var arquivoDoc = requestDto.Doc.OpenReadStream();
+        var isValidDocConvenio = FileTypeValidator.IsImage(arquivoDocConvenio);
+        var isValidDoc = FileTypeValidator.IsImage(arquivoDoc);
+        
+        //Verificamos se os documentos são válidos, verificando se são imagens ou não
+        if(isValidDoc == false || isValidDocConvenio == false)
+            return BadRequest("O arquivo carregado não é uma imagem");
+
         if (requestDto.TemConvenio)
         {
             if (requestDto.DocConvenio == null || requestDto.DocConvenio.Length == 0)
-            {
                 return BadRequest("Nenhuma foto de convênio foi carregada");
-            }
-            Guid guidDocConvenio = Guid.NewGuid();
-            
+
+            Guid guidDocConvenio = Guid.NewGuid(); 
             var caminhoConvenio = Path.Combine("Imagens/", $"{guidDocConvenio + requestDto.DocConvenio.FileName}");
-            
             requestDto.ImgCarteiraDoConvenio = caminhoConvenio;
 
             using (var stream = new FileStream(caminhoConvenio, FileMode.Create))
-            {
                 await requestDto.DocConvenio.CopyToAsync(stream);
-            }
         }
 
         //Se as fotos não forem carregadas, será retornado uma BadRequest
         if (requestDto.Doc == null || requestDto.Doc.Length == 0)
-        {
             return BadRequest("Nenhuma foto de documento foi carregada");
-        }
+
         //Geramos um novo guid para deixar a foto com id único
         Guid guidDoc = Guid.NewGuid();
         
@@ -133,11 +155,7 @@ public class PacienteController : ControllerBase
         //Todos pacientes recebem a imagem de documento
 
         using (var stream = new FileStream(caminhoDoc, FileMode.Create))
-        {
             await requestDto.Doc.CopyToAsync(stream);
-        }
-
-        //Se o paciente tem comvênio, ele recebe a imagem da carteira do convênio
 
         requestDto.ImgDocumento = caminhoDoc;
         
