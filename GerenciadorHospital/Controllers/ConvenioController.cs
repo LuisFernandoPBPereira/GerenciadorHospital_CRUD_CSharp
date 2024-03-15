@@ -16,6 +16,11 @@ namespace GerenciadorHospital.Controllers
             _convenioRepositorio = convenioRepositorio;
         }
 
+        /// <summary>
+        /// Busca Todos Convênios
+        /// </summary>
+        /// <returns>Todos Convênios</returns>
+        /// <response code="200">Convênios Retornados com SUCESSO</response>
         [HttpGet]
         public async Task<ActionResult<List<ConvenioModel>>> BuscarTodosConvenios()
         {
@@ -23,6 +28,12 @@ namespace GerenciadorHospital.Controllers
             return Ok(convenios);
         }
 
+        /// <summary>
+        /// Busca Convênio por ID
+        /// </summary>
+        /// <param name="id">ID do convênio</param>
+        /// <returns>Convênio</returns>
+        /// <response code="200">Convênio Retornado com SUCESSO</response>
         [HttpGet("{id}")]
         public async Task<ActionResult<List<ConvenioModel>>> BuscarPorId(int id)
         {
@@ -30,7 +41,11 @@ namespace GerenciadorHospital.Controllers
             return Ok(convenio);
         }
 
-        //Método POST com requisição pelo body para a criação do convênio de forma assíncrona
+        /// <summary>
+        /// Cadastrar Convênio
+        /// </summary>
+        /// <param name="convenioModel">Dados do convênio</param>
+        /// <response code="200">Convênio Cadastrado com SUCESSO</response>
         [HttpPost]
         public async Task<ActionResult<ConvenioModel>> Adicionar([FromBody] ConvenioModel convenioModel)
         {
@@ -38,7 +53,13 @@ namespace GerenciadorHospital.Controllers
             return Ok(convenio);
         }
 
-        //Método PUT com requisição pelo body para a atualização do convênio de forma assíncrona
+        /// <summary>
+        /// Atualizar Convênio
+        /// </summary>
+        /// <param name="convenioModel">Dados do Convênio</param>
+        /// <param name="id">ID do Convênio</param>
+        /// <returns>Os dados atualizados</returns>
+        /// <response code="200">Convênio Atualizado com SUCESSO</response>
         [HttpPut("{id}")]
         public async Task<ActionResult<ConvenioModel>> Atualizar([FromBody] ConvenioModel convenioModel, int id)
         {
@@ -47,7 +68,12 @@ namespace GerenciadorHospital.Controllers
             return Ok(convenio);
         }
 
-        //Método DELETE que busca o convênio pelo ID para deletar o convênio
+        /// <summary>
+        /// Apagar Convênio
+        /// </summary>
+        /// <param name="id">ID do Convênio</param>
+        /// <returns>Booleano</returns>
+        /// <response code="200">Convênio Apagado com SUCESSO</response>
         [HttpDelete("{id}")]
         public async Task<ActionResult<ConvenioModel>> Apagar(int id)
         {

@@ -15,6 +15,11 @@ namespace GerenciadorHospital.Controllers
             _medicamentosPacienteRepositorio = medicamentoRepositorio;
         }
 
+        /// <summary>
+        /// Busca Todos Medicamentos
+        /// </summary>
+        /// <returns>Todos Medicamentos</returns>
+        /// <response code="200">Medicamentos Retornados com SUCESSO</response>
         [HttpGet]
         public async Task<ActionResult<List<MedicamentoPacienteModel>>> BuscarTodosMedicamentosPaciente()
         {
@@ -22,6 +27,12 @@ namespace GerenciadorHospital.Controllers
             return Ok(medicos);
         }
 
+        /// <summary>
+        /// Busca Medicamento por ID
+        /// </summary>
+        /// <param name="id">ID do Medicamento</param>
+        /// <returns>Medicamento</returns>
+        /// <response code="200">Medicamento Retornado com SUCESSO</response>
         [HttpGet("{id}")]
         public async Task<ActionResult<List<MedicamentoPacienteModel>>> BuscarPorId(int id)
         {
@@ -29,15 +40,26 @@ namespace GerenciadorHospital.Controllers
             return Ok(medicamentos);
         }
 
-        //Método POST com requisição pelo body para a criação do medicamento de forma assíncrona
+        /// <summary>
+        /// Cadastrar Medicamento
+        /// </summary>
+        /// <param name="medicamentoModel">Dados do Medicamento</param>
+        /// <returns>Medicamento Cadastrado</returns>
+        /// <response code="200">Medicamento Cadastrado com SUCESSO</response>
         [HttpPost]
-        public async Task<ActionResult<MedicamentoPacienteModel>> Adicionar([FromBody] MedicamentoPacienteModel medicoModel)
+        public async Task<ActionResult<MedicamentoPacienteModel>> Adicionar([FromBody] MedicamentoPacienteModel medicamentoModel)
         {
-            MedicamentoPacienteModel medicamentos = await _medicamentosPacienteRepositorio.Adicionar(medicoModel);
+            MedicamentoPacienteModel medicamentos = await _medicamentosPacienteRepositorio.Adicionar(medicamentoModel);
             return Ok(medicamentos);
         }
 
-        //Método PUT com requisição pelo body para a atualização do medicamento de forma assíncrona
+        /// <summary>
+        /// Atualizar Medicamento
+        /// </summary>
+        /// <param name="id">ID do Medicamento</param>
+        /// <param name="medicamentoModel">Dados do Medicamento</param>
+        /// <returns>Medicamento Atualizado</returns>
+        /// <response code="200">Medicamento Atualizado com SUCESSO</response>
         [HttpPut("{id}")]
         public async Task<ActionResult<MedicamentoPacienteModel>> Atualizar([FromBody] MedicamentoPacienteModel medicamentoModel, int id)
         {
@@ -46,7 +68,12 @@ namespace GerenciadorHospital.Controllers
             return Ok(medicamentos);
         }
 
-        //Método DELETE que busca o medicamento pelo ID para medicamento o usuário
+        /// <summary>
+        /// Apagar Medicamento
+        /// </summary>
+        /// <param name="id">ID do Medicamento</param>
+        /// <returns>Booleano</returns>
+        /// <response code="200">Medicamento Apagado com SUCESSO</response>
         [HttpDelete("{id}")]
         public async Task<ActionResult<MedicamentoPacienteModel>> Apagar(int id)
         {

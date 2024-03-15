@@ -15,6 +15,11 @@ namespace GerenciadorHospital.Controllers
             _tipoExameRepositorio = tipoExameRepositorio;
         }
 
+        /// <summary>
+        /// Busca Todos Exames
+        /// </summary>
+        /// <returns>Todos Exames</returns>
+        /// <response code="200">Exames Retornados com SUCESSO</response>
         [HttpGet]
         public async Task<ActionResult<List<TipoExameModel>>> BuscarTodosExames()
         {
@@ -22,6 +27,12 @@ namespace GerenciadorHospital.Controllers
             return Ok(exames);
         }
 
+        /// <summary>
+        /// Busca Exame por ID
+        /// </summary>
+        /// <param name="id">ID do Exame</param>
+        /// <returns>Exame</returns>
+        /// <response code="200">Exame Retornado com SUCESSO</response>
         [HttpGet("{id}")]
         public async Task<ActionResult<List<TipoExameModel>>> BuscarPorId(int id)
         {
@@ -29,7 +40,12 @@ namespace GerenciadorHospital.Controllers
             return Ok(exames);
         }
 
-        //Método POST com requisição pelo body para a criação do exame de forma assíncrona
+        /// <summary>
+        /// Cadastrar Exame
+        /// </summary>
+        /// <param name="tipoExameModel">Dados do Exame</param>
+        /// <returns>Exame Cadastrado</returns>
+        /// <response code="200">Exame Cadastrado com SUCESSO</response>
         [HttpPost]
         public async Task<ActionResult<TipoExameModel>> Adicionar([FromBody] TipoExameModel tipoExameModel)
         {
@@ -37,7 +53,13 @@ namespace GerenciadorHospital.Controllers
             return Ok(exame);
         }
 
-        //Método PUT com requisição pelo body para a atualização do exame de forma assíncrona
+        /// <summary>
+        /// Atualizar Exame
+        /// </summary>
+        /// <param name="id">ID do Exame</param>
+        /// <param name="tipoExameModel">Dados do Exame</param>
+        /// <returns>Exame Atualizado</returns>
+        /// <response code="200">Exame Atualizado com SUCESSO</response>
         [HttpPut("{id}")]
         public async Task<ActionResult<TipoExameModel>> Atualizar([FromBody] TipoExameModel tipoExameModel, int id)
         {
@@ -46,7 +68,12 @@ namespace GerenciadorHospital.Controllers
             return Ok(exame);
         }
 
-        //Método DELETE que busca o exame pelo ID para deletar o exame
+        /// <summary>
+        /// Apagar Exame
+        /// </summary>
+        /// <param name="id">ID do Exame</param>
+        /// <returns>Booleano</returns>
+        /// <response code="200">Exame Apagado com SUCESSO</response>
         [HttpDelete("{id}")]
         public async Task<ActionResult<TipoExameModel>> Apagar(int id)
         {

@@ -96,6 +96,7 @@ public class PacienteController : ControllerBase
     /// Cadastrar um Paciente
     /// </summary>
     /// <param name="requestDto">Dados do Paciente</param>
+    /// <returns>Paciente Cadastrado</returns>
     /// <response code="200">Paciente cadastrado com SUCESSO</response>
     [HttpPost]
     public async Task<ActionResult<PacienteModel>> Adicionar(PacienteResquestDto requestDto)

@@ -20,6 +20,11 @@ namespace GerenciadorHospital.Controllers
             _pacienteRepositorio = pacienteRepositorio;
         }
 
+        /// <summary>
+        /// Busca Todas Consultas
+        /// </summary>
+        /// <returns>Todas Consultas</returns>
+        /// <response code="200">Consultas Retornadas com SUCESSO</response>
         [HttpGet]
         public async Task<ActionResult<List<RegistroConsultaModel>>> BuscarTodosRegistrosConsultas()
         {
@@ -27,6 +32,12 @@ namespace GerenciadorHospital.Controllers
             return Ok(consultas);
         }
 
+        /// <summary>
+        /// Busca Consulta por ID
+        /// </summary>
+        /// <param name="id">ID da Consulta</param>
+        /// <returns>Consulta</returns>
+        /// <response code="200">Consulta Retornada com SUCESSO</response>
         [HttpGet("{id}")]
         public async Task<ActionResult<List<RegistroConsultaModel>>> BuscarPorId(int id)
         {
@@ -34,7 +45,12 @@ namespace GerenciadorHospital.Controllers
             return Ok(consultas);
         }
 
-        //Método POST com requisição pelo body para a criação da consulta de forma assíncrona
+        /// <summary>
+        /// Cadastrar Consulta
+        /// </summary>
+        /// <param name="consultaModel">Dados da Consulta</param>
+        /// <returns>Consulta Cadastrada</returns>
+        /// <response code="200">Consulta Cadastrada com SUCESSO</response>
         [HttpPost]
         public async Task<ActionResult<RegistroConsultaModel>> Adicionar([FromBody] RegistroConsultaModel consultaModel)
         {
@@ -97,7 +113,13 @@ namespace GerenciadorHospital.Controllers
 
         }
 
-        //Método PUT com requisição pelo body para a atualização da consulta de forma assíncrona
+        /// <summary>
+        /// Atualizar Consulta
+        /// </summary>
+        /// <param name="id">ID da Consulta</param>
+        /// <param name="consultaModel">Dados da Consulta</param>
+        /// <returns>Consulta Atualizada</returns>
+        /// <response code="200">Consulta Atualizada com SUCESSO</response>
         [HttpPut("{id}")]
         public async Task<ActionResult<RegistroConsultaModel>> Atualizar([FromBody] RegistroConsultaModel consultaModel, int id)
         {
@@ -112,7 +134,12 @@ namespace GerenciadorHospital.Controllers
             return Ok(consulta);
         }
 
-        //Método DELETE que busca a consulta pelo ID para deletar o consulta
+        /// <summary>
+        /// Apagar Consulta
+        /// </summary>
+        /// <param name="id">ID da Consulta</param>
+        /// <returns>Booleano</returns>
+        /// <response code="200">Consulta Apagada com SUCESSO</response>
         [HttpDelete("{id}")]
         public async Task<ActionResult<RegistroConsultaModel>> Apagar(int id)
         {

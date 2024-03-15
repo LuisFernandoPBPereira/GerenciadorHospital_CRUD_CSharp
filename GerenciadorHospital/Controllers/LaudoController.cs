@@ -15,6 +15,11 @@ namespace GerenciadorHospital.Controllers
             _laudoRepositorio = laudoRepositorio;
         }
 
+        /// <summary>
+        /// Busca Todos Laudos
+        /// </summary>
+        /// <returns>Todos Laudos</returns>
+        /// <response code="200">Laudos Retornados com SUCESSO</response>
         [HttpGet]
         public async Task<ActionResult<List<LaudoModel>>> BuscarTodosLaudos()
         {
@@ -22,6 +27,12 @@ namespace GerenciadorHospital.Controllers
             return Ok(laudos);
         }
 
+        /// <summary>
+        /// Busca Laudos por ID
+        /// </summary>
+        /// <param name="id">ID do Laudo</param>
+        /// <returns>Laudo</returns>
+        /// <response code="200">Laudo Retornado com SUCESSO</response>
         [HttpGet("{id}")]
         public async Task<ActionResult<List<LaudoModel>>> BuscarPorId(int id)
         {
@@ -29,7 +40,12 @@ namespace GerenciadorHospital.Controllers
             return Ok(laudos);
         }
 
-        //Método POST com requisição pelo body para a criação do laudo de forma assíncrona
+        /// <summary>
+        /// Cadastrar Laudo
+        /// </summary>
+        /// <param name="laudoModel">Dados do Laudo</param>
+        /// <returns>Laudo Cadastrado</returns>
+        /// <response code="200">Laudo Cadastrado com SUCESSO</response>
         [HttpPost]
         public async Task<ActionResult<LaudoModel>> Adicionar([FromBody] LaudoModel laudoModel)
         {
@@ -37,7 +53,13 @@ namespace GerenciadorHospital.Controllers
             return Ok(laudo);
         }
 
-        //Método PUT com requisição pelo body para a atualização do laudo de forma assíncrona
+        /// <summary>
+        /// Atualizar Laudo
+        /// </summary>
+        /// <param name="id">ID do Laudo</param>
+        /// <param name="laudoModel">Dados do Laudo</param>
+        /// <returns>Laudo atualizado</returns>
+        /// <response code="200">Laudo Atualizado com SUCESSO</response>
         [HttpPut("{id}")]
         public async Task<ActionResult<LaudoModel>> Atualizar([FromBody] LaudoModel laudoModel, int id)
         {
@@ -46,7 +68,12 @@ namespace GerenciadorHospital.Controllers
             return Ok(laudo);
         }
 
-        //Método DELETE que busca o laudo pelo ID para deletar o laudo
+        /// <summary>
+        /// Apagar Laudo
+        /// </summary>
+        /// <param name="id">ID do Laudo</param>
+        /// <returns>Booleano</returns>
+        /// <response code="200">Laudo Apagado com SUCESSO</response>
         [HttpDelete("{id}")]
         public async Task<ActionResult<LaudoModel>> Apagar(int id)
         {

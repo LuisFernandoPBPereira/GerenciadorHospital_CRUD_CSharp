@@ -15,6 +15,11 @@ namespace GerenciadorHospital.Controllers
             _medicoRepositorio = medicoRepositorio;
         }
 
+        /// <summary>
+        /// Busca Todos Médicos
+        /// </summary>
+        /// <returns>Todos Médicos</returns>
+        /// <response code="200">Médicos Retornados com SUCESSO</response>
         [HttpGet]
         public async Task<ActionResult<List<MedicoModel>>> BuscarTodosMedicos()
         {
@@ -22,6 +27,12 @@ namespace GerenciadorHospital.Controllers
             return Ok(medicos);
         }
 
+        /// <summary>
+        /// Busca Médico por ID
+        /// </summary>
+        /// <param name="id">ID do Médico</param>
+        /// <returns>Médicos</returns>
+        /// <response code="200">Médico Retornado com SUCESSO</response>
         [HttpGet("{id}")]
         public async Task<ActionResult<List<MedicoModel>>> BuscarPorId(int id)
         {
@@ -29,7 +40,12 @@ namespace GerenciadorHospital.Controllers
             return Ok(medicos);
         }
 
-        //Método POST com requisição pelo body para a criação do médico de forma assíncrona
+        /// <summary>
+        /// Cadastrar Médico
+        /// </summary>
+        /// <param name="medicoModel">Dados do Médico</param>
+        /// <returns>Médico Cadastrado</returns>
+        /// <response code="200">Médico Cadastrado com SUCESSO</response>
         [HttpPost]
         public async Task<ActionResult<MedicoModel>> Adicionar([FromBody] MedicoModel medicoModel)
         {
@@ -37,7 +53,13 @@ namespace GerenciadorHospital.Controllers
             return Ok(medico);
         }
 
-        //Método PUT com requisição pelo body para a atualização do médico de forma assíncrona
+        /// <summary>
+        /// Atualizar Médico
+        /// </summary>
+        /// <param name="id">ID do Médico</param>
+        /// <param name="medicoModel">Dados do Médico</param>
+        /// <returns>Médico Atualizado</returns>
+        /// <response code="200">Médico Atualizado com SUCESSO</response>
         [HttpPut("{id}")]
         public async Task<ActionResult<MedicoModel>> Atualizar([FromBody] MedicoModel medicoModel, int id)
         {
@@ -46,7 +68,12 @@ namespace GerenciadorHospital.Controllers
             return Ok(medico);
         }
 
-        //Método DELETE que busca o médico pelo ID para deletar o médico
+        /// <summary>
+        /// Apagar Médico
+        /// </summary>
+        /// <param name="id">ID do Médico</param>
+        /// <returns>Booleano</returns>
+        /// <response code="200">Médico Apagado com SUCESSO</response>
         [HttpDelete("{id}")]
         public async Task<ActionResult<MedicoModel>> Apagar(int id)
         {
