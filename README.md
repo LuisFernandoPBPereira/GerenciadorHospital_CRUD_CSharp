@@ -121,13 +121,62 @@ public DateTime DataValidade { get; set; }
 public class PacienteResquestDto : PacienteModel
 {
     public IFormFile Doc { get; set; }
-    public IFormFile DocConvenio { get; set; }
+    public IFormFile DocConvenio? { get; set; }
 }
 
 ```
+<h2>Retorno da Imagem do paciente:</h2>
 <ul>
-	<li>Aqui nós recebemos os uploads das fotos de documento e o documento do convênio</li>
+	<li>Criamos um endpoint separadamente, apenas para retornar a imagem do paciente, sendo mais eficiente</li>
+	<li>O exemplo abaixo mostra o retorno da imagem do documento</li>
 </ul>
+<br/>
+
+```
+[HttpGet("MostrarDoc/{id}")]
+public async Task<ActionResult<List<PacienteModel>>> BuscarDocPorId(int id)
+{
+    PacienteModel paciente = await _pacienteRepositorio.BuscarDocPorId(id);
+    var caminho = paciente.ImgDocumento;
+
+    Byte[] b = System.IO.File.ReadAllBytes($"{caminho}");
+    return File(b, "image/png");
+}
+```
+<ul>
+	<li>O exemplo abaixo mostra outro endpoint para retornar a imagem da carteira do convênio</li>
+</ul>
+
+```
+[HttpGet("MostrarDocConvenio/{id}")]
+public async Task<ActionResult<List<PacienteModel>>> BuscarDocConvenioPorId(int id)
+{
+    //Capturamos o paciente pelo ID
+    PacienteModel paciente = await _pacienteRepositorio.BuscarDocConvenioPorId(id);
+
+    //Se o paciente não tiver uma imagem salva, retorna uma BadRequest
+    if (paciente.ImgCarteiraDoConvenio == null)
+    {
+        return BadRequest("Este paciente não possui foto da carteira do convênio");
+    }
+    //Caso o paciente não tenha convênio, retorna outra BadRequest
+    else if (paciente.TemConvenio == false)
+    {
+        return BadRequest("Este paciente não possui convênio");
+
+    }
+
+    var caminho = paciente.ImgCarteiraDoConvenio;
+
+    if(caminho is null)
+    {
+        return BadRequest("Este paciente não possui carteira do convênio");
+    }
+
+    Byte[] b = System.IO.File.ReadAllBytes($"{caminho}");
+    return File(b, "image/png");
+}
+```
 <br/>
 
 <p>Essas entidades possuem relação, então devemos aplicar algumas regras de negócio que ainda não estão concluídas</p>
@@ -139,20 +188,6 @@ public class PacienteResquestDto : PacienteModel
 </ul>
 <br/>
 
-<h3 align="center">IMPLEMENTAR UM RETORNO DE IMAGEM VIA HTTP GET:</h3>
-<ul>
-	<li>Podemos retornar uma imagem usando o método abaixo (PARA TESTAR):</li>
-</ul>
-<br/>
-
-```
-[HttpGet]
-public IActionResult Get()
-{            
-    Byte[] b = System.IO.File.ReadAllBytes(@"C:\\arquivo.jpg");         
-    return File(b, "image/jpeg");
-}
-```
 
 <h3 align="center">IMPLEMENTAR SUMMARY COMO DOCUMENTAÇÃO:</h3>
 <ul>
