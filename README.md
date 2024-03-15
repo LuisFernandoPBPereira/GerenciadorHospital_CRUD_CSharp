@@ -182,6 +182,12 @@ public async Task<ActionResult<List<PacienteModel>>> BuscarDocConvenioPorId(int 
 <p>Essas entidades possuem relação, então devemos aplicar algumas regras de negócio que ainda não estão concluídas</p>
 <h2>Regras de negócio para serem aplicadas:</h2>
 
+<h3 align="center">VERIFICAR SE EXISTE UMA CONSULTA MARCADA EM DETERMINADA DATA:</h3>
+<ul>
+	<li>Isso pode gerar confusões, então devemos evitar fazendo uma tratativa quando cadastrar uma consulta</li>
+</ul>
+<br/>
+
 <h3 align="center">IMPLEMENTAR FILE.TYPECHECKER (Nuget Package):</h3>
 <ul>
 	<li>Ao instalarmos este pacote, podemos verificar se o arquivo que está sendo carregado, realmente é do tipo que precisamos, evitando erros e vazamento de exceções</li>
