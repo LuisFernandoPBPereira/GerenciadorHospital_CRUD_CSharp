@@ -179,7 +179,47 @@ public async Task<ActionResult<List<PacienteModel>>> BuscarDocConvenioPorId(int 
 ```
 <br/>
 
-<p>Essas entidades possuem relação, então devemos aplicar algumas regras de negócio que ainda não estão concluídas</p>
+<h2>Usando Summary:</h2>
+<ul>
+	<li>Usamos o Summary para documentar nossa API nos enpoints, para melhor visualização das regras de negócio</li>
+	<li>Primeiro devemos configurar nosso projeto para usá-lo. Abrimos o xml do projeto (está com o nome do projeto) e inserimos esse bloco de código abaixo:</li>
+</ul>
+
+```
+<GenerateDocumentationFile>true</GenerateDocumentationFile>
+<NoWarn>$(NoWarn);1591</NoWarn>
+```
+<br/>
+<ul>
+	<li>Logo após, configuramos a documentação do Swagger na Program.cs</li>
+</ul>
+
+```
+builder.Services.AddSwaggerGen(c =>
+{   
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+
+    });
+    var xmlFile = "GerenciadorHospital.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+
+    c.IncludeXmlComments(xmlPath);
+});
+```
+<ul>
+	<li>Agora podemos usar em nossos endpoints!</li>
+</ul>
+
+```
+/// <summary>
+/// Cadastrar um Paciente
+/// </summary>
+/// <param name="requestDto">Dados do Paciente</param>
+/// <returns>Paciente Cadastrado</returns>
+/// <response code="200">Paciente cadastrado com SUCESSO</response>
+```
+
 <h2>Regras de negócio para serem aplicadas:</h2>
 
 <h3 align="center">VERIFICAR SE EXISTE UMA CONSULTA MARCADA EM DETERMINADA DATA:</h3>
