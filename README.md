@@ -283,12 +283,3 @@ builder.Services.AddSwaggerGen(c =>
 "server=nomeDoServidor;database=nomeDoBancoDeDados;TrustServerCertificate=True;Integrated Security=SSPI;"
 ```
 <br/>
-
-<h2>Regras de negócio para serem aplicadas:</h2>
-
-<h3 align="center">CRIAR VARIÁVEL DE AMBIENTE OU USAR GITIGNORE:</h3>
-<ul>
-	<li>Não devemos expor nossa string de conexão, é um dado sensível, então podemos ignorar o upload do appsettings.Development.json, ou criar uma variável de ambiente</li>
-</ul>
-<br/>
-
