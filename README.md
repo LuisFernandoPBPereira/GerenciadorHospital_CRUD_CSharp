@@ -220,6 +220,13 @@ builder.Services.AddSwaggerGen(c =>
 /// <response code="200">Paciente cadastrado com SUCESSO</response>
 ```
 
+<h2>ConnectionStrings (Conexão do banco de dados):</h2>
+
+```
+"server=nomeDoServidor;database=nomeDoBancoDeDados;TrustServerCertificate=True;Integrated Security=SSPI;"
+```
+<br/>
+
 <h2>Regras de negócio para serem aplicadas:</h2>
 
 <h3 align="center">VERIFICAR SE EXISTE UMA CONSULTA MARCADA EM DETERMINADA DATA:</h3>
