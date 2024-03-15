@@ -4,6 +4,7 @@ using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios;
 using GerenciadorHospital.Repositorios.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 namespace GerenciadorHospital
 {
@@ -18,7 +19,17 @@ namespace GerenciadorHospital
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(c =>
+            {   
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+
+                });
+                var xmlFile = "GerenciadorHospital.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+
+                c.IncludeXmlComments(xmlPath);
+            }); 
 
             //Configuramos o EntityFramework
             builder.Services.AddEntityFrameworkSqlServer().

@@ -71,6 +71,11 @@ public class PacienteController : ControllerBase
         return File(b, "image/png");
     }
 
+    /// <summary>
+    /// Cadastrar um paciente
+    /// </summary>
+    /// <param name="requestDto"></param>
+    /// <response code="200">Paciente cadastrado com SUCESSO</response>
     //Método POST com requisição pelo body para a criação do paciente de forma assíncrona
     [HttpPost]
     public async Task<ActionResult<PacienteModel>> Adicionar(PacienteResquestDto requestDto)
