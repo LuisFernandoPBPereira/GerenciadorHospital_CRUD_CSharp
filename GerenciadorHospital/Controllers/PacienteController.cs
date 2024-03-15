@@ -16,6 +16,11 @@ public class PacienteController : ControllerBase
         _pacienteRepositorio = pacienteRepositorio;
     }
 
+    /// <summary>
+    /// Busca Todos os Pacientes
+    /// </summary>
+    /// <returns>Todos Pacientes</returns>
+    /// <response code="200">Pacientes retornados com SUCESSO</response>
     [HttpGet]
     public async Task<ActionResult<List<PacienteModel>>> BuscarTodosPacientes()
     {
@@ -23,6 +28,12 @@ public class PacienteController : ControllerBase
         return Ok(pacientes);
     }
 
+    /// <summary>
+    /// Busca Paciente por ID
+    /// </summary>
+    /// <param name="id">ID do paciente</param>
+    /// <returns>Paciente</returns>
+    /// <response code="200">Paciente retornado com SUCESSO</response>
     [HttpGet("{id}")]
     public async Task<ActionResult<List<PacienteModel>>> BuscarPorId(int id)
     {
@@ -30,7 +41,12 @@ public class PacienteController : ControllerBase
         return Ok(paciente);
     }
 
-    //Método GET para retornar o documento da carteira do convênio
+    /// <summary>
+    /// Busca Imagem do Documento do Convênio do Paciente
+    /// </summary>
+    /// <param name="id">ID do paciente</param>
+    /// <returns>A Imagem do Documento do Convênio</returns>
+    /// <response code="200">Imagem retornada com SUCESSO</response>
     [HttpGet("MostrarDocConvenio/{id}")]
     public async Task<ActionResult<List<PacienteModel>>> BuscarDocConvenioPorId(int id)
     {
@@ -59,8 +75,13 @@ public class PacienteController : ControllerBase
         Byte[] b = System.IO.File.ReadAllBytes($"{caminho}");
         return File(b, "image/png");
     }
-    
-    //Método GET para retornar o documento do paciente
+
+    /// <summary>
+    /// Buscar Imagem do Documento do Paciente
+    /// </summary>
+    /// <param name="id">ID do Paciente</param>
+    /// <returns>A imagem do documento</returns>
+    /// <response code="200">Imagem retornada com sucesso</response>
     [HttpGet("MostrarDoc/{id}")]
     public async Task<ActionResult<List<PacienteModel>>> BuscarDocPorId(int id)
     {
@@ -72,11 +93,10 @@ public class PacienteController : ControllerBase
     }
 
     /// <summary>
-    /// Cadastrar um paciente
+    /// Cadastrar um Paciente
     /// </summary>
-    /// <param name="requestDto"></param>
+    /// <param name="requestDto">Dados do Paciente</param>
     /// <response code="200">Paciente cadastrado com SUCESSO</response>
-    //Método POST com requisição pelo body para a criação do paciente de forma assíncrona
     [HttpPost]
     public async Task<ActionResult<PacienteModel>> Adicionar(PacienteResquestDto requestDto)
     {
@@ -125,7 +145,13 @@ public class PacienteController : ControllerBase
         return Ok(paciente);
     }
 
-    //Método PUT com requisição pelo body para a atualização do paciente de forma assíncrona
+    /// <summary>
+    /// Atualizar um Paciente
+    /// </summary>
+    /// <param name="pacienteModel">Dados do Paciente</param>
+    /// <param name="id">ID do Paciente</param>
+    /// <returns>O paciente atualizado</returns>
+    /// <response code="200">Paciente atualizado com SUCESSO</response>
     [HttpPut("{id}")]
     public async Task<ActionResult<PacienteModel>> Atualizar([FromBody] PacienteModel pacienteModel, int id)
     {
@@ -134,7 +160,12 @@ public class PacienteController : ControllerBase
         return Ok(paciente);
     }
 
-    //Método DELETE que busca o paciente pelo ID para deletar o paciente
+    /// <summary>
+    /// Apagar um Paciente
+    /// </summary>
+    /// <param name="id">ID do Paciente</param>
+    /// <returns>Um booleano</returns>
+    /// <response code="200">Paciente apagado com SUCESSO</response>
     [HttpDelete("{id}")]
     public async Task<ActionResult<PacienteModel>> Apagar(int id)
     {
