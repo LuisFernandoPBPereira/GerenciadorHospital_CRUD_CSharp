@@ -182,28 +182,18 @@ public async Task<ActionResult<List<PacienteModel>>> BuscarDocConvenioPorId(int 
 <p>Essas entidades possuem relação, então devemos aplicar algumas regras de negócio que ainda não estão concluídas</p>
 <h2>Regras de negócio para serem aplicadas:</h2>
 
+<h3 align="center">VERIFICAR SE EXISTE UMA CONSULTA MARCADA EM DETERMINADA DATA:</h3>
+<ul>
+	<li>Isso pode gerar confusões, então devemos evitar fazendo uma tratativa quando cadastrar uma consulta</li>
+</ul>
+<br/>
+
 <h3 align="center">IMPLEMENTAR FILE.TYPECHECKER (Nuget Package):</h3>
 <ul>
 	<li>Ao instalarmos este pacote, podemos verificar se o arquivo que está sendo carregado, realmente é do tipo que precisamos, evitando erros e vazamento de exceções</li>
 </ul>
 <br/>
 
-
-<h3 align="center">IMPLEMENTAR SUMMARY COMO DOCUMENTAÇÃO:</h3>
-<ul>
-	<li>Usando o summary, podemos fazer com que as regras de negócio fiquem mais claras e evidentes, podendo evitar erros:</li>
-</ul>
-<br/>
-
-```
-/// <summary>
-/// Faz tal ação
-/// </summary>
-/// <remarks></remarks>
-/// <response code="200">Exemplo de status code 200</response>
-/// <response code="400">Exemplo de status code 400</response>
-/// <response code="500">Exemplo de status code 500</response>
-```
 <h3 align="center">CRIAR VARIÁVEL DE AMBIENTE OU USAR GITIGNORE:</h3>
 <ul>
 	<li>Não devemos expor nossa string de conexão, é um dado sensível, então podemos ignorar o upload do appsettings.Development.json, ou criar uma variável de ambiente</li>
