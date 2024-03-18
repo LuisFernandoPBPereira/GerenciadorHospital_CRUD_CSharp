@@ -42,12 +42,15 @@
 	<p>
 		Classe onde podemos fazer uma transferência de ojetos, é útil para criar campos que não foram necessariamente mapeados e modelados.
 	</p>
+	<h3><li>Utils</li></h3><br/>
+	<p>
+		Aqui podemos inserir classes e métodos que podem ser úteis em validações, por exemplo.
+	</p>
 	<h3><li>Program.cs:</li></h3><br/>
 	<p>
 		Não podemos nos esquecer de adicionar o escopo das injeções de dependência das nossas interfaces, além de configurarmos o EntityFramework.
 	</p>
 </ul>
-
 
 <br/>
 
