@@ -3,6 +3,7 @@ using FileTypeChecker.Abstracts;
 using GerenciadorHospital.Dto;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
+using GerenciadorHospital.Utils;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GerenciadorHospital.Controllers;
@@ -119,49 +120,19 @@ public class PacienteController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<PacienteModel>> Adicionar(PacienteResquestDto requestDto)
     {
-        //Lemos os arquivos que supostamente devem ser imagens
-        var arquivoDocConvenio = requestDto.DocConvenio.OpenReadStream();
-        var arquivoDoc = requestDto.Doc.OpenReadStream();
-        var isValidDocConvenio = FileTypeValidator.IsImage(arquivoDocConvenio);
-        var isValidDoc = FileTypeValidator.IsImage(arquivoDoc);
-        
-        //Verificamos se os documentos são válidos, verificando se são imagens ou não
-        if(isValidDoc == false || isValidDocConvenio == false)
-            return BadRequest("O arquivo carregado não é uma imagem");
+        //É instanciado um novo objeto para a validação das imagens carregadas na requisição
+        ValidaImagem validaImagem = new ValidaImagem(requestDto);
+        var requestDtoValidado = validaImagem.ValidacaoImagem();
 
-        if (requestDto.TemConvenio)
+        if (requestDtoValidado)
         {
-            if (requestDto.DocConvenio == null || requestDto.DocConvenio.Length == 0)
-                return BadRequest("Nenhuma foto de convênio foi carregada");
-
-            Guid guidDocConvenio = Guid.NewGuid(); 
-            var caminhoConvenio = Path.Combine("Imagens/", $"{guidDocConvenio + requestDto.DocConvenio.FileName}");
-            requestDto.ImgCarteiraDoConvenio = caminhoConvenio;
-
-            using (var stream = new FileStream(caminhoConvenio, FileMode.Create))
-                await requestDto.DocConvenio.CopyToAsync(stream);
+            PacienteModel paciente = await _pacienteRepositorio.Adicionar(requestDto);
+            return Ok(paciente);
         }
-
-        //Se as fotos não forem carregadas, será retornado uma BadRequest
-        if (requestDto.Doc == null || requestDto.Doc.Length == 0)
-            return BadRequest("Nenhuma foto de documento foi carregada");
-
-        //Geramos um novo guid para deixar a foto com id único
-        Guid guidDoc = Guid.NewGuid();
-        
-        //Passamos os caminhos das imagens
-        var caminhoDoc = Path.Combine("Imagens/", $"{guidDoc + requestDto.Doc.FileName}");
-
-        //Todos pacientes recebem a imagem de documento
-
-        using (var stream = new FileStream(caminhoDoc, FileMode.Create))
-            await requestDto.Doc.CopyToAsync(stream);
-
-        requestDto.ImgDocumento = caminhoDoc;
-        
-        PacienteModel paciente = await _pacienteRepositorio.Adicionar(requestDto);
-        
-        return Ok(paciente);
+        else
+        {
+            return BadRequest("Não foi possível cadastrar o paciente: Imagem inválida ou inexistente");
+        }
     }
 
     /// <summary>
