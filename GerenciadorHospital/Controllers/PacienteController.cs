@@ -56,35 +56,14 @@ public class PacienteController : ControllerBase
         //Capturamos o paciente pelo ID
         PacienteModel paciente = await _pacienteRepositorio.BuscarDocConvenioPorId(id);
 
-        //Se o paciente não tiver uma imagem salva, retorna uma BadRequest
-        if (paciente.ImgCarteiraDoConvenio == null)
-        {
-            return BadRequest("Este paciente não possui foto da carteira do convênio");
-        }
-        //Caso o paciente não tenha convênio, retorna outra BadRequest
-        else if (paciente.TemConvenio == false)
-        {
+        if (paciente.TemConvenio == false)
             return BadRequest("Este paciente não possui convênio");
 
-        }
+        string caminho = paciente.ImgCarteiraDoConvenio;
 
-        var caminho = paciente.ImgCarteiraDoConvenio;
-
-        if(caminho is null)
-        {
-            return BadRequest("Este paciente não possui carteira do convênio");
-        }
-
-        Byte[] b = System.IO.File.ReadAllBytes($"{caminho}");
-
-        if (paciente.ImgDocumento.Contains(".png"))
-            return File(b, "image/png");
-        if (paciente.ImgDocumento.Contains(".jpg"))
-            return File(b, "image/jpg");
-        if (paciente.ImgDocumento.Contains(".jpeg"))
-            return File(b, "image/jpeg");
-
-        return BadRequest("Não foi possível buscar a imagem");
+        var imagem = new BuscaImagem(paciente);
+        
+        return imagem.BuscarImagem(caminho);
     }
 
     /// <summary>
@@ -98,17 +77,11 @@ public class PacienteController : ControllerBase
     {
         PacienteModel paciente = await _pacienteRepositorio.BuscarDocPorId(id);
         
-        var caminho = paciente.ImgDocumento;
-        Byte[] b = System.IO.File.ReadAllBytes($"{caminho}");
+        string caminho = paciente.ImgDocumento;
 
-        if (paciente.ImgDocumento.Contains(".png"))
-            return File(b, "image/png");
-        if (paciente.ImgDocumento.Contains(".jpg"))
-            return File(b, "image/jpg");
-        if (paciente.ImgDocumento.Contains(".jpeg"))
-            return File(b, "image/jpeg");
+        var imagem = new BuscaImagem(paciente);
 
-        return BadRequest("Não foi possível buscar a imagem");
+        return imagem.BuscarImagem(caminho);
     }
 
     /// <summary>
