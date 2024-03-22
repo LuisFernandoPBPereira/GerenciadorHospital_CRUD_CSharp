@@ -1,6 +1,6 @@
 ﻿namespace GerenciadorHospital.Models
 {
-    public class PacienteModel : UsuarioModel
+    public class PacienteModel //: UsuarioModel
     {
         public bool TemConvenio { get; set; }
         public string? ImgCarteiraDoConvenio { get; set; }

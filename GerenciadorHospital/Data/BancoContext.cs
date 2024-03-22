@@ -15,7 +15,8 @@ namespace GerenciadorHospital.Data
         public DbSet<RegistroConsultaModel> RegistrosConsultas { get; set; }
         public DbSet<LaudoModel> Laudos { get; set; }
         public DbSet<MedicamentoPacienteModel> MedicamentosPaciente { get; set; }
-        //public DbSet<AdministradorModel> Administradores{ get; set; }
+        public DbSet<UsuarioModel> Usuarios { get; set; }
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -26,7 +27,7 @@ namespace GerenciadorHospital.Data
             modelBuilder.ApplyConfiguration(new RegistroConsultaMap());
             modelBuilder.ApplyConfiguration(new LaudoMap());
             modelBuilder.ApplyConfiguration(new MedicamentoPacienteMap());
-            //modelBuilder.ApplyConfiguration(new AdministradorMap());
+            //modelBuilder.ApplyConfiguration(new UsuarioMap());
 
             base.OnModelCreating(modelBuilder);
         }

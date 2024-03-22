@@ -45,6 +45,7 @@ namespace GerenciadorHospital
             builder.Services.AddScoped<IRegistroConsultaRepositorio, RegistroConsultaRepositorio>();
             builder.Services.AddScoped<ILaudoRepositorio, LaudoRepositorio>();
             builder.Services.AddScoped<ITipoExameRepositorio, TipoExameRepositorio>();
+            builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
 
             var app = builder.Build();
 
