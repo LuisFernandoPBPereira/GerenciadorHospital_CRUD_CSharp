@@ -1,12 +1,7 @@
 ﻿namespace GerenciadorHospital.Models
 {
-    public class PacienteModel
+    public class PacienteModel : UsuarioModel
     {
-        public int Id {  get; set; }
-        public string Nome { get; set; }
-        public string Cpf { get; set; }
-        public string Endereco { get; set; }
-        public DateTime DataNasc {  get; set; }
         public bool TemConvenio { get; set; }
         public string? ImgCarteiraDoConvenio { get; set; }
         public string? ImgDocumento { get; set; }
