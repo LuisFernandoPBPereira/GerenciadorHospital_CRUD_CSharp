@@ -1,5 +1,6 @@
 ﻿using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,6 +22,7 @@ namespace GerenciadorHospital.Controllers
         /// <returns>Todos Laudos</returns>
         /// <response code="200">Laudos Retornados com SUCESSO</response>
         [HttpGet]
+        [Authorize(Policy = "StandardRights")]
         public async Task<ActionResult<List<LaudoModel>>> BuscarTodosLaudos()
         {
             List<LaudoModel> laudos = await _laudoRepositorio.BuscarTodosLaudos();
@@ -34,6 +36,7 @@ namespace GerenciadorHospital.Controllers
         /// <returns>Laudo</returns>
         /// <response code="200">Laudo Retornado com SUCESSO</response>
         [HttpGet("{id}")]
+        [Authorize(Policy = "StandardRights")]
         public async Task<ActionResult<List<LaudoModel>>> BuscarPorId(int id)
         {
             LaudoModel laudos = await _laudoRepositorio.BuscarPorId(id);
@@ -47,6 +50,7 @@ namespace GerenciadorHospital.Controllers
         /// <returns>Laudo Cadastrado</returns>
         /// <response code="200">Laudo Cadastrado com SUCESSO</response>
         [HttpPost]
+        [Authorize(Policy = "AdminAndDoctorRights")]
         public async Task<ActionResult<LaudoModel>> Adicionar([FromBody] LaudoModel laudoModel)
         {
             LaudoModel laudo = await _laudoRepositorio.Adicionar(laudoModel);
@@ -61,6 +65,7 @@ namespace GerenciadorHospital.Controllers
         /// <returns>Laudo atualizado</returns>
         /// <response code="200">Laudo Atualizado com SUCESSO</response>
         [HttpPut("{id}")]
+        [Authorize(Policy = "AdminAndDoctorRights")]
         public async Task<ActionResult<LaudoModel>> Atualizar([FromBody] LaudoModel laudoModel, int id)
         {
             laudoModel.Id = id;
@@ -75,6 +80,7 @@ namespace GerenciadorHospital.Controllers
         /// <returns>Booleano</returns>
         /// <response code="200">Laudo Apagado com SUCESSO</response>
         [HttpDelete("{id}")]
+        [Authorize(Policy = "ElevatedRights")]
         public async Task<ActionResult<LaudoModel>> Apagar(int id)
         {
             bool apagado = await _laudoRepositorio.Apagar(id);

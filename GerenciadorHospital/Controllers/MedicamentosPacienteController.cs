@@ -1,5 +1,6 @@
 ﻿using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,6 +22,7 @@ namespace GerenciadorHospital.Controllers
         /// <returns>Todos Medicamentos</returns>
         /// <response code="200">Medicamentos Retornados com SUCESSO</response>
         [HttpGet]
+        [Authorize(Policy = "StandardRights")]
         public async Task<ActionResult<List<MedicamentoPacienteModel>>> BuscarTodosMedicamentosPaciente()
         {
             List<MedicamentoPacienteModel> medicos = await _medicamentosPacienteRepositorio.BuscarTodosMedicamentosPaciente();
@@ -34,6 +36,7 @@ namespace GerenciadorHospital.Controllers
         /// <returns>Medicamento</returns>
         /// <response code="200">Medicamento Retornado com SUCESSO</response>
         [HttpGet("{id}")]
+        [Authorize(Policy = "StandardRights")]
         public async Task<ActionResult<List<MedicamentoPacienteModel>>> BuscarPorId(int id)
         {
             MedicamentoPacienteModel medicamentos = await _medicamentosPacienteRepositorio.BuscarPorId(id);
@@ -47,6 +50,7 @@ namespace GerenciadorHospital.Controllers
         /// <returns>Medicamento Cadastrado</returns>
         /// <response code="200">Medicamento Cadastrado com SUCESSO</response>
         [HttpPost]
+        [Authorize(Policy = "ElevatedRights")]
         public async Task<ActionResult<MedicamentoPacienteModel>> Adicionar([FromBody] MedicamentoPacienteModel medicamentoModel)
         {
             MedicamentoPacienteModel medicamentos = await _medicamentosPacienteRepositorio.Adicionar(medicamentoModel);
@@ -61,6 +65,7 @@ namespace GerenciadorHospital.Controllers
         /// <returns>Medicamento Atualizado</returns>
         /// <response code="200">Medicamento Atualizado com SUCESSO</response>
         [HttpPut("{id}")]
+        [Authorize(Policy = "ElevatedRights")]
         public async Task<ActionResult<MedicamentoPacienteModel>> Atualizar([FromBody] MedicamentoPacienteModel medicamentoModel, int id)
         {
             medicamentoModel.Id = id;
@@ -75,6 +80,7 @@ namespace GerenciadorHospital.Controllers
         /// <returns>Booleano</returns>
         /// <response code="200">Medicamento Apagado com SUCESSO</response>
         [HttpDelete("{id}")]
+        [Authorize(Policy = "ElevatedRights")]
         public async Task<ActionResult<MedicamentoPacienteModel>> Apagar(int id)
         {
             bool apagado = await _medicamentosPacienteRepositorio.Apagar(id);

@@ -2,6 +2,7 @@
 using GerenciadorHospital.Repositorios;
 using GerenciadorHospital.Repositorios.Interfaces;
 using GerenciadorHospital.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
@@ -27,6 +28,7 @@ namespace GerenciadorHospital.Controllers
         /// <returns>Todas Consultas</returns>
         /// <response code="200">Consultas Retornadas com SUCESSO</response>
         [HttpGet]
+        [Authorize(Policy = "AdminAndDoctorRights")]
         public async Task<ActionResult<List<RegistroConsultaModel>>> BuscarTodosRegistrosConsultas()
         {
             List<RegistroConsultaModel> consultas = await _consultaRepositorio.BuscarTodosRegistrosConsultas();
@@ -40,6 +42,7 @@ namespace GerenciadorHospital.Controllers
         /// <returns>Consulta</returns>
         /// <response code="200">Consulta Retornada com SUCESSO</response>
         [HttpGet("{id}")]
+        [Authorize(Policy = "AdminAndDoctorRights")]
         public async Task<ActionResult<List<RegistroConsultaModel>>> BuscarPorId(int id)
         {
             RegistroConsultaModel consultas = await _consultaRepositorio.BuscarPorId(id);
@@ -53,6 +56,7 @@ namespace GerenciadorHospital.Controllers
         /// <returns>Consulta Cadastrada</returns>
         /// <response code="200">Consulta Cadastrada com SUCESSO</response>
         [HttpPost]
+        [Authorize(Policy = "AdminAndDoctorRights")]
         public async Task<ActionResult<RegistroConsultaModel>> Adicionar([FromBody] RegistroConsultaModel consultaModel)
         {
             //É instanciado um novo objeto para validar o cadastro da consulta
@@ -78,6 +82,7 @@ namespace GerenciadorHospital.Controllers
         /// <returns>Consulta Atualizada</returns>
         /// <response code="200">Consulta Atualizada com SUCESSO</response>
         [HttpPut("{id}")]
+        [Authorize(Policy = "AdminAndDoctorRights")]
         public async Task<ActionResult<RegistroConsultaModel>> Atualizar([FromBody] RegistroConsultaModel consultaModel, int id)
         {
             consultaModel.Id = id;
@@ -98,6 +103,7 @@ namespace GerenciadorHospital.Controllers
         /// <returns>Booleano</returns>
         /// <response code="200">Consulta Apagada com SUCESSO</response>
         [HttpDelete("{id}")]
+        [Authorize(Policy = "ElevatedRights")]
         public async Task<ActionResult<RegistroConsultaModel>> Apagar(int id)
         {
             bool apagado = await _consultaRepositorio.Apagar(id);
