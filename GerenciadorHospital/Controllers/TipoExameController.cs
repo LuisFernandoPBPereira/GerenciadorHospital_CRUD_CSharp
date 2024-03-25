@@ -1,5 +1,6 @@
 ﻿using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,6 +22,7 @@ namespace GerenciadorHospital.Controllers
         /// <returns>Todos Exames</returns>
         /// <response code="200">Exames Retornados com SUCESSO</response>
         [HttpGet]
+        [Authorize(Policy = "AdminAndDoctorRights")]
         public async Task<ActionResult<List<TipoExameModel>>> BuscarTodosExames()
         {
             List<TipoExameModel> exames = await _tipoExameRepositorio.BuscarTodosExames();
@@ -34,6 +36,7 @@ namespace GerenciadorHospital.Controllers
         /// <returns>Exame</returns>
         /// <response code="200">Exame Retornado com SUCESSO</response>
         [HttpGet("{id}")]
+        [Authorize(Policy = "StandardRights")]
         public async Task<ActionResult<List<TipoExameModel>>> BuscarPorId(int id)
         {
             TipoExameModel exames = await _tipoExameRepositorio.BuscarPorId(id);
@@ -47,6 +50,7 @@ namespace GerenciadorHospital.Controllers
         /// <returns>Exame Cadastrado</returns>
         /// <response code="200">Exame Cadastrado com SUCESSO</response>
         [HttpPost]
+        [Authorize(Policy = "AdminAndDoctorRights")]
         public async Task<ActionResult<TipoExameModel>> Adicionar([FromBody] TipoExameModel tipoExameModel)
         {
             TipoExameModel exame = await _tipoExameRepositorio.Adicionar(tipoExameModel);
@@ -61,6 +65,7 @@ namespace GerenciadorHospital.Controllers
         /// <returns>Exame Atualizado</returns>
         /// <response code="200">Exame Atualizado com SUCESSO</response>
         [HttpPut("{id}")]
+        [Authorize(Policy = "AdminAndDoctorRights")]
         public async Task<ActionResult<TipoExameModel>> Atualizar([FromBody] TipoExameModel tipoExameModel, int id)
         {
             tipoExameModel.Id = id;
@@ -75,6 +80,7 @@ namespace GerenciadorHospital.Controllers
         /// <returns>Booleano</returns>
         /// <response code="200">Exame Apagado com SUCESSO</response>
         [HttpDelete("{id}")]
+        [Authorize(Policy = "ElevatedRights")]
         public async Task<ActionResult<TipoExameModel>> Apagar(int id)
         {
             bool apagado = await _tipoExameRepositorio.Apagar(id);

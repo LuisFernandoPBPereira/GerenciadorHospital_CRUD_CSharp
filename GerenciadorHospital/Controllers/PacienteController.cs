@@ -26,7 +26,7 @@ public class PacienteController : ControllerBase
     /// <returns>Todos Pacientes</returns>
     /// <response code="200">Pacientes retornados com SUCESSO</response>
     [HttpGet]
-    [Authorize(Policy = "ElevatedRights")]
+    [Authorize(Policy = "AdminAndDoctorRights")]
     public async Task<ActionResult<List<PacienteModel>>> BuscarTodosPacientes()
     {
         List<PacienteModel> pacientes = await _pacienteRepositorio.BuscarTodosPacientes();
@@ -40,6 +40,7 @@ public class PacienteController : ControllerBase
     /// <returns>Paciente</returns>
     /// <response code="200">Paciente retornado com SUCESSO</response>
     [HttpGet("{id}")]
+    [Authorize(Policy = "AdminAndDoctorRights")]
     public async Task<ActionResult<List<PacienteModel>>> BuscarPorId(int id)
     {
         PacienteModel paciente = await _pacienteRepositorio.BuscarPorId(id);
@@ -53,6 +54,7 @@ public class PacienteController : ControllerBase
     /// <returns>A Imagem do Documento do Convênio</returns>
     /// <response code="200">Imagem retornada com SUCESSO</response>
     [HttpGet("MostrarDocConvenio/{id}")]
+    [Authorize(Policy = "AdminAndDoctorRights")]
     public async Task<ActionResult<List<PacienteModel>>> BuscarDocConvenioPorId(int id)
     {
         //Capturamos o paciente pelo ID
@@ -75,6 +77,7 @@ public class PacienteController : ControllerBase
     /// <returns>A imagem do documento</returns>
     /// <response code="200">Imagem retornada com sucesso</response>
     [HttpGet("MostrarDoc/{id}")]
+    [Authorize(Policy = "AdminAndDoctorRights")]
     public async Task<ActionResult<List<PacienteModel>>> BuscarDocPorId(int id)
     {
         PacienteModel paciente = await _pacienteRepositorio.BuscarDocPorId(id);
@@ -93,7 +96,7 @@ public class PacienteController : ControllerBase
     /// <returns>Paciente Cadastrado</returns>
     /// <response code="200">Paciente cadastrado com SUCESSO</response>
     [HttpPost]
-    [Authorize(Roles = "admin")]
+    [Authorize(Policy = "AdminAndDoctorRights")]
     public async Task<ActionResult<PacienteModel>> Adicionar(PacienteResquestDto requestDto)
     {
         //É instanciado um novo objeto para a validação das imagens carregadas na requisição
@@ -119,6 +122,7 @@ public class PacienteController : ControllerBase
     /// <returns>O paciente atualizado</returns>
     /// <response code="200">Paciente atualizado com SUCESSO</response>
     [HttpPut("{id}")]
+    [Authorize(Policy = "StandardRights")]
     public async Task<ActionResult<PacienteModel>> Atualizar([FromBody] PacienteModel pacienteModel, int id)
     {
         pacienteModel.Id = id;
@@ -133,6 +137,7 @@ public class PacienteController : ControllerBase
     /// <returns>Um booleano</returns>
     /// <response code="200">Paciente apagado com SUCESSO</response>
     [HttpDelete("{id}")]
+    [Authorize(Policy = "ElevatedRights")]
     public async Task<ActionResult<PacienteModel>> Apagar(int id)
     {
         bool apagado = await _pacienteRepositorio.Apagar(id);

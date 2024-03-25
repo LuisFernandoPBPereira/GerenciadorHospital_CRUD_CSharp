@@ -53,8 +53,10 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("ElevatedRights", policy =>
         policy.RequireRole(Role.Admin));
+    options.AddPolicy("AdminAndDoctorRights", policy =>
+        policy.RequireRole(Role.Admin, Role.Medico));
     options.AddPolicy("StandardRights", policy =>
-        policy.RequireRole(Role.Admin, Role.User));
+        policy.RequireRole(Role.Admin, Role.Paciente, Role.Medico));
 });
 
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();

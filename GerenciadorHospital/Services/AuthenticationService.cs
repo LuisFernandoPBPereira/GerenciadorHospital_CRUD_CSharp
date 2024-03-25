@@ -43,7 +43,8 @@ namespace GerenciadorHospital.Services
 
             var result = await _usuarioRepositorio.CreateAsync(user, request.Senha);
 
-            await _usuarioRepositorio.AddToRoleAsync(user, Role.User);
+            await _usuarioRepositorio.AddToRoleAsync(user, request.Role);
+            //await _usuarioRepositorio.AddToRoleAsync(user, Role.Medico);
 
             if (!result.Succeeded)
             {
