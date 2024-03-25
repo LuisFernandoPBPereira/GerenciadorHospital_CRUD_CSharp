@@ -1,10 +1,11 @@
 ﻿using GerenciadorHospital.Data.Map;
 using GerenciadorHospital.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace GerenciadorHospital.Data
 {
-    public class BancoContext : DbContext
+    public class BancoContext : IdentityDbContext<UsuarioModel>
     {
         public BancoContext(DbContextOptions<BancoContext> options) : base(options) { }
         
@@ -27,7 +28,7 @@ namespace GerenciadorHospital.Data
             modelBuilder.ApplyConfiguration(new RegistroConsultaMap());
             modelBuilder.ApplyConfiguration(new LaudoMap());
             modelBuilder.ApplyConfiguration(new MedicamentoPacienteMap());
-            //modelBuilder.ApplyConfiguration(new UsuarioMap());
+            modelBuilder.ApplyConfiguration(new UsuarioMap());
 
             base.OnModelCreating(modelBuilder);
         }

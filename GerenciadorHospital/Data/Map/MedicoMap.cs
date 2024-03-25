@@ -11,7 +11,6 @@ namespace GerenciadorHospital.Data.Map
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Nome).IsRequired().HasMaxLength(255);
             builder.Property(x => x.Cpf).IsRequired();
-            builder.Property(x => x.Senha).IsRequired();
             builder.Property(x => x.Crm);
         }
     }

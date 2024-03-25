@@ -1,9 +1,10 @@
 ﻿using GerenciadorHospital.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GerenciadorHospital.Data.Map
 {
-    public class UsuarioMap
+    public class UsuarioMap : IEntityTypeConfiguration<UsuarioModel>
     {
         public void Configure(EntityTypeBuilder<UsuarioModel> builder)
         {

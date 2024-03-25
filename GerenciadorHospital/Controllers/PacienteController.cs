@@ -4,6 +4,7 @@ using GerenciadorHospital.Dto;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
 using GerenciadorHospital.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GerenciadorHospital.Controllers;
@@ -25,6 +26,7 @@ public class PacienteController : ControllerBase
     /// <returns>Todos Pacientes</returns>
     /// <response code="200">Pacientes retornados com SUCESSO</response>
     [HttpGet]
+    [Authorize(Policy = "ElevatedRights")]
     public async Task<ActionResult<List<PacienteModel>>> BuscarTodosPacientes()
     {
         List<PacienteModel> pacientes = await _pacienteRepositorio.BuscarTodosPacientes();
@@ -91,6 +93,7 @@ public class PacienteController : ControllerBase
     /// <returns>Paciente Cadastrado</returns>
     /// <response code="200">Paciente cadastrado com SUCESSO</response>
     [HttpPost]
+    [Authorize(Roles = "admin")]
     public async Task<ActionResult<PacienteModel>> Adicionar(PacienteResquestDto requestDto)
     {
         //É instanciado um novo objeto para a validação das imagens carregadas na requisição
