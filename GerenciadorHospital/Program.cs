@@ -17,8 +17,18 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
+// Contexto do Banco (SQLite para testes no banco)
 builder.Services.AddDbContext<BancoContext>(options => options.UseSqlite(configuration.GetConnectionString("DataBase")));
 
+// Configuramos o EntityFramework
+/*
+builder.Services.AddEntityFrameworkSqlServer().
+    AddDbContext<BancoContext>(
+        options => options.UseSqlServer(builder.Configuration.GetConnectionString("DataBase"))
+);
+*/
+
+// Configurando a adição do Identity
 builder.Services.AddIdentity<UsuarioModel, IdentityRole>()
     .AddRoles<IdentityRole>()
     .AddRoleManager<RoleManager<IdentityRole>>()
@@ -34,7 +44,7 @@ builder.Services.AddAuthentication(options =>
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 })
 
-    // 4. Adding Jwt Bearer
+    // Adição do JWT
     .AddJwtBearer(options =>
     {
         options.SaveToken = true;
@@ -49,6 +59,7 @@ builder.Services.AddAuthentication(options =>
         };
     });
 
+// Adicionando políticas para travar os endpoints
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("ElevatedRights", policy =>
@@ -59,19 +70,18 @@ builder.Services.AddAuthorization(options =>
         policy.RequireRole(Role.Admin, Role.Paciente, Role.Medico));
 });
 
+// Escopo da injeção de dependência do serviço de autenticação
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Wedding Planner API", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Gerenciador de Hospital", Version = "v1" });
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n 
-            Enter 'Bearer' [space] and then your token in the text input below.
-            \r\n\r\nExample: 'Bearer 12345abcdef'",
+        Description = "Autorização JWT usando o esquema Bearer. \r\n\r\nInsira 'Bearer' [space] e seu token logo em seguida.\r\n\r\n Exemplo: 'Bearer 12345abcdef'",
         Name = "Authorization",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.ApiKey,
@@ -95,13 +105,6 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
     });
-//Configuramos o EntityFramework
-/*
-builder.Services.AddEntityFrameworkSqlServer().
-    AddDbContext<BancoContext>(
-        options => options.UseSqlServer(builder.Configuration.GetConnectionString("DataBase"))
-);
-*/
 
 //Configuramos as injeções de dependências para podermos acessar a controller
 builder.Services.AddScoped<IPacienteRepositorio, PacienteRepositorio>();
@@ -128,6 +131,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+// Criamos o escopo das nossas seeds
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
