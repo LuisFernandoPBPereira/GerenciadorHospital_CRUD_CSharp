@@ -286,3 +286,12 @@ builder.Services.AddSwaggerGen(c =>
 "server=nomeDoServidor;database=nomeDoBancoDeDados;TrustServerCertificate=True;Integrated Security=SSPI;"
 ```
 <br/>
+
+<h2>ConnectionStrings com SQLite (Para fins de teste):</h2>
+
+```
+"Data Source=Data/BancoSQLite/database.db;"
+```
+<br/>
+
+<h2>Usamos JWT para autenticar os usuários em nosso sistema.</h2>
