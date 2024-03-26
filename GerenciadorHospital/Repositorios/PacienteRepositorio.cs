@@ -58,8 +58,6 @@ namespace GerenciadorHospital.Repositorios
             pacientePorId.ExameId = paciente.ExameId;
             pacientePorId.MedicamentoId = paciente.MedicamentoId;
             pacientePorId.ConvenioId = paciente.ConvenioId;
-            pacientePorId.ImgCarteiraDoConvenio = paciente.ImgCarteiraDoConvenio;
-            pacientePorId.ImgDocumento = paciente.ImgDocumento;
 
             //Atualizamos no banco de dados e salvamos as alterações
             _bancoContext.Pacientes.Update(pacientePorId);

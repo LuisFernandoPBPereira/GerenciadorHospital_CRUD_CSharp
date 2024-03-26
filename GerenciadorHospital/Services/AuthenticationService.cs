@@ -25,11 +25,9 @@ namespace GerenciadorHospital.Services
         {
             if (request.Senha.Length < 6) throw new ArgumentException("A senha deve ter ao mínimo 6 caracteres");
 
-            var userByUsername = await _usuarioRepositorio.FindByNameAsync(request.Nome);
-            if (userByUsername is not null)
-            {
-                throw new ArgumentException($"Usuário com o nome {request.Nome} já existe.");
-            }
+            var usuarioPorUsername = await _usuarioRepositorio.FindByNameAsync(request.Nome);
+
+            if (usuarioPorUsername is not null) throw new ArgumentException($"Usuário com o nome {request.Nome} já existe.");
 
             UsuarioModel user = new()
             {
@@ -48,9 +46,7 @@ namespace GerenciadorHospital.Services
             await _usuarioRepositorio.AddToRoleAsync(user, request.Role);
 
             if (!result.Succeeded)
-            {
                 throw new ArgumentException($"não foi possível cadastrar o usuário {request.Nome}, erros: {GetErrorsText(result.Errors)}");
-            }
 
             return await Login( new LoginRequestDto { UserName = request.UserName, Senha = request.Senha });
         }
@@ -60,9 +56,7 @@ namespace GerenciadorHospital.Services
             var user = await _usuarioRepositorio.FindByNameAsync(request.UserName);
 
             if (user is null || !await _usuarioRepositorio.CheckPasswordAsync(user, request.Senha))
-            {
                 throw new ArgumentException($"Não foi possível autenticar o usuário {request.UserName}");
-            }
 
             var authClaims = new List<Claim>
             {

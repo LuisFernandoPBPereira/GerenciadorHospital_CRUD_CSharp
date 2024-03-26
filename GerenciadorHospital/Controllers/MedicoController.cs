@@ -1,5 +1,8 @@
-﻿using GerenciadorHospital.Models;
+﻿using GerenciadorHospital.Dto;
+using GerenciadorHospital.Entities;
+using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
+using GerenciadorHospital.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,9 +14,12 @@ namespace GerenciadorHospital.Controllers
     public class MedicoController : ControllerBase
     {
         private readonly IMedicoRepositorio _medicoRepositorio;
-        public MedicoController(IMedicoRepositorio medicoRepositorio)
+        private readonly IAuthenticationService _authenticationService;
+        public MedicoController(IMedicoRepositorio medicoRepositorio,
+                                IAuthenticationService authenticationService)
         {
             _medicoRepositorio = medicoRepositorio;
+            _authenticationService = authenticationService;
         }
 
         /// <summary>
@@ -54,6 +60,19 @@ namespace GerenciadorHospital.Controllers
         public async Task<ActionResult<MedicoModel>> Adicionar([FromBody] MedicoModel medicoModel)
         {
             MedicoModel medico = await _medicoRepositorio.Adicionar(medicoModel);
+
+            CadastroRequestDto novoMedico = new CadastroRequestDto();
+
+            novoMedico.Nome = medico.Nome;
+            novoMedico.UserName = medico.Crm;
+            novoMedico.Cpf = medico.Cpf;
+            novoMedico.Senha = medico.Senha;
+            novoMedico.DataNasc = medico.DataNasc;
+            novoMedico.Endereco = medico.Endereco;
+            novoMedico.Role = Role.Medico;
+
+            await _authenticationService.Register(novoMedico);
+
             return Ok(medico);
         }
 
