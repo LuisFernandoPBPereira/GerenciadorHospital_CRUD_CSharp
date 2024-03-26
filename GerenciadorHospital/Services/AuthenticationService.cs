@@ -23,10 +23,12 @@ namespace GerenciadorHospital.Services
 
         public async Task<string> Register(CadastroRequestDto request)
         {
+            if (request.Senha.Length < 6) throw new ArgumentException("A senha deve ter ao mínimo 6 caracteres");
+
             var userByUsername = await _usuarioRepositorio.FindByNameAsync(request.Nome);
             if (userByUsername is not null)
             {
-                throw new ArgumentException($"User with username {request.Nome} already exists.");
+                throw new ArgumentException($"Usuário com o nome {request.Nome} já existe.");
             }
 
             UsuarioModel user = new()
@@ -44,11 +46,10 @@ namespace GerenciadorHospital.Services
             var result = await _usuarioRepositorio.CreateAsync(user, request.Senha);
 
             await _usuarioRepositorio.AddToRoleAsync(user, request.Role);
-            //await _usuarioRepositorio.AddToRoleAsync(user, Role.Medico);
 
             if (!result.Succeeded)
             {
-                throw new ArgumentException($"Unable to register user {request.Nome} errors: {GetErrorsText(result.Errors)}");
+                throw new ArgumentException($"não foi possível cadastrar o usuário {request.Nome}, erros: {GetErrorsText(result.Errors)}");
             }
 
             return await Login( new LoginRequestDto { UserName = request.UserName, Senha = request.Senha });
@@ -60,7 +61,7 @@ namespace GerenciadorHospital.Services
 
             if (user is null || !await _usuarioRepositorio.CheckPasswordAsync(user, request.Senha))
             {
-                throw new ArgumentException($"Unable to authenticate user {request.UserName}");
+                throw new ArgumentException($"Não foi possível autenticar o usuário {request.UserName}");
             }
 
             var authClaims = new List<Claim>

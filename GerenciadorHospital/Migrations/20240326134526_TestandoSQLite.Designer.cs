@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GerenciadorHospital.Migrations
 {
     [DbContext(typeof(BancoContext))]
-    [Migration("20240325184100_TestandoSQLite")]
+    [Migration("20240326134526_TestandoSQLite")]
     partial class TestandoSQLite
     {
         /// <inheritdoc />
