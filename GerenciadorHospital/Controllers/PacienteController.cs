@@ -1,8 +1,10 @@
 ﻿using FileTypeChecker;
 using FileTypeChecker.Abstracts;
 using GerenciadorHospital.Dto;
+using GerenciadorHospital.Entities;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
+using GerenciadorHospital.Services;
 using GerenciadorHospital.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,10 +16,13 @@ namespace GerenciadorHospital.Controllers;
 public class PacienteController : ControllerBase
 {
     private readonly IPacienteRepositorio _pacienteRepositorio;
+    private readonly IAuthenticationService _authenticationService;
 
-    public PacienteController(IPacienteRepositorio pacienteRepositorio)
+    public PacienteController(IPacienteRepositorio pacienteRepositorio,
+                              IAuthenticationService authenticationService)
     {
         _pacienteRepositorio = pacienteRepositorio;
+        _authenticationService = authenticationService;
     }
 
     /// <summary>
@@ -106,6 +111,18 @@ public class PacienteController : ControllerBase
         if (requestDtoValidado)
         {
             PacienteModel paciente = await _pacienteRepositorio.Adicionar(requestDto);
+            CadastroRequestDto novoPaciente = new CadastroRequestDto();
+
+            novoPaciente.Nome = requestDto.Nome;
+            novoPaciente.UserName = requestDto.Cpf;
+            novoPaciente.Cpf = requestDto.Cpf;
+            novoPaciente.Senha = requestDto.Senha;
+            novoPaciente.DataNasc = requestDto.DataNasc;
+            novoPaciente.Endereco = requestDto.Endereco;
+            novoPaciente.Role = Role.Paciente;
+
+            await _authenticationService.Register(novoPaciente);
+
             return Ok(paciente);
         }
         else
