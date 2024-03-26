@@ -23,6 +23,8 @@ namespace GerenciadorHospital.Services
 
         public async Task<string> Register(CadastroRequestDto request)
         {
+            if(request.Role is Role.Medico or Role.Paciente) throw new ArgumentException("Não é possível criar um paciente ou um médico nesta página");
+
             if (request.Senha.Length < 6) throw new ArgumentException("A senha deve ter ao mínimo 6 caracteres");
 
             var usuarioPorUsername = await _usuarioRepositorio.FindByNameAsync(request.Nome);
