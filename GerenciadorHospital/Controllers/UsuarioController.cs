@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using GerenciadorHospital.Dto;
+using GerenciadorHospital.Entities;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
 using GerenciadorHospital.Services;
@@ -32,6 +33,8 @@ namespace GerenciadorHospital.Controllers
         [HttpPost("cadastro")]
         public async Task<IActionResult> Cadastrar([FromBody] CadastroRequestDto usuarioModel)
         {
+            if (usuarioModel.Role is Role.Medico or Role.Paciente) throw new ArgumentException("Não é possível criar um paciente ou um médico nesta página");
+
             var response = await _authenticationService.Register(usuarioModel);
 
             return Ok(response);
