@@ -1,6 +1,7 @@
 ﻿using Azure.Core;
 using GerenciadorHospital.Dto;
 using GerenciadorHospital.Entities;
+using GerenciadorHospital.Extensions;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
 using GerenciadorHospital.Services;
@@ -37,6 +38,13 @@ namespace GerenciadorHospital.Controllers
 
             var response = await _authenticationService.Register(usuarioModel);
 
+            var resultadoDto = response.MostraResultadoDto();
+
+            if (!resultadoDto.IsSuccess)
+            {
+                return BadRequest(resultadoDto);
+            }
+
             return Ok(response);
         }
 
@@ -45,6 +53,13 @@ namespace GerenciadorHospital.Controllers
         public async Task<IActionResult> Login([FromBody] LoginRequestDto usuarioModel)
         {
             var response = await _authenticationService.Login(usuarioModel);
+
+            var resultadoDto = response.MostraResultadoDto();
+
+            if (!resultadoDto.IsSuccess)
+            {
+                return BadRequest(resultadoDto);
+            }
 
             return Ok(response);
         }

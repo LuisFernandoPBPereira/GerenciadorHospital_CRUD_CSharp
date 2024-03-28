@@ -1,4 +1,5 @@
-﻿using GerenciadorHospital.Dto;
+﻿using FluentResults;
+using GerenciadorHospital.Dto;
 using GerenciadorHospital.Entities;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
@@ -21,13 +22,13 @@ namespace GerenciadorHospital.Services
             _configuration = configuration;
         }
 
-        public async Task<string> Register(CadastroRequestDto request)
+        public async Task<Result<string>> Register(CadastroRequestDto request)
         {
-            if (request.Senha.Length < 6) throw new ArgumentException("A senha deve ter ao mínimo 6 caracteres");
+            if (request.Senha.Length < 6) return Result.Fail(new Error("A senha deve no mínimo possuir 6 caracteres"));
 
             var usuarioPorUsername = await _usuarioRepositorio.FindByNameAsync(request.Nome);
 
-            if (usuarioPorUsername is not null) throw new ArgumentException($"Usuário com o nome {request.Nome} já existe.");
+            if (usuarioPorUsername is not null) return Result.Fail(new Error($"Usuário com o nome {request.Nome} já existe."));
 
             UsuarioModel user = new()
             {
@@ -45,18 +46,17 @@ namespace GerenciadorHospital.Services
 
             await _usuarioRepositorio.AddToRoleAsync(user, request.Role);
 
-            if (!result.Succeeded)
-                throw new ArgumentException($"não foi possível cadastrar o usuário {request.Nome}, erros: {GetErrorsText(result.Errors)}");
+            if (!result.Succeeded) return Result.Fail(new Error($"não foi possível cadastrar o usuário {request.Nome}, erros: {GetErrorsText(result.Errors)}"));
 
             return await Login( new LoginRequestDto { UserName = request.UserName, Senha = request.Senha });
         }
 
-        public async Task<string> Login(LoginRequestDto request)
+        public async Task<Result<string>> Login(LoginRequestDto request)
         {
             var user = await _usuarioRepositorio.FindByNameAsync(request.UserName);
 
             if (user is null || !await _usuarioRepositorio.CheckPasswordAsync(user, request.Senha))
-                throw new ArgumentException($"Não foi possível autenticar o usuário {request.UserName}");
+                return Result.Fail(new Error($"Não foi possível autenticar o usuário {request.UserName}"));
 
             var authClaims = new List<Claim>
             {
@@ -71,7 +71,7 @@ namespace GerenciadorHospital.Services
 
             var token = GetToken(authClaims);
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return Result.Ok(new JwtSecurityTokenHandler().WriteToken(token));
         }
 
         private JwtSecurityToken GetToken(IEnumerable<Claim> authClaims)
