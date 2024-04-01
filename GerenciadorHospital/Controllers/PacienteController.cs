@@ -8,6 +8,7 @@ using GerenciadorHospital.Services;
 using GerenciadorHospital.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace GerenciadorHospital.Controllers;
 
@@ -102,23 +103,26 @@ public class PacienteController : ControllerBase
     /// <response code="200">Paciente cadastrado com SUCESSO</response>
     [HttpPost]
     [Authorize(Policy = "AdminAndDoctorRights")]
-    public async Task<ActionResult<PacienteModel>> Adicionar(PacienteResquestDto requestDto)
+    public async Task<ActionResult<PacienteModel>> Adicionar(PacienteModel pacienteModel)
     {
         //É instanciado um novo objeto para a validação das imagens carregadas na requisição
-        ValidaImagem validaImagem = new ValidaImagem(requestDto);
+        DocumentoImagemDto imagem = new DocumentoImagemDto();
+        imagem.Doc = pacienteModel.Doc;
+        imagem.DocConvenio = pacienteModel.DocConvenio;
+        ValidaImagem validaImagem = new ValidaImagem(imagem, pacienteModel);
         var requestDtoValidado = validaImagem.ValidacaoImagem();
 
         if (requestDtoValidado)
         {
-            PacienteModel paciente = await _pacienteRepositorio.Adicionar(requestDto);
+            PacienteModel paciente = await _pacienteRepositorio.Adicionar(pacienteModel);
             CadastroRequestDto novoPaciente = new CadastroRequestDto();
 
-            novoPaciente.Nome = requestDto.Nome;
-            novoPaciente.UserName = requestDto.Cpf;
-            novoPaciente.Cpf = requestDto.Cpf;
-            novoPaciente.Senha = requestDto.Senha;
-            novoPaciente.DataNasc = requestDto.DataNasc;
-            novoPaciente.Endereco = requestDto.Endereco;
+            novoPaciente.Nome = pacienteModel.Nome;
+            novoPaciente.UserName = pacienteModel.Cpf;
+            novoPaciente.Cpf = pacienteModel.Cpf;
+            novoPaciente.Senha = pacienteModel.Senha;
+            novoPaciente.DataNasc = pacienteModel.DataNasc;
+            novoPaciente.Endereco = pacienteModel.Endereco;
             novoPaciente.Role = Role.Paciente;
 
             await _authenticationService.Register(novoPaciente);
@@ -145,6 +149,33 @@ public class PacienteController : ControllerBase
         pacienteModel.Id = id;
         PacienteModel paciente = await _pacienteRepositorio.Atualizar(pacienteModel, id);
         return Ok(paciente);
+    }
+
+    /// <summary>
+    /// Atualizar um Paciente
+    /// </summary>
+    /// <param name="pacienteModel">Dados do Paciente</param>
+    /// <param name="id">ID do Paciente</param>
+    /// <returns>O paciente atualizado</returns>
+    /// <response code="200">Paciente atualizado com SUCESSO</response>
+    [HttpPut("AtualizarDoc/{id}")]
+    [Authorize(Policy = "StandardRights")]
+    public async Task<ActionResult<PacienteModel>> AtualizarDoc(DocumentoImagemDto documentoImagemDto, int id)
+    {
+
+        PacienteModel paciente = await _pacienteRepositorio.BuscarPorId(id);
+        ValidaImagem validaImagem = new ValidaImagem(documentoImagemDto, paciente);
+
+        var requestDtoValidado = validaImagem.ValidacaoImagem();
+
+        if (requestDtoValidado)
+        {
+            await _pacienteRepositorio.Atualizar(paciente, id);
+            return Ok(documentoImagemDto);
+        }
+
+        return BadRequest("Não foi possível atualizar a imagem");
+
     }
 
     /// <summary>

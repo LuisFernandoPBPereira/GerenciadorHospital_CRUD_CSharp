@@ -1,4 +1,6 @@
-﻿namespace GerenciadorHospital.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace GerenciadorHospital.Models
 {
     public class PacienteModel
     {
@@ -11,6 +13,10 @@
         public bool TemConvenio { get; set; }
         public string? ImgCarteiraDoConvenio { get; set; }
         public string? ImgDocumento { get; set; }
+        [NotMapped]
+        public IFormFile Doc { get; set; }
+        [NotMapped]
+        public IFormFile? DocConvenio { get; set; }
         /*
          * Pegamos o ID do convenio e do medicamento,
          * além de pegarmos os objetos convenio e medicamento

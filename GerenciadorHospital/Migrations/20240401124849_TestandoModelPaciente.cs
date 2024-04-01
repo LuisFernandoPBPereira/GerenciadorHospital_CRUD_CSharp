@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace GerenciadorHospital.Migrations
 {
     /// <inheritdoc />
-    public partial class TestandoSQLite : Migration
+    public partial class TestandoModelPaciente : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -94,6 +94,7 @@ namespace GerenciadorHospital.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Nome = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
                     Cpf = table.Column<string>(type: "TEXT", nullable: false),
+                    Senha = table.Column<string>(type: "TEXT", nullable: false),
                     Endereco = table.Column<string>(type: "TEXT", nullable: false),
                     DataNasc = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Crm = table.Column<string>(type: "TEXT", nullable: false),
@@ -231,6 +232,7 @@ namespace GerenciadorHospital.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Nome = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
                     Cpf = table.Column<string>(type: "TEXT", nullable: false),
+                    Senha = table.Column<string>(type: "TEXT", nullable: false),
                     Endereco = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
                     DataNasc = table.Column<DateTime>(type: "TEXT", nullable: false),
                     TemConvenio = table.Column<bool>(type: "INTEGER", nullable: false),

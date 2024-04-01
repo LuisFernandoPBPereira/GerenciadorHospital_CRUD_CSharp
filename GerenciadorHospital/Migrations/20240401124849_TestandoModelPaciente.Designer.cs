@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GerenciadorHospital.Migrations
 {
     [DbContext(typeof(BancoContext))]
-    [Migration("20240326134526_TestandoSQLite")]
-    partial class TestandoSQLite
+    [Migration("20240401124849_TestandoModelPaciente")]
+    partial class TestandoModelPaciente
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -118,6 +118,10 @@ namespace GerenciadorHospital.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Senha")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.ToTable("Medicos");
@@ -160,6 +164,10 @@ namespace GerenciadorHospital.Migrations
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasMaxLength(255)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Senha")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("TemConvenio")
