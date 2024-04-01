@@ -1,10 +1,11 @@
-﻿using GerenciadorHospital.Dto;
+﻿using FluentResults;
+using GerenciadorHospital.Dto;
 
 namespace GerenciadorHospital.Services
 {
     public interface IAuthenticationService
     {
-        Task<string> Register(CadastroRequestDto request);
-        Task<string> Login(LoginRequestDto request);
+        Task<Result<string>> Register(CadastroRequestDto request);
+        Task<Result<string>> Login(LoginRequestDto request);
     }
 }
