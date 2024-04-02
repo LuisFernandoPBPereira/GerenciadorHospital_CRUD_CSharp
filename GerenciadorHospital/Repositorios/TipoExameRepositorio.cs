@@ -50,6 +50,8 @@ namespace GerenciadorHospital.Repositorios
 
             //Fazemos as devidas alterações
             tipoExamePorId.Nome = tipoExame.Nome;
+            tipoExamePorId.PacienteId = tipoExame.PacienteId;
+            tipoExamePorId.MedicoId = tipoExame.MedicoId;
 
             //Atualizamos o banco de dados e salvamos as alterações
             _bancoContext.TiposExames.Update(tipoExamePorId);

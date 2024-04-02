@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GerenciadorHospital.Migrations
 {
     [DbContext(typeof(BancoContext))]
-    [Migration("20240401124849_TestandoModelPaciente")]
-    partial class TestandoModelPaciente
+    [Migration("20240402120346_AlterandoModels")]
+    partial class AlterandoModels
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -51,10 +51,20 @@ namespace GerenciadorHospital.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("MedicamentoId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("MedicoId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int?>("PacienteId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MedicamentoId");
+
+                    b.HasIndex("MedicoId");
 
                     b.HasIndex("PacienteId");
 
@@ -148,18 +158,12 @@ namespace GerenciadorHospital.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("ExameId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("ImgCarteiraDoConvenio")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ImgDocumento")
                         .IsRequired()
                         .HasColumnType("TEXT");
-
-                    b.Property<int?>("MedicamentoId")
-                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -176,10 +180,6 @@ namespace GerenciadorHospital.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ConvenioId");
-
-                    b.HasIndex("ExameId");
-
-                    b.HasIndex("MedicamentoId");
 
                     b.ToTable("Pacientes");
                 });
@@ -199,6 +199,9 @@ namespace GerenciadorHospital.Migrations
                     b.Property<int?>("EstadoConsulta")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("LaudoId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int?>("MedicoId")
                         .HasColumnType("INTEGER");
 
@@ -209,6 +212,8 @@ namespace GerenciadorHospital.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("LaudoId");
 
                     b.HasIndex("MedicoId");
 
@@ -223,12 +228,22 @@ namespace GerenciadorHospital.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("MedicoId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("PacienteId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("MedicoId");
+
+                    b.HasIndex("PacienteId");
 
                     b.ToTable("TiposExames");
                 });
@@ -452,9 +467,21 @@ namespace GerenciadorHospital.Migrations
 
             modelBuilder.Entity("GerenciadorHospital.Models.LaudoModel", b =>
                 {
+                    b.HasOne("GerenciadorHospital.Models.MedicamentoPacienteModel", "Medicamento")
+                        .WithMany()
+                        .HasForeignKey("MedicamentoId");
+
+                    b.HasOne("GerenciadorHospital.Models.MedicoModel", "Medico")
+                        .WithMany()
+                        .HasForeignKey("MedicoId");
+
                     b.HasOne("GerenciadorHospital.Models.PacienteModel", "Paciente")
                         .WithMany()
                         .HasForeignKey("PacienteId");
+
+                    b.Navigation("Medicamento");
+
+                    b.Navigation("Medico");
 
                     b.Navigation("Paciente");
                 });
@@ -465,23 +492,15 @@ namespace GerenciadorHospital.Migrations
                         .WithMany()
                         .HasForeignKey("ConvenioId");
 
-                    b.HasOne("GerenciadorHospital.Models.TipoExameModel", "Exame")
-                        .WithMany()
-                        .HasForeignKey("ExameId");
-
-                    b.HasOne("GerenciadorHospital.Models.MedicamentoPacienteModel", "Medicamento")
-                        .WithMany()
-                        .HasForeignKey("MedicamentoId");
-
                     b.Navigation("Convenio");
-
-                    b.Navigation("Exame");
-
-                    b.Navigation("Medicamento");
                 });
 
             modelBuilder.Entity("GerenciadorHospital.Models.RegistroConsultaModel", b =>
                 {
+                    b.HasOne("GerenciadorHospital.Models.LaudoModel", "Laudo")
+                        .WithMany()
+                        .HasForeignKey("LaudoId");
+
                     b.HasOne("GerenciadorHospital.Models.MedicoModel", "Medico")
                         .WithMany()
                         .HasForeignKey("MedicoId");
@@ -491,6 +510,23 @@ namespace GerenciadorHospital.Migrations
                         .HasForeignKey("PacienteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Laudo");
+
+                    b.Navigation("Medico");
+
+                    b.Navigation("Paciente");
+                });
+
+            modelBuilder.Entity("GerenciadorHospital.Models.TipoExameModel", b =>
+                {
+                    b.HasOne("GerenciadorHospital.Models.MedicoModel", "Medico")
+                        .WithMany()
+                        .HasForeignKey("MedicoId");
+
+                    b.HasOne("GerenciadorHospital.Models.PacienteModel", "Paciente")
+                        .WithMany()
+                        .HasForeignKey("PacienteId");
 
                     b.Navigation("Medico");
 

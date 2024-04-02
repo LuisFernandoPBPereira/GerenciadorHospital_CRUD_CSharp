@@ -53,6 +53,10 @@ namespace GerenciadorHospital.Repositorios
             consultaPorId.DataConsulta = registroConsulta.DataConsulta;
             consultaPorId.DataRetorno = registroConsulta.DataRetorno;
             consultaPorId.Valor = registroConsulta.Valor;
+            consultaPorId.MedicoId = registroConsulta.MedicoId;
+            consultaPorId.PacienteId = registroConsulta.PacienteId;
+            consultaPorId.LaudoId = registroConsulta.LaudoId;
+            consultaPorId.ExameId = registroConsulta.ExameId;
 
             //Atualizamos no banco de dados e salvamos as alterações
             _bancoContext.RegistrosConsultas.Update(consultaPorId);
@@ -70,6 +74,8 @@ namespace GerenciadorHospital.Repositorios
             return await _bancoContext.RegistrosConsultas
                 .Include(x => x.Medico)
                 .Include(x => x.Paciente)
+                .Include(x => x.Laudo)
+                .Include(x => x.Exame)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 
@@ -79,6 +85,8 @@ namespace GerenciadorHospital.Repositorios
             return await _bancoContext.RegistrosConsultas
                 .Include(x => x.Medico)
                 .Include(x => x.Paciente)
+                .Include(x => x.Laudo)
+                .Include(x => x.Exame)
                 .ToListAsync();
         }
     }

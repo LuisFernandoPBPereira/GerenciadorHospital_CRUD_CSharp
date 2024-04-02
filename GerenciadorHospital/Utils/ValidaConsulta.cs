@@ -38,28 +38,28 @@ namespace GerenciadorHospital.Utils
             var paciente = _consultaModel.PacienteId;
             PacienteModel pacientePorId = await _pacienteRepositorio.BuscarPorId(paciente);
 
-            //A consulta possui um valor padrão para quem não tem convênio
-            _consultaModel.Valor = 100;
-            _consultaModel.EstadoConsulta = Enums.StatusConsulta.Agendada;
-            if (pacientePorId.TemConvenio)
-            {
-                _consultaModel.Valor = 0;
-
-            }
-            //Se o paciente tem convênio e a consulta não foi realizada, será cobrado um valor padrão da consulta
-            if (consultaPorId.EstadoConsulta == Enums.StatusConsulta.Expirada && pacientePorId.TemConvenio)
-            {
-                _consultaModel.Valor = 100;
-            }
-            //Caso contrário, a consulta não será cobrada
-            if (consultaPorId.EstadoConsulta == Enums.StatusConsulta.Atendida && pacientePorId.TemConvenio)
-            {
-                _consultaModel.Valor = 0;
-            }
-
             //Se foi encontrada uma consulta
             if (consultaPorId != null)
             {
+                //A consulta possui um valor padrão para quem não tem convênio
+                _consultaModel.Valor = 100;
+                _consultaModel.EstadoConsulta = Enums.StatusConsulta.Agendada;
+                if (pacientePorId.TemConvenio)
+                {
+                    _consultaModel.Valor = 0;
+
+                }
+                //Se o paciente tem convênio e a consulta não foi realizada, será cobrado um valor padrão da consulta
+                if (consultaPorId.EstadoConsulta == Enums.StatusConsulta.Expirada && pacientePorId.TemConvenio)
+                {
+                    _consultaModel.Valor = 100;
+                }
+                //Caso contrário, a consulta não será cobrada
+                if (consultaPorId.EstadoConsulta == Enums.StatusConsulta.Atendida && pacientePorId.TemConvenio)
+                {
+                    _consultaModel.Valor = 0;
+                }
+
                 //E se o estado desta consulta for Agendada, será mostrado o código 400 com a seguinte mensagem
                 if (consultaPorId.EstadoConsulta == Enums.StatusConsulta.Agendada)
                 {

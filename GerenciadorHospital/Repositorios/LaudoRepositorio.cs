@@ -49,6 +49,8 @@ namespace GerenciadorHospital.Repositorios
             //Fazemos as devidas alterações
             laudoPorId.Descricao = laudo.Descricao;
             laudoPorId.PacienteId = laudo.PacienteId;
+            laudoPorId.MedicoId = laudo.MedicoId;
+            laudoPorId.MedicamentoId = laudo.MedicamentoId;
 
             //Atualizamos no banco de dados e salvamos as alterações
             _bancoContext.Laudos.Update(laudoPorId);
