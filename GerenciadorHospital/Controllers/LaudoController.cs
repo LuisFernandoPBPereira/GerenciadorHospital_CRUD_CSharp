@@ -25,8 +25,15 @@ namespace GerenciadorHospital.Controllers
         [Authorize(Policy = "StandardRights")]
         public async Task<ActionResult<List<LaudoModel>>> BuscarTodosLaudos()
         {
-            List<LaudoModel> laudos = await _laudoRepositorio.BuscarTodosLaudos();
-            return Ok(laudos);
+            try
+            {
+                List<LaudoModel> laudos = await _laudoRepositorio.BuscarTodosLaudos();
+                return Ok(laudos);
+            }
+            catch (Exception erro)
+            {
+                return BadRequest($"Não foi possível buscar todos os laudos. Erro:{erro.Message}");
+            }
         }
 
         /// <summary>
@@ -39,8 +46,15 @@ namespace GerenciadorHospital.Controllers
         [Authorize(Policy = "StandardRights")]
         public async Task<ActionResult<List<LaudoModel>>> BuscarPorId(int id)
         {
-            LaudoModel laudos = await _laudoRepositorio.BuscarPorId(id);
-            return Ok(laudos);
+            try
+            {
+                LaudoModel laudos = await _laudoRepositorio.BuscarPorId(id);
+                return Ok(laudos);
+            }
+            catch (Exception erro)
+            {
+                return BadRequest($"Não foi possível buscar o laudo com ID: {id}. Erro:{erro.Message}");
+            }
         }
 
         /// <summary>
@@ -53,8 +67,15 @@ namespace GerenciadorHospital.Controllers
         [Authorize(Policy = "AdminAndDoctorRights")]
         public async Task<ActionResult<LaudoModel>> Adicionar([FromBody] LaudoModel laudoModel)
         {
-            LaudoModel laudo = await _laudoRepositorio.Adicionar(laudoModel);
-            return Ok(laudo);
+            try
+            {
+                LaudoModel laudo = await _laudoRepositorio.Adicionar(laudoModel);
+                return Ok(laudo);
+            }
+            catch (Exception erro)
+            {
+                return BadRequest($"Não foi possível cadastrar o laudo. Erro:{erro.Message}");
+            }
         }
 
         /// <summary>
@@ -68,9 +89,16 @@ namespace GerenciadorHospital.Controllers
         [Authorize(Policy = "AdminAndDoctorRights")]
         public async Task<ActionResult<LaudoModel>> Atualizar([FromBody] LaudoModel laudoModel, int id)
         {
-            laudoModel.Id = id;
-            LaudoModel laudo = await _laudoRepositorio.Atualizar(laudoModel, id);
-            return Ok(laudo);
+            try
+            {
+                laudoModel.Id = id;
+                LaudoModel laudo = await _laudoRepositorio.Atualizar(laudoModel, id);
+                return Ok(laudo);
+            }
+            catch (Exception erro)
+            {
+                return BadRequest($"Não foi possível atualizar o laudo com ID: {id}. Erro:{erro.Message}");
+            }
         }
 
         /// <summary>
@@ -83,8 +111,15 @@ namespace GerenciadorHospital.Controllers
         [Authorize(Policy = "ElevatedRights")]
         public async Task<ActionResult<LaudoModel>> Apagar(int id)
         {
-            bool apagado = await _laudoRepositorio.Apagar(id);
-            return Ok(apagado);
+            try
+            {
+                bool apagado = await _laudoRepositorio.Apagar(id);
+                return Ok(apagado);
+            }
+            catch (Exception erro)
+            {
+                return BadRequest($"Não foi possível apagar o laudo com ID: {id}. Erro:{erro.Message}");
+            }
         }
     }
 }

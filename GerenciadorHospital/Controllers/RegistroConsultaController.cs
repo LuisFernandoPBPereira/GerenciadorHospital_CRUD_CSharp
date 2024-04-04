@@ -31,8 +31,15 @@ namespace GerenciadorHospital.Controllers
         [Authorize(Policy = "AdminAndDoctorRights")]
         public async Task<ActionResult<List<RegistroConsultaModel>>> BuscarTodosRegistrosConsultas()
         {
-            List<RegistroConsultaModel> consultas = await _consultaRepositorio.BuscarTodosRegistrosConsultas();
-            return Ok(consultas);
+            try
+            {
+                List<RegistroConsultaModel> consultas = await _consultaRepositorio.BuscarTodosRegistrosConsultas();
+                return Ok(consultas);
+            }
+            catch (Exception erro)
+            {
+                return BadRequest($"Não foi possível buscar todas as consultas. Erro: {erro.Message}");
+            }
         }
 
         /// <summary>
@@ -45,8 +52,15 @@ namespace GerenciadorHospital.Controllers
         [Authorize(Policy = "AdminAndDoctorRights")]
         public async Task<ActionResult<List<RegistroConsultaModel>>> BuscarPorId(int id)
         {
-            RegistroConsultaModel consultas = await _consultaRepositorio.BuscarPorId(id);
-            return Ok(consultas);
+            try
+            {
+                RegistroConsultaModel consultas = await _consultaRepositorio.BuscarPorId(id);
+                return Ok(consultas);
+            }
+            catch (Exception erro)
+            {
+                return BadRequest($"Não foi possível buscar a consulta com o ID: {id}. Erro: {erro.Message}");
+            }
         }
 
         /// <summary>
@@ -59,19 +73,26 @@ namespace GerenciadorHospital.Controllers
         [Authorize(Policy = "AdminAndDoctorRights")]
         public async Task<ActionResult<RegistroConsultaModel>> Adicionar([FromBody] RegistroConsultaModel consultaModel)
         {
-            //É instanciado um novo objeto para validar o cadastro da consulta
-            ValidaConsulta validaConsulta = new ValidaConsulta(_consultaRepositorio, consultaModel, _pacienteRepositorio);
-            var consultaValidada = validaConsulta.ValidacaoConsulta();
+            try
+            {
+                //É instanciado um novo objeto para validar o cadastro da consulta
+                ValidaConsulta validaConsulta = new ValidaConsulta(_consultaRepositorio, consultaModel, _pacienteRepositorio);
+                var consultaValidada = validaConsulta.ValidacaoConsulta();
 
-            if (await consultaValidada == false)
-                return BadRequest("Não foi possível cadastrar uma nova consulta: paciente já tem uma consulta agendada");
+                if (await consultaValidada == false)
+                    return BadRequest("Não foi possível cadastrar uma nova consulta: paciente já tem uma consulta agendada");
 
-            RegistroConsultaModel consulta = await _consultaRepositorio.Adicionar(consultaModel);
+                RegistroConsultaModel consulta = await _consultaRepositorio.Adicionar(consultaModel);
             
-            if(consulta == null)
-                return BadRequest("Não foi possível agendar uma consulta");
+                if(consulta == null)
+                    return BadRequest("Não foi possível agendar uma consulta");
 
-            return Ok(consulta);
+                return Ok(consulta);
+            }
+            catch (Exception erro)
+            {
+                return BadRequest($"Não foi possível cadastrar a consulta. Erro: {erro.Message}");
+            }
         }
 
         /// <summary>
@@ -85,15 +106,22 @@ namespace GerenciadorHospital.Controllers
         [Authorize(Policy = "AdminAndDoctorRights")]
         public async Task<ActionResult<RegistroConsultaModel>> Atualizar([FromBody] RegistroConsultaModel consultaModel, int id)
         {
-            consultaModel.Id = id;
-
-            if (consultaModel.EstadoConsulta == Enums.StatusConsulta.Atendida)
+            try
             {
-                consultaModel.DataRetorno = DateTime.Now.AddDays(30);
-            }
+                consultaModel.Id = id;
 
-            RegistroConsultaModel consulta = await _consultaRepositorio.Atualizar(consultaModel, id);
-            return Ok(consulta);
+                if (consultaModel.EstadoConsulta == Enums.StatusConsulta.Atendida)
+                {
+                    consultaModel.DataRetorno = DateTime.Now.AddDays(30);
+                }
+
+                RegistroConsultaModel consulta = await _consultaRepositorio.Atualizar(consultaModel, id);
+                return Ok(consulta);
+            }
+            catch (Exception erro)
+            {
+                return BadRequest($"Não foi possível atualizar a consulta com o ID: {id}. Erro: {erro.Message}");
+            }
         }
 
         /// <summary>
@@ -106,8 +134,15 @@ namespace GerenciadorHospital.Controllers
         [Authorize(Policy = "ElevatedRights")]
         public async Task<ActionResult<RegistroConsultaModel>> Apagar(int id)
         {
-            bool apagado = await _consultaRepositorio.Apagar(id);
-            return Ok(apagado);
+            try
+            {
+                bool apagado = await _consultaRepositorio.Apagar(id);
+                return Ok(apagado);
+            }
+            catch (Exception erro)
+            {
+                return BadRequest($"Não foi possível apagar a consulta com o ID: {id}. Erro: {erro.Message}");
+            }
         }
     }
 }

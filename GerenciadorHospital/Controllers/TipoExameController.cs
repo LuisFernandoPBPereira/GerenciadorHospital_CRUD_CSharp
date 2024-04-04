@@ -25,8 +25,15 @@ namespace GerenciadorHospital.Controllers
         [Authorize(Policy = "AdminAndDoctorRights")]
         public async Task<ActionResult<List<TipoExameModel>>> BuscarTodosExames()
         {
-            List<TipoExameModel> exames = await _tipoExameRepositorio.BuscarTodosExames();
-            return Ok(exames);
+            try
+            {
+                List<TipoExameModel> exames = await _tipoExameRepositorio.BuscarTodosExames();
+                return Ok(exames);
+            }
+            catch (Exception erro)
+            {
+                return BadRequest($"Não foi possível buscar todos exames. Erro: {erro.Message}");
+            }
         }
 
         /// <summary>
@@ -39,8 +46,15 @@ namespace GerenciadorHospital.Controllers
         [Authorize(Policy = "StandardRights")]
         public async Task<ActionResult<List<TipoExameModel>>> BuscarPorId(int id)
         {
-            TipoExameModel exames = await _tipoExameRepositorio.BuscarPorId(id);
-            return Ok(exames);
+            try
+            {
+                TipoExameModel exames = await _tipoExameRepositorio.BuscarPorId(id);
+                return Ok(exames);
+            }
+            catch(Exception erro)
+            {
+                return BadRequest($"Não foi possível buscar o exame com ID: {id}. Erro: {erro.Message}");
+            }
         }
 
         /// <summary>
@@ -53,8 +67,15 @@ namespace GerenciadorHospital.Controllers
         [Authorize(Policy = "AdminAndDoctorRights")]
         public async Task<ActionResult<TipoExameModel>> Adicionar([FromBody] TipoExameModel tipoExameModel)
         {
-            TipoExameModel exame = await _tipoExameRepositorio.Adicionar(tipoExameModel);
-            return Ok(exame);
+            try
+            {
+                TipoExameModel exame = await _tipoExameRepositorio.Adicionar(tipoExameModel);
+                return Ok(exame);
+            }
+            catch (Exception erro)
+            {
+                return BadRequest($"Não foi possível cadastrar o exame. Erro: {erro.Message}");
+            }
         }
 
         /// <summary>
@@ -68,9 +89,16 @@ namespace GerenciadorHospital.Controllers
         [Authorize(Policy = "AdminAndDoctorRights")]
         public async Task<ActionResult<TipoExameModel>> Atualizar([FromBody] TipoExameModel tipoExameModel, int id)
         {
-            tipoExameModel.Id = id;
-            TipoExameModel exame = await _tipoExameRepositorio.Atualizar(tipoExameModel, id);
-            return Ok(exame);
+            try
+            {
+                tipoExameModel.Id = id;
+                TipoExameModel exame = await _tipoExameRepositorio.Atualizar(tipoExameModel, id);
+                return Ok(exame);
+            }
+            catch (Exception erro)
+            {
+                return BadRequest($"Não foi possível atualizar o exame com ID: {id}. Erro: {erro.Message}");
+            }
         }
 
         /// <summary>
@@ -83,8 +111,15 @@ namespace GerenciadorHospital.Controllers
         [Authorize(Policy = "ElevatedRights")]
         public async Task<ActionResult<TipoExameModel>> Apagar(int id)
         {
-            bool apagado = await _tipoExameRepositorio.Apagar(id);
-            return Ok(apagado);
+            try
+            {
+                bool apagado = await _tipoExameRepositorio.Apagar(id);
+                return Ok(apagado);
+            }
+            catch (Exception erro)
+            {
+                return BadRequest($"Não foi possível apagar o exame com ID: {id}. Erro: {erro.Message}");
+            }
         }
     }
 }

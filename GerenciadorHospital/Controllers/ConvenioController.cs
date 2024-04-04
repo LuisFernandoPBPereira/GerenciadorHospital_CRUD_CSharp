@@ -26,8 +26,15 @@ namespace GerenciadorHospital.Controllers
         [Authorize(Policy = "StandardRights")]
         public async Task<ActionResult<List<ConvenioModel>>> BuscarTodosConvenios()
         {
-            List<ConvenioModel> convenios = await _convenioRepositorio.BuscarTodosConvenios();
-            return Ok(convenios);
+            try
+            {
+                List<ConvenioModel> convenios = await _convenioRepositorio.BuscarTodosConvenios();
+                return Ok(convenios);
+            }
+            catch (Exception erro)
+            {
+                return BadRequest($"Não foi possível buscar todos os convênios. Erro:{erro.Message}");
+            }
         }
 
         /// <summary>
@@ -40,8 +47,15 @@ namespace GerenciadorHospital.Controllers
         [Authorize(Policy = "StandardRights")]
         public async Task<ActionResult<List<ConvenioModel>>> BuscarPorId(int id)
         {
-            ConvenioModel convenio = await _convenioRepositorio.BuscarPorId(id);
-            return Ok(convenio);
+            try
+            {
+                ConvenioModel convenio = await _convenioRepositorio.BuscarPorId(id);
+                return Ok(convenio);
+            }
+            catch (Exception erro)
+            {
+                return BadRequest($"Não foi possível buscar o convênio com o ID: {id}. Erro:{erro.Message}");
+            }
         }
 
         /// <summary>
@@ -53,8 +67,15 @@ namespace GerenciadorHospital.Controllers
         [Authorize(Policy = "ElevatedRights")]
         public async Task<ActionResult<ConvenioModel>> Adicionar([FromBody] ConvenioModel convenioModel)
         {
-            ConvenioModel convenio = await _convenioRepositorio.Adicionar(convenioModel);
-            return Ok(convenio);
+            try
+            {
+                ConvenioModel convenio = await _convenioRepositorio.Adicionar(convenioModel);
+                return Ok(convenio);
+            }
+            catch (Exception erro)
+            {
+                return BadRequest($"Não foi possível cadastrar o convênio. Erro:{erro.Message}");
+            }
         }
 
         /// <summary>
@@ -68,9 +89,16 @@ namespace GerenciadorHospital.Controllers
         [Authorize(Policy = "ElevatedRights")]
         public async Task<ActionResult<ConvenioModel>> Atualizar([FromBody] ConvenioModel convenioModel, int id)
         {
-            convenioModel.Id = id;
-            ConvenioModel convenio = await _convenioRepositorio.Atualizar(convenioModel, id);
-            return Ok(convenio);
+            try
+            {
+                convenioModel.Id = id;
+                ConvenioModel convenio = await _convenioRepositorio.Atualizar(convenioModel, id);
+                return Ok(convenio);
+            }
+            catch (Exception erro)
+            {
+                return BadRequest($"Não foi possível atualizar o convênio com ID: {id}. Erro:{erro.Message}");
+            }
         }
 
         /// <summary>
@@ -83,8 +111,15 @@ namespace GerenciadorHospital.Controllers
         [Authorize(Policy = "ElevatedRights")]
         public async Task<ActionResult<ConvenioModel>> Apagar(int id)
         {
-            bool apagado = await _convenioRepositorio.Apagar(id);
-            return Ok(apagado);
+            try
+            {
+                bool apagado = await _convenioRepositorio.Apagar(id);
+                return Ok(apagado);
+            }
+            catch (Exception erro)
+            {
+                return BadRequest($"Não foi possível apagar o convênio com ID: {id}. Erro:{erro.Message}");
+            }
         }
     }
 }
