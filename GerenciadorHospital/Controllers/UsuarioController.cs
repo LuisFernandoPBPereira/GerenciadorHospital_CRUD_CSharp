@@ -18,12 +18,14 @@ namespace GerenciadorHospital.Controllers
     {
         private readonly IAuthenticationService _authenticationService;
 
-
+        #region Construtor
         public UsuarioController(IAuthenticationService authenticationService)
         {
             _authenticationService = authenticationService;
         }
+        #endregion
 
+        #region POST Cadastrar Usuário
         /// <summary>
         /// Cadastrar um Paciente
         /// </summary>
@@ -55,7 +57,9 @@ namespace GerenciadorHospital.Controllers
                 return BadRequest($"Não foi possível cadastrar o usuário. Erro: {erro.Message}");
             }
         }
+        #endregion
 
+        #region POST Efetuar Login
         [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto usuarioModel)
@@ -78,5 +82,6 @@ namespace GerenciadorHospital.Controllers
                 return BadRequest($"Não foi possível realizar o login. Erro:{erro.Message}");
             }
         }
+        #endregion
     }
 }

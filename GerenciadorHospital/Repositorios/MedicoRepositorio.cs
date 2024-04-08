@@ -9,12 +9,15 @@ namespace GerenciadorHospital.Repositorios
     {
         //Criamos o contexto do banco de dados
         private readonly BancoContext _bancoContext;
-
+        #region Construtor
         //Injetamos o contexto no construtor
         public MedicoRepositorio(BancoContext bancoContext)
         {
             _bancoContext = bancoContext;
         }
+        #endregion
+
+        #region Repositório - Adicionar Médico
         public async Task<MedicoModel> Adicionar(MedicoModel medico)
         {
             //Adicionamos o médico na tabela Medicos e salvamos as alterações
@@ -23,7 +26,9 @@ namespace GerenciadorHospital.Repositorios
 
             return medico;
         }
+        #endregion
 
+        #region Repositório - Apagar Médico
         public async Task<bool> Apagar(int id)
         {
             //Pegamos um médico por id de forma assíncrona
@@ -39,7 +44,9 @@ namespace GerenciadorHospital.Repositorios
 
             return true;
         }
+        #endregion
 
+        #region Repositório - Atualizar Médico
         public async Task<MedicoModel> Atualizar(MedicoModel medico, int id)
         {
             //Pegamos um médico por id de forma assíncrona
@@ -61,17 +68,22 @@ namespace GerenciadorHospital.Repositorios
 
             return medicoPorId;
         }
+        #endregion
 
+        #region Repositório - Buscar Médico Por ID
         public async Task<MedicoModel> BuscarPorId(int id)
         {
             //Retornamos o primeiro médico ou o padrão por ID
             return await _bancoContext.Medicos.FirstOrDefaultAsync(x => x.Id == id);
         }
+        #endregion
 
+        #region Repositório - Buscar Todos Médicos
         public async Task<List<MedicoModel>> BuscarTodosMedicos()
         {
             //Retornamos todos os médicos
             return await _bancoContext.Medicos.ToListAsync();
         }
+        #endregion
     }
 }

@@ -11,11 +11,15 @@ namespace GerenciadorHospital.Repositorios
     {
         //Criamos o conexto do banco de dados
         private readonly BancoContext _bancoContext;
+        #region Construtor
         //Injetamos no construtor
         public RegistroConsultaRepositorio(BancoContext bancoContext)
         {
             _bancoContext = bancoContext;
         }
+        #endregion
+
+        #region Repositório - Adicionar Consulta
         public async Task<RegistroConsultaModel> Adicionar(RegistroConsultaModel registroConsulta)
         {
             //Adicionamos uma consulta na tabela RegistrosConsultas e salvamos as alterações
@@ -24,7 +28,9 @@ namespace GerenciadorHospital.Repositorios
 
             return registroConsulta;
         }
+        #endregion
 
+        #region Repositório - Apagar Consulta
         public async Task<bool> Apagar(int id)
         {
             //Pegamos a primeira consulta pelo ID de forma assíncrona
@@ -40,7 +46,9 @@ namespace GerenciadorHospital.Repositorios
 
             return true;
         }
+        #endregion
 
+        #region Repositório - Atualizar Consulta
         public async Task<RegistroConsultaModel> Atualizar(RegistroConsultaModel registroConsulta, int id)
         {
             //Pegamos a consulta pelo ID de forma assíncrona
@@ -66,7 +74,9 @@ namespace GerenciadorHospital.Repositorios
 
             return consultaPorId;
         }
+        #endregion
 
+        #region Repositório - Buscar Consulta Por ID do Paciente
         public async Task<List<RegistroConsultaModel>> BuscarConsultaPorPacienteId(int id, StatusConsulta statusConsulta)
         {
             return await _bancoContext.RegistrosConsultas
@@ -77,7 +87,9 @@ namespace GerenciadorHospital.Repositorios
                 .Include(x => x.Exame)
                 .ToListAsync();
         }
+        #endregion
 
+        #region Repositório - Buscar Consulta Por ID do Médico
         public async Task<List<RegistroConsultaModel>> BuscarConsultaPorMedicoId(int id, StatusConsulta statusConsulta, string? dataInicial, string? dataFinal)
         {
             DateTime dataInicialConvertida = DateTime.Now;
@@ -102,11 +114,9 @@ namespace GerenciadorHospital.Repositorios
                 .Include(x => x.Exame)
                 .ToListAsync();
         }
+        #endregion
 
-        /*
-         * Retornamos a primeira consulta ou o padrão pelo ID, incluindo
-         * os objetos Medico e Paciente
-        */
+        #region Repositório - Buscar Consulta Por ID
         public async Task<RegistroConsultaModel> BuscarPorId(int id)
         {
             return await _bancoContext.RegistrosConsultas
@@ -116,7 +126,9 @@ namespace GerenciadorHospital.Repositorios
                 .Include(x => x.Exame)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
+        #endregion
 
+        #region Repositório - Buscar Todas Consultas
         public async Task<List<RegistroConsultaModel>> BuscarTodosRegistrosConsultas()
         {
             //Retornamos todas as consultas com os objetos medico e paciente
@@ -127,5 +139,6 @@ namespace GerenciadorHospital.Repositorios
                 .Include(x => x.Exame)
                 .ToListAsync();
         }
+        #endregion
     }
 }

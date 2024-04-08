@@ -16,13 +16,16 @@ namespace GerenciadorHospital.Controllers
     {
         private readonly IRegistroConsultaRepositorio _consultaRepositorio;
         private readonly IPacienteRepositorio _pacienteRepositorio;
+        #region Construtor
         public RegistroConsultaController(IRegistroConsultaRepositorio consultaRepositorio, 
                                           IPacienteRepositorio pacienteRepositorio)
         {
             _consultaRepositorio = consultaRepositorio;
             _pacienteRepositorio = pacienteRepositorio;
         }
+        #endregion
 
+        #region GET Todas Consultas
         /// <summary>
         /// Busca Todas Consultas
         /// </summary>
@@ -42,7 +45,9 @@ namespace GerenciadorHospital.Controllers
                 return BadRequest($"Não foi possível buscar todas as consultas. Erro: {erro.Message}");
             }
         }
+        #endregion
 
+        #region GET Consulta Por ID
         /// <summary>
         /// Busca Consulta por ID
         /// </summary>
@@ -63,7 +68,9 @@ namespace GerenciadorHospital.Controllers
                 return BadRequest($"Não foi possível buscar a consulta com o ID: {id}. Erro: {erro.Message}");
             }
         }
+        #endregion
 
+        #region GET Consulta Por ID do Paciente
         /// <summary>
         /// Busca Consulta por ID
         /// </summary>
@@ -85,7 +92,9 @@ namespace GerenciadorHospital.Controllers
                 return BadRequest($"Não foi possível buscar a consulta com o ID: {id}. Erro: {erro.Message}");
             }
         }
+        #endregion
 
+        #region GET Consulta Por ID do Médico
         /// <summary>
         /// Busca Consulta por ID
         /// </summary>
@@ -110,7 +119,9 @@ namespace GerenciadorHospital.Controllers
                 return BadRequest($"Não foi possível buscar a consulta com o ID: {id}. Erro: {erro.Message}");
             }
         }
+        #endregion
 
+        #region POST Cadastrar Consulta
         /// <summary>
         /// Cadastrar Consulta
         /// </summary>
@@ -142,7 +153,9 @@ namespace GerenciadorHospital.Controllers
                 return BadRequest($"Não foi possível cadastrar a consulta. Erro: {erro.Message}");
             }
         }
+        #endregion
 
+        #region PUT Atualizar Consulta
         /// <summary>
         /// Atualizar Consulta
         /// </summary>
@@ -171,7 +184,9 @@ namespace GerenciadorHospital.Controllers
                 return BadRequest($"Não foi possível atualizar a consulta com o ID: {id}. Erro: {erro.Message}");
             }
         }
+        #endregion
 
+        #region DELETE Apagar Consulta
         /// <summary>
         /// Apagar Consulta
         /// </summary>
@@ -192,5 +207,6 @@ namespace GerenciadorHospital.Controllers
                 return BadRequest($"Não foi possível apagar a consulta com o ID: {id}. Erro: {erro.Message}");
             }
         }
+        #endregion
     }
 }

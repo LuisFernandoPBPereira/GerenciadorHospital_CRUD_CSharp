@@ -7,6 +7,7 @@ namespace GerenciadorHospital.Data
 {
     public class SeedManager
     {
+        #region Seeds
         public static async Task Seed(IServiceProvider services)
         {
             await SeedRoles(services);
@@ -15,7 +16,9 @@ namespace GerenciadorHospital.Data
             await SeedPaciente(services);
             await SeedMedico(services);
         }
+        #endregion
 
+        #region Seeds das Roles
         private static async Task SeedRoles(IServiceProvider services)
         {
             var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
@@ -24,7 +27,9 @@ namespace GerenciadorHospital.Data
             await roleManager.CreateAsync(new IdentityRole(Role.Paciente));
             await roleManager.CreateAsync(new IdentityRole(Role.Medico));
         }
+        #endregion
 
+        #region Seed Admin
         private static async Task SeedAdminUser(IServiceProvider services)
         {
             var context = services.GetRequiredService<BancoContext>();
@@ -47,7 +52,9 @@ namespace GerenciadorHospital.Data
                 await userManager.AddToRoleAsync(adminUser, Role.Admin);
             }
         }
+        #endregion
 
+        #region Seed Paciente
         private static async Task SeedPaciente(IServiceProvider services)
         {
             var context = services.GetRequiredService<BancoContext>();
@@ -71,7 +78,9 @@ namespace GerenciadorHospital.Data
                 await userManager.AddToRoleAsync(adminUser, Role.Paciente);
             }
         }
+        #endregion
 
+        #region Seed Médico
         private static async Task SeedMedico(IServiceProvider services)
         {
             var context = services.GetRequiredService<BancoContext>();
@@ -95,5 +104,6 @@ namespace GerenciadorHospital.Data
                 await userManager.AddToRoleAsync(adminUser, Role.Medico);
             }
         }
+        #endregion
     }
 }

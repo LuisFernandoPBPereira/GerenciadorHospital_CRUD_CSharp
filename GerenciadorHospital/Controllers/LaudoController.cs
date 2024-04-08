@@ -11,11 +11,14 @@ namespace GerenciadorHospital.Controllers
     public class LaudoController : ControllerBase
     {
         private readonly ILaudoRepositorio _laudoRepositorio;
+        #region Construtor
         public LaudoController(ILaudoRepositorio laudoRepositorio)
         {
             _laudoRepositorio = laudoRepositorio;
         }
+        #endregion
 
+        #region GET Todos Laudos
         /// <summary>
         /// Busca Todos Laudos
         /// </summary>
@@ -35,7 +38,9 @@ namespace GerenciadorHospital.Controllers
                 return BadRequest($"Não foi possível buscar todos os laudos. Erro:{erro.Message}");
             }
         }
+        #endregion
 
+        #region GET Buscar Laudo Por ID
         /// <summary>
         /// Busca Laudos por ID
         /// </summary>
@@ -56,7 +61,9 @@ namespace GerenciadorHospital.Controllers
                 return BadRequest($"Não foi possível buscar o laudo com ID: {id}. Erro:{erro.Message}");
             }
         }
+        #endregion
 
+        #region GET Buscar Laudo com Filtro
         /// <summary>
         /// Busca Laudos por ID
         /// </summary>
@@ -82,7 +89,9 @@ namespace GerenciadorHospital.Controllers
                 return BadRequest($"Não foi possível buscar o laudo com ID: . Erro: {erro.Message}");
             }
         }
+        #endregion
 
+        #region POST Cadastrar Laudo
         /// <summary>
         /// Cadastrar Laudo
         /// </summary>
@@ -103,7 +112,9 @@ namespace GerenciadorHospital.Controllers
                 return BadRequest($"Não foi possível cadastrar o laudo. Erro:{erro.Message}");
             }
         }
+        #endregion
 
+        #region PUT Atualizar Laudo
         /// <summary>
         /// Atualizar Laudo
         /// </summary>
@@ -126,7 +137,9 @@ namespace GerenciadorHospital.Controllers
                 return BadRequest($"Não foi possível atualizar o laudo com ID: {id}. Erro:{erro.Message}");
             }
         }
+        #endregion
 
+        #region DELETE Apagar Laudo
         /// <summary>
         /// Apagar Laudo
         /// </summary>
@@ -147,5 +160,6 @@ namespace GerenciadorHospital.Controllers
                 return BadRequest($"Não foi possível apagar o laudo com ID: {id}. Erro:{erro.Message}");
             }
         }
+        #endregion
     }
 }
