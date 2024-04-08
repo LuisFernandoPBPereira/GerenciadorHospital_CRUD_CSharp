@@ -1,4 +1,5 @@
-﻿using GerenciadorHospital.Models;
+﻿using GerenciadorHospital.Enums;
+using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios;
 using GerenciadorHospital.Repositorios.Interfaces;
 using GerenciadorHospital.Utils;
@@ -55,6 +56,28 @@ namespace GerenciadorHospital.Controllers
             try
             {
                 RegistroConsultaModel consultas = await _consultaRepositorio.BuscarPorId(id);
+                return Ok(consultas);
+            }
+            catch (Exception erro)
+            {
+                return BadRequest($"Não foi possível buscar a consulta com o ID: {id}. Erro: {erro.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Busca Consulta por ID
+        /// </summary>
+        /// <param name="id">ID da Consulta</param>
+        /// <param name="statusConsulta">Estado da Consulta</param>
+        /// <returns>Consulta</returns>
+        /// <response code="200">Consulta Retornada com SUCESSO</response>
+        [HttpGet("BuscarConsultaPorPaciente/{id}")]
+        [Authorize(Policy = "StandardRights")]
+        public async Task<ActionResult<List<RegistroConsultaModel>>> BuscarConsultaPorPacienteId(int id, StatusConsulta statusConsulta)
+        {
+            try
+            {
+                List<RegistroConsultaModel> consultas = await _consultaRepositorio.BuscarConsultaPorPacienteId(id, statusConsulta);
                 return Ok(consultas);
             }
             catch (Exception erro)

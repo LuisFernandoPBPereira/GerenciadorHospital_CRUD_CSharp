@@ -1,4 +1,5 @@
 ﻿using GerenciadorHospital.Data;
+using GerenciadorHospital.Enums;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -63,6 +64,17 @@ namespace GerenciadorHospital.Repositorios
             await _bancoContext.SaveChangesAsync();
 
             return consultaPorId;
+        }
+
+        public async Task<List<RegistroConsultaModel>> BuscarConsultaPorPacienteId(int id, StatusConsulta statusConsulta)
+        {
+            return await _bancoContext.RegistrosConsultas
+                .Where(x => statusConsulta == 0 ? x.PacienteId == id : x.PacienteId == id && x.EstadoConsulta == statusConsulta)
+                .Include(x => x.Medico)
+                .Include(x => x.Paciente)
+                .Include(x => x.Laudo)
+                .Include(x => x.Exame)
+                .ToListAsync();
         }
 
         /*
