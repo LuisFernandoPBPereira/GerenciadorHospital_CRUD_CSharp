@@ -3,6 +3,7 @@ using GerenciadorHospital.Enums;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace GerenciadorHospital.Repositorios
 {
@@ -70,6 +71,31 @@ namespace GerenciadorHospital.Repositorios
         {
             return await _bancoContext.RegistrosConsultas
                 .Where(x => statusConsulta == 0 ? x.PacienteId == id : x.PacienteId == id && x.EstadoConsulta == statusConsulta)
+                .Include(x => x.Medico)
+                .Include(x => x.Paciente)
+                .Include(x => x.Laudo)
+                .Include(x => x.Exame)
+                .ToListAsync();
+        }
+
+        public async Task<List<RegistroConsultaModel>> BuscarConsultaPorMedicoId(int id, StatusConsulta statusConsulta, string? dataInicial, string? dataFinal)
+        {
+            DateTime dataInicialConvertida = DateTime.Now;
+            DateTime dataFinalConvertida = DateTime.Now;
+
+            var query = _bancoContext.RegistrosConsultas
+                .Where(x => statusConsulta == 0 ? x.MedicoId == id : x.MedicoId == id && x.EstadoConsulta == statusConsulta);
+
+
+            if (dataInicial != string.Empty)
+            {
+                dataInicialConvertida = DateTime.Parse(dataInicial);
+                dataFinalConvertida = DateTime.Parse(dataFinal);
+                query = query.Where(x => dataInicial != string.Empty ? x.DataConsulta.Date > dataInicialConvertida.Date && 
+                                                                       x.DataConsulta < dataFinalConvertida : x.MedicoId == id);
+            }
+
+            return await query
                 .Include(x => x.Medico)
                 .Include(x => x.Paciente)
                 .Include(x => x.Laudo)

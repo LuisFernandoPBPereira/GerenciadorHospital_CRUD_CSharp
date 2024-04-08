@@ -4,6 +4,7 @@
     {
         public int Id { get; set; }
         public string Descricao { get; set; }
+        public DateTime? DataCriacao { get; set; }
         public int? PacienteId { get; set; }
         public int? MedicoId { get; set; }
         public int? MedicamentoId { get; set; }

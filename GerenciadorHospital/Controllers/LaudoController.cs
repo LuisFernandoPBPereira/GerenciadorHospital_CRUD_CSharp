@@ -58,6 +58,32 @@ namespace GerenciadorHospital.Controllers
         }
 
         /// <summary>
+        /// Busca Laudos por ID
+        /// </summary>
+        /// <param name="dataInicial">Data inicial do Laudo</param>
+        /// <param name="dataFinal">Data final do Laudo</param>
+        /// <param name="medicoId">ID medico</param>
+        /// <param name="pacienteId">ID paciente</param>
+        /// <returns>Laudo</returns>
+        /// <response code="200">Laudo Retornado com SUCESSO</response>
+        [HttpGet("BuscarLaudo")]
+        [Authorize(Policy = "StandardRights")]
+        public async Task<ActionResult<List<LaudoModel>>> BuscarLaudo(string? dataInicial, string? dataFinal, int medicoId, int pacienteId)
+        {
+            try
+            {
+                dataInicial = dataInicial ?? string.Empty;
+                dataFinal = dataFinal ?? string.Empty;
+                List<LaudoModel> laudos = await _laudoRepositorio.BuscarLaudo(dataInicial, dataFinal, medicoId, pacienteId);
+                return Ok(laudos);
+            }
+            catch (Exception erro)
+            {
+                return BadRequest($"Não foi possível buscar o laudo com ID: . Erro: {erro.Message}");
+            }
+        }
+
+        /// <summary>
         /// Cadastrar Laudo
         /// </summary>
         /// <param name="laudoModel">Dados do Laudo</param>

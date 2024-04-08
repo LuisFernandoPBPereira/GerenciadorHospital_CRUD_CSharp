@@ -87,6 +87,31 @@ namespace GerenciadorHospital.Controllers
         }
 
         /// <summary>
+        /// Busca Consulta por ID
+        /// </summary>
+        /// <param name="id">ID da Consulta</param>
+        /// <param name="statusConsulta">Estado da Consulta</param>
+        /// <param name="data">Data da Consulta</param>
+        /// <returns>Consulta</returns>
+        /// <response code="200">Consulta Retornada com SUCESSO</response>
+        [HttpGet("BuscarConsultaPorMedico/{id}")]
+        [Authorize(Policy = "StandardRights")]
+        public async Task<ActionResult<List<RegistroConsultaModel>>> BuscarConsultaPorMedicoId(int id, StatusConsulta statusConsulta, string? dataInicial, string? dataFinal)
+        {
+            try
+            {
+                if (dataInicial == null) dataInicial = string.Empty;
+                if (dataFinal == null) dataFinal = string.Empty;
+                List<RegistroConsultaModel> consultas = await _consultaRepositorio.BuscarConsultaPorMedicoId(id, statusConsulta, dataInicial, dataFinal);
+                return Ok(consultas);
+            }
+            catch (Exception erro)
+            {
+                return BadRequest($"Não foi possível buscar a consulta com o ID: {id}. Erro: {erro.Message}");
+            }
+        }
+
+        /// <summary>
         /// Cadastrar Consulta
         /// </summary>
         /// <param name="consultaModel">Dados da Consulta</param>

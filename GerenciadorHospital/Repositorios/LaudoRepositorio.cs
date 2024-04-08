@@ -17,6 +17,7 @@ namespace GerenciadorHospital.Repositorios
         public async Task<LaudoModel> Adicionar(LaudoModel laudo)
         {
             //Adicionamos na tabela Laudos e salvamos as alterações
+            laudo.DataCriacao = DateTime.Now;
             await _bancoContext.Laudos.AddAsync(laudo);
             await _bancoContext.SaveChangesAsync();
 
@@ -57,6 +58,31 @@ namespace GerenciadorHospital.Repositorios
             await _bancoContext.SaveChangesAsync();
 
             return laudoPorId;
+        }
+
+        public async Task<List<LaudoModel>> BuscarLaudo(string? dataInicial, string? dataFinal, int medicoId, int pacienteId)
+        {
+            var dataInicialConvertida = DateTime.Now;
+            var dataFinalConvertida = DateTime.Now;
+
+            var query = _bancoContext.Laudos.Where(x => x.PacienteId == pacienteId && x.MedicoId == medicoId);
+
+            if (medicoId == 0) query = query.Where(x => x.PacienteId == pacienteId);
+            if (pacienteId == 0) query = query.Where(x => x.MedicoId == medicoId);
+            if (medicoId == 0 && pacienteId == 0) query = _bancoContext.Laudos;
+            
+            if (dataInicial != string.Empty)
+            {
+                dataInicialConvertida = DateTime.Parse(dataInicial);
+                dataFinalConvertida = DateTime.Parse(dataFinal);
+                query = query.Where(x => x.DataCriacao > dataInicialConvertida && x.DataCriacao < dataFinalConvertida);
+
+            }
+            return await query 
+                .Include(x => x.Paciente)
+                .Include(x => x.Medico)
+                .Include(x => x.Medicamento)
+                .ToListAsync();
         }
 
         public async Task<LaudoModel> BuscarPorId(int id)
