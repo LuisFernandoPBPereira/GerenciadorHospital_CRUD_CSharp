@@ -20,7 +20,7 @@ namespace GerenciadorHospital.Dto
         [Required]
         public string Endereco { get; set; }
         [Required]
-        [MinLength(Consts.TamanhoDataNasc, ErrorMessage = Consts.ErroDeValidacaoDataNasc)]
+        //[MinLength(Consts.TamanhoDataNasc, ErrorMessage = Consts.ErroDeValidacaoDataNasc)]
         public DateTime DataNasc { get; set; }
         [Required]
         public string Role { get; set; }

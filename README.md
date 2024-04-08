@@ -58,22 +58,21 @@
 
 ```
 PACIENTE
-public int Id {  get; set; }
+public int Id { get; set; }
 public string Nome { get; set; }
 public string Cpf { get; set; }
 public string Senha { get; set; }
 public string Endereco { get; set; }
-public DateTime DataNasc {  get; set; }
+public DateTime DataNasc { get; set; }
 public bool TemConvenio { get; set; }
 public string? ImgCarteiraDoConvenio { get; set; }
 public string? ImgDocumento { get; set; }
+[NotMapped]
+public IFormFile Doc { get; set; }
+[NotMapped]
+public IFormFile? DocConvenio { get; set; }
 public int? ConvenioId { get; set; }
-public int? MedicamentoId { get; set; }
-public int? ExameId { get; set; }
 public virtual ConvenioModel? Convenio {  get; set; }
-public virtual MedicamentoPacienteModel? Medicamento {  get; set; }
-public virtual TipoExameModel? Exame {  get; set; }
-
 
 
 MÉDICO
@@ -81,6 +80,8 @@ public int Id { get; set; }
 public string Nome { get; set; }
 public string Cpf { get; set; }
 public string Senha { get; set; }
+public string Endereco { get; set; }
+public DateTime DataNasc { get; set; }
 public string Crm { get; set; }
 public string Especializacao { get; set; }
 
@@ -93,26 +94,37 @@ public float Preco { get; set; }
 TIPOS EXAMES
 public int Id { get; set; }
 public string Nome { get; set; }
-
-REGISTRO CONSULTAS
-public int Id { get; set; }
-public int PacienteId { get; set; }
+public int? PacienteId { get; set; }
 public int? MedicoId { get; set; }
-public DateTime DataConsulta {  get; set; }
-public decimal? Valor { get; set; }
-public DateTime? DataRetorno { get; set; }
-public StatusConsulta? EstadoConsulta { get; set; }
 public virtual PacienteModel? Paciente { get; set; }
 public virtual MedicoModel? Medico { get; set; }
+
+REGISTRO CONSULTAS
+ public int Id { get; set; }
+ public DateTime DataConsulta {  get; set; }
+ public decimal? Valor { get; set; }
+ public DateTime? DataRetorno { get; set; }
+ public StatusConsulta? EstadoConsulta { get; set; }
+ public int PacienteId { get; set; }
+ public int? MedicoId { get; set; }
+ public int? LaudoId { get; set; }
+ public int? ExameId { get; set; }
+ public virtual PacienteModel? Paciente { get; set; }
+ public virtual MedicoModel? Medico { get; set; }
+ public virtual LaudoModel? Laudo { get; set; }
+ public virtual TipoExameModel? Exame { get; set; }
 
 LAUDOS
 public int Id { get; set; }
 public string Descricao { get; set; }
 public int? PacienteId { get; set; }
+public int? MedicoId { get; set; }
+public int? MedicamentoId { get; set; }
 public virtual PacienteModel? Paciente { get; set; }
+public virtual MedicoModel? Medico { get; set; }
+public virtual MedicamentoPacienteModel? Medicamento { get; set; }
 
 MEDICAMENTOS DO PACIENTE
-
 public int Id { get; set; }
 public string Nome { get; set; }
 public string Composicao { get; set; }
@@ -129,16 +141,6 @@ public DateTime? DataNasc { get; set; }
 public string? Role { get; set; }
 ```
 
-<h2>Campos dos atributos da PacienteRequestDto (DTO: Data Transfer Object -> Objeto de Transferência de Dados)</h2>
-
-```
-public class PacienteResquestDto : PacienteModel
-{
-    public IFormFile Doc { get; set; }
-    public IFormFile DocConvenio? { get; set; }
-}
-
-```
 <h2>Retorno da Imagem do paciente:</h2>
 <ul>
 	<li>Criamos um endpoint separadamente, apenas para retornar a imagem do paciente, sendo mais eficiente;</li>

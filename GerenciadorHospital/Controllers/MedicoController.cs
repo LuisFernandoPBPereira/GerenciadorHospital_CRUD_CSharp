@@ -31,8 +31,15 @@ namespace GerenciadorHospital.Controllers
         [Authorize(Policy = "ElevatedRights")]
         public async Task<ActionResult<List<MedicoModel>>> BuscarTodosMedicos()
         {
-            List<MedicoModel> medicos = await _medicoRepositorio.BuscarTodosMedicos();
-            return Ok(medicos);
+            try
+            {
+                List<MedicoModel> medicos = await _medicoRepositorio.BuscarTodosMedicos();
+                return Ok(medicos);
+            }
+            catch(Exception erro)
+            {
+                return BadRequest($"Não foi possível buscar todos os médicos. Erro: {erro.Message}");
+            }
         }
 
         /// <summary>
@@ -45,8 +52,15 @@ namespace GerenciadorHospital.Controllers
         [Authorize(Policy = "ElevatedRights")]
         public async Task<ActionResult<List<MedicoModel>>> BuscarPorId(int id)
         {
-            MedicoModel medicos = await _medicoRepositorio.BuscarPorId(id);
-            return Ok(medicos);
+            try
+            {
+                MedicoModel medicos = await _medicoRepositorio.BuscarPorId(id);
+                return Ok(medicos);
+            }
+            catch (Exception erro)
+            {
+                return BadRequest($"Não foi possível buscar o médico com ID: {id}. Erro: {erro.Message}");
+            }
         }
 
         /// <summary>
@@ -59,21 +73,28 @@ namespace GerenciadorHospital.Controllers
         [Authorize(Policy = "ElevatedRights")]
         public async Task<ActionResult<MedicoModel>> Adicionar([FromBody] MedicoModel medicoModel)
         {
-            MedicoModel medico = await _medicoRepositorio.Adicionar(medicoModel);
+            try
+            {
+                MedicoModel medico = await _medicoRepositorio.Adicionar(medicoModel);
+            
+                CadastroRequestDto novoMedico = new CadastroRequestDto();
 
-            CadastroRequestDto novoMedico = new CadastroRequestDto();
+                novoMedico.Nome = medico.Nome;
+                novoMedico.UserName = medico.Crm;
+                novoMedico.Cpf = medico.Cpf;
+                novoMedico.Senha = medico.Senha;
+                novoMedico.DataNasc = medico.DataNasc;
+                novoMedico.Endereco = medico.Endereco;
+                novoMedico.Role = Role.Medico;
 
-            novoMedico.Nome = medico.Nome;
-            novoMedico.UserName = medico.Crm;
-            novoMedico.Cpf = medico.Cpf;
-            novoMedico.Senha = medico.Senha;
-            novoMedico.DataNasc = medico.DataNasc;
-            novoMedico.Endereco = medico.Endereco;
-            novoMedico.Role = Role.Medico;
+                await _authenticationService.Register(novoMedico);
 
-            await _authenticationService.Register(novoMedico);
-
-            return Ok(medico);
+                return Ok(medico);
+            }
+            catch (Exception erro)
+            {
+                return BadRequest($"Não foi possível cadastrar o médico. Erro:{erro.Message}");
+            }
         }
 
         /// <summary>
@@ -87,9 +108,16 @@ namespace GerenciadorHospital.Controllers
         [Authorize(Policy = "ElevatedRights")]
         public async Task<ActionResult<MedicoModel>> Atualizar([FromBody] MedicoModel medicoModel, int id)
         {
-            medicoModel.Id = id;
-            MedicoModel medico = await _medicoRepositorio.Atualizar(medicoModel, id);
-            return Ok(medico);
+            try
+            {
+                medicoModel.Id = id;
+                MedicoModel medico = await _medicoRepositorio.Atualizar(medicoModel, id);
+                return Ok(medico);
+            }
+            catch (Exception erro)
+            {
+                return BadRequest($"Não foi possível atualizar o médico com ID: {id}. Erro: {erro.Message}");
+            }
         }
 
         /// <summary>
@@ -102,8 +130,15 @@ namespace GerenciadorHospital.Controllers
         [Authorize(Policy = "ElevatedRights")]
         public async Task<ActionResult<MedicoModel>> Apagar(int id)
         {
-            bool apagado = await _medicoRepositorio.Apagar(id);
-            return Ok(apagado);
+            try
+            {
+                bool apagado = await _medicoRepositorio.Apagar(id);
+                return Ok(apagado);
+            }
+            catch (Exception erro)
+            {
+                return BadRequest($"Não possível apagar o médico com o ID: {id}. Erro: {erro.Message}");
+            }
         }
     }
 }

@@ -8,6 +8,7 @@ using GerenciadorHospital.Services;
 using GerenciadorHospital.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace GerenciadorHospital.Controllers;
 
@@ -34,8 +35,15 @@ public class PacienteController : ControllerBase
     [Authorize(Policy = "AdminAndDoctorRights")]
     public async Task<ActionResult<List<PacienteModel>>> BuscarTodosPacientes()
     {
-        List<PacienteModel> pacientes = await _pacienteRepositorio.BuscarTodosPacientes();
-        return Ok(pacientes);
+        try
+        {
+            List<PacienteModel> pacientes = await _pacienteRepositorio.BuscarTodosPacientes();
+            return Ok(pacientes);
+        }
+        catch(Exception erro)
+        {
+            return BadRequest($"Não foi possível buscar todos os pacientes. Erro: {erro.Message}");
+        }
     }
 
     /// <summary>
@@ -48,8 +56,15 @@ public class PacienteController : ControllerBase
     [Authorize(Policy = "AdminAndDoctorRights")]
     public async Task<ActionResult<List<PacienteModel>>> BuscarPorId(int id)
     {
-        PacienteModel paciente = await _pacienteRepositorio.BuscarPorId(id);
-        return Ok(paciente);
+        try
+        {
+            PacienteModel paciente = await _pacienteRepositorio.BuscarPorId(id);
+            return Ok(paciente);
+        }
+        catch (Exception erro)
+        {
+            return BadRequest($"Não foi possívell buscar o paciente com o ID: {id}. Erro: {erro.Message}");
+        }
     }
 
     /// <summary>
@@ -62,17 +77,24 @@ public class PacienteController : ControllerBase
     [Authorize(Policy = "AdminAndDoctorRights")]
     public async Task<ActionResult<List<PacienteModel>>> BuscarDocConvenioPorId(int id)
     {
-        //Capturamos o paciente pelo ID
-        PacienteModel paciente = await _pacienteRepositorio.BuscarDocConvenioPorId(id);
+        try
+        {
+            //Capturamos o paciente pelo ID
+            PacienteModel paciente = await _pacienteRepositorio.BuscarDocConvenioPorId(id);
 
-        if (paciente.TemConvenio == false)
-            return BadRequest("Este paciente não possui convênio");
+            if (paciente.TemConvenio == false)
+                return BadRequest("Este paciente não possui convênio");
 
-        string caminho = paciente.ImgCarteiraDoConvenio;
+            string caminho = paciente.ImgCarteiraDoConvenio;
 
-        var imagem = new BuscaImagem(paciente);
+            var imagem = new BuscaImagem(paciente);
         
-        return imagem.BuscarImagem(caminho);
+            return imagem.BuscarImagem(caminho);
+        }
+        catch (Exception erro)
+        {
+            return BadRequest($"Não foi possível buscar o documento do convênio com ID: {id}. Erro: {erro.Message}");
+        }
     }
 
     /// <summary>
@@ -85,49 +107,70 @@ public class PacienteController : ControllerBase
     [Authorize(Policy = "AdminAndDoctorRights")]
     public async Task<ActionResult<List<PacienteModel>>> BuscarDocPorId(int id)
     {
-        PacienteModel paciente = await _pacienteRepositorio.BuscarDocPorId(id);
+        try
+        {
+            PacienteModel paciente = await _pacienteRepositorio.BuscarDocPorId(id);
         
-        string caminho = paciente.ImgDocumento;
+            string caminho = paciente.ImgDocumento;
 
-        var imagem = new BuscaImagem(paciente);
+            var imagem = new BuscaImagem(paciente);
 
-        return imagem.BuscarImagem(caminho);
+            return imagem.BuscarImagem(caminho);
+        }
+        catch (Exception erro)
+        {
+            return BadRequest($"Não foi possível buscar o documento do paciente com o ID: {id}. Erro: {erro.Message}");
+        }
     }
 
     /// <summary>
     /// Cadastrar um Paciente
     /// </summary>
-    /// <param name="requestDto">Dados do Paciente</param>
+    /// <param name="pacienteModel">Dados do Paciente</param>
     /// <returns>Paciente Cadastrado</returns>
     /// <response code="200">Paciente cadastrado com SUCESSO</response>
     [HttpPost]
     [Authorize(Policy = "AdminAndDoctorRights")]
-    public async Task<ActionResult<PacienteModel>> Adicionar(PacienteResquestDto requestDto)
+    public async Task<ActionResult<PacienteModel>> Adicionar(PacienteModel pacienteModel)
     {
-        //É instanciado um novo objeto para a validação das imagens carregadas na requisição
-        ValidaImagem validaImagem = new ValidaImagem(requestDto);
-        var requestDtoValidado = validaImagem.ValidacaoImagem();
-
-        if (requestDtoValidado)
+        try 
         {
-            PacienteModel paciente = await _pacienteRepositorio.Adicionar(requestDto);
-            CadastroRequestDto novoPaciente = new CadastroRequestDto();
+            if (pacienteModel.TemConvenio == false && pacienteModel.DocConvenio.Length > 0)
+            {
+                return BadRequest("Não é possível adicionar uma carteira de convênio, caso o campo TemConvenio seja falso");
+            }
+            //É instanciado um novo objeto para a validação das imagens carregadas na requisição
+            DocumentoImagemDto imagem = new DocumentoImagemDto();
+            imagem.Doc = pacienteModel.Doc;
+            imagem.DocConvenio = pacienteModel.DocConvenio;
+            ValidaImagem validaImagem = new ValidaImagem(imagem, pacienteModel);
+            var requestDtoValidado = validaImagem.ValidacaoImagem();
 
-            novoPaciente.Nome = requestDto.Nome;
-            novoPaciente.UserName = requestDto.Cpf;
-            novoPaciente.Cpf = requestDto.Cpf;
-            novoPaciente.Senha = requestDto.Senha;
-            novoPaciente.DataNasc = requestDto.DataNasc;
-            novoPaciente.Endereco = requestDto.Endereco;
-            novoPaciente.Role = Role.Paciente;
+            if (requestDtoValidado)
+            {
+                PacienteModel paciente = await _pacienteRepositorio.Adicionar(pacienteModel);
+                CadastroRequestDto novoPaciente = new CadastroRequestDto();
 
-            await _authenticationService.Register(novoPaciente);
+                novoPaciente.Nome = pacienteModel.Nome;
+                novoPaciente.UserName = pacienteModel.Cpf;
+                novoPaciente.Cpf = pacienteModel.Cpf;
+                novoPaciente.Senha = pacienteModel.Senha;
+                novoPaciente.DataNasc = pacienteModel.DataNasc;
+                novoPaciente.Endereco = pacienteModel.Endereco;
+                novoPaciente.Role = Role.Paciente;
 
-            return Ok(paciente);
+                await _authenticationService.Register(novoPaciente);
+
+                return Ok(paciente);
+            }
+            else
+            {
+                return BadRequest("Não foi possível cadastrar o paciente: Imagem inválida ou inexistente");
+            }
         }
-        else
+        catch (Exception erro)
         {
-            return BadRequest("Não foi possível cadastrar o paciente: Imagem inválida ou inexistente");
+            return BadRequest($"Não foi possível cadastrar o paciente. Erro: {erro.Message}");
         }
     }
 
@@ -142,9 +185,49 @@ public class PacienteController : ControllerBase
     [Authorize(Policy = "StandardRights")]
     public async Task<ActionResult<PacienteModel>> Atualizar([FromBody] PacienteModel pacienteModel, int id)
     {
-        pacienteModel.Id = id;
-        PacienteModel paciente = await _pacienteRepositorio.Atualizar(pacienteModel, id);
-        return Ok(paciente);
+        try
+        {
+            pacienteModel.Id = id;
+            PacienteModel paciente = await _pacienteRepositorio.Atualizar(pacienteModel, id);
+            return Ok(paciente);
+        }
+        catch (Exception erro)
+        {
+            return BadRequest($"Não foi possível atualizar o paciente com ID: {id}. Erro: {erro.Message}");
+        }
+    }
+
+    /// <summary>
+    /// Atualizar um Paciente
+    /// </summary>
+    /// <param name="documentoImagemDto">Dados do Paciente</param>
+    /// <param name="id">ID do Paciente</param>
+    /// <returns>O paciente atualizado</returns>
+    /// <response code="200">Paciente atualizado com SUCESSO</response>
+    [HttpPut("AtualizarDoc/{id}")]
+    [Authorize(Policy = "StandardRights")]
+    public async Task<ActionResult<PacienteModel>> AtualizarDoc(DocumentoImagemDto documentoImagemDto, int id)
+    {
+        try
+        {
+            PacienteModel paciente = await _pacienteRepositorio.BuscarPorId(id);
+            ValidaImagem validaImagem = new ValidaImagem(documentoImagemDto, paciente);
+
+            var requestDtoValidado = validaImagem.ValidacaoImagem();
+
+            if (requestDtoValidado)
+            {
+                await _pacienteRepositorio.Atualizar(paciente, id);
+                return Ok(documentoImagemDto);
+            }
+
+            return BadRequest("Não foi possível atualizar a imagem");
+        }
+        catch (Exception erro)
+        {
+            return BadRequest($"Não foi possível atualizar o documento do paciente com o ID: {id}. Erro: {erro.Message}");
+        }
+
     }
 
     /// <summary>
@@ -157,7 +240,14 @@ public class PacienteController : ControllerBase
     [Authorize(Policy = "ElevatedRights")]
     public async Task<ActionResult<PacienteModel>> Apagar(int id)
     {
-        bool apagado = await _pacienteRepositorio.Apagar(id);
-        return Ok(apagado);
+        try
+        {
+            bool apagado = await _pacienteRepositorio.Apagar(id);
+            return Ok(apagado);
+        }
+        catch (Exception erro)
+        {
+            return BadRequest($"Não foi possível apagar o paciente com o ID: {id}. Erro: {erro.Message}");
+        }
     }
 }

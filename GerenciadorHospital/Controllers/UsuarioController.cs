@@ -34,34 +34,49 @@ namespace GerenciadorHospital.Controllers
         [HttpPost("cadastro")]
         public async Task<IActionResult> Cadastrar([FromBody] CadastroRequestDto usuarioModel)
         {
-            if (usuarioModel.Role is Role.Medico or Role.Paciente) throw new ArgumentException("Não é possível criar um paciente ou um médico nesta página");
-
-            var response = await _authenticationService.Register(usuarioModel);
-
-            var resultadoDto = response.MostraResultadoDto();
-
-            if (!resultadoDto.IsSuccess)
+            try
             {
-                return BadRequest(resultadoDto);
-            }
+                if (usuarioModel.Role is Role.Medico or Role.Paciente) 
+                    throw new ArgumentException("Não é possível criar um paciente ou um médico nesta página");
 
-            return Ok(response);
+                var response = await _authenticationService.Register(usuarioModel);
+
+                var resultadoDto = response.MostraResultadoDto();
+
+                if (!resultadoDto.IsSuccess)
+                {
+                    return BadRequest(resultadoDto);
+                }
+
+                return Ok(response);
+            }
+            catch (Exception erro)
+            {
+                return BadRequest($"Não foi possível cadastrar o usuário. Erro: {erro.Message}");
+            }
         }
 
         [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto usuarioModel)
         {
-            var response = await _authenticationService.Login(usuarioModel);
-
-            var resultadoDto = response.MostraResultadoDto();
-
-            if (!resultadoDto.IsSuccess)
+            try
             {
-                return BadRequest(resultadoDto);
-            }
+                var response = await _authenticationService.Login(usuarioModel);
 
-            return Ok(response);
+                var resultadoDto = response.MostraResultadoDto();
+
+                if (!resultadoDto.IsSuccess)
+                {
+                    return BadRequest(resultadoDto);
+                }
+
+                return Ok(response);
+            }
+            catch (Exception erro)
+            {
+                return BadRequest($"Não foi possível realizar o login. Erro:{erro.Message}");
+            }
         }
     }
 }

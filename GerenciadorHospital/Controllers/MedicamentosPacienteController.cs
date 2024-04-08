@@ -25,8 +25,15 @@ namespace GerenciadorHospital.Controllers
         [Authorize(Policy = "StandardRights")]
         public async Task<ActionResult<List<MedicamentoPacienteModel>>> BuscarTodosMedicamentosPaciente()
         {
-            List<MedicamentoPacienteModel> medicos = await _medicamentosPacienteRepositorio.BuscarTodosMedicamentosPaciente();
-            return Ok(medicos);
+            try
+            {
+                List<MedicamentoPacienteModel> medicos = await _medicamentosPacienteRepositorio.BuscarTodosMedicamentosPaciente();
+                return Ok(medicos);
+            }
+            catch (Exception erro)
+            {
+                return BadRequest($"Não foi possível buscar todos medicamentos. Erro:{erro.Message}");
+            }
         }
 
         /// <summary>
@@ -39,8 +46,15 @@ namespace GerenciadorHospital.Controllers
         [Authorize(Policy = "StandardRights")]
         public async Task<ActionResult<List<MedicamentoPacienteModel>>> BuscarPorId(int id)
         {
-            MedicamentoPacienteModel medicamentos = await _medicamentosPacienteRepositorio.BuscarPorId(id);
-            return Ok(medicamentos);
+            try
+            {
+                MedicamentoPacienteModel medicamentos = await _medicamentosPacienteRepositorio.BuscarPorId(id);
+                return Ok(medicamentos);
+            }
+            catch (Exception erro)
+            {
+                return BadRequest($"Não foi possível buscar o medicamento com ID: {id}. Erro:{erro.Message}");
+            }
         }
 
         /// <summary>
@@ -53,8 +67,15 @@ namespace GerenciadorHospital.Controllers
         [Authorize(Policy = "ElevatedRights")]
         public async Task<ActionResult<MedicamentoPacienteModel>> Adicionar([FromBody] MedicamentoPacienteModel medicamentoModel)
         {
-            MedicamentoPacienteModel medicamentos = await _medicamentosPacienteRepositorio.Adicionar(medicamentoModel);
-            return Ok(medicamentos);
+            try
+            {
+                MedicamentoPacienteModel medicamentos = await _medicamentosPacienteRepositorio.Adicionar(medicamentoModel);
+                return Ok(medicamentos);
+            }
+            catch (Exception erro)
+            {
+                return BadRequest($"Não foi possível cadastrar o medicamento. Erro:{erro.Message}");
+            }
         }
 
         /// <summary>
@@ -68,9 +89,16 @@ namespace GerenciadorHospital.Controllers
         [Authorize(Policy = "ElevatedRights")]
         public async Task<ActionResult<MedicamentoPacienteModel>> Atualizar([FromBody] MedicamentoPacienteModel medicamentoModel, int id)
         {
-            medicamentoModel.Id = id;
-            MedicamentoPacienteModel medicamentos = await _medicamentosPacienteRepositorio.Atualizar(medicamentoModel, id);
-            return Ok(medicamentos);
+            try
+            {
+                medicamentoModel.Id = id;
+                MedicamentoPacienteModel medicamentos = await _medicamentosPacienteRepositorio.Atualizar(medicamentoModel, id);
+                return Ok(medicamentos);
+            }
+            catch (Exception erro)
+            {
+                return BadRequest($"Não foi possível atualizar o medicamento com ID: {id}. Erro:{erro.Message}");
+            }
         }
 
         /// <summary>
@@ -83,8 +111,15 @@ namespace GerenciadorHospital.Controllers
         [Authorize(Policy = "ElevatedRights")]
         public async Task<ActionResult<MedicamentoPacienteModel>> Apagar(int id)
         {
-            bool apagado = await _medicamentosPacienteRepositorio.Apagar(id);
-            return Ok(apagado);
+            try
+            {
+                bool apagado = await _medicamentosPacienteRepositorio.Apagar(id);
+                return Ok(apagado);
+            }
+            catch (Exception erro)
+            {
+                return BadRequest($"Não foi possível apagar o medicamento com ID: {id}. Erro: {erro.Message}");
+            }
         }
     }
 }

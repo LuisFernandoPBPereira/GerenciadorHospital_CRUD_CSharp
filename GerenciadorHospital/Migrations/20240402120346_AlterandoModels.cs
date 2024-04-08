@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace GerenciadorHospital.Migrations
 {
     /// <inheritdoc />
-    public partial class TestandoSQLite : Migration
+    public partial class AlterandoModels : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -94,6 +94,7 @@ namespace GerenciadorHospital.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Nome = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
                     Cpf = table.Column<string>(type: "TEXT", nullable: false),
+                    Senha = table.Column<string>(type: "TEXT", nullable: false),
                     Endereco = table.Column<string>(type: "TEXT", nullable: false),
                     DataNasc = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Crm = table.Column<string>(type: "TEXT", nullable: false),
@@ -102,19 +103,6 @@ namespace GerenciadorHospital.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Medicos", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TiposExames",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Nome = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TiposExames", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -231,14 +219,13 @@ namespace GerenciadorHospital.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Nome = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
                     Cpf = table.Column<string>(type: "TEXT", nullable: false),
+                    Senha = table.Column<string>(type: "TEXT", nullable: false),
                     Endereco = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
                     DataNasc = table.Column<DateTime>(type: "TEXT", nullable: false),
                     TemConvenio = table.Column<bool>(type: "INTEGER", nullable: false),
                     ImgCarteiraDoConvenio = table.Column<string>(type: "TEXT", nullable: true),
                     ImgDocumento = table.Column<string>(type: "TEXT", nullable: false),
-                    ConvenioId = table.Column<int>(type: "INTEGER", nullable: true),
-                    MedicamentoId = table.Column<int>(type: "INTEGER", nullable: true),
-                    ExameId = table.Column<int>(type: "INTEGER", nullable: true)
+                    ConvenioId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -247,16 +234,6 @@ namespace GerenciadorHospital.Migrations
                         name: "FK_Pacientes_Convenios_ConvenioId",
                         column: x => x.ConvenioId,
                         principalTable: "Convenios",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Pacientes_MedicamentosPaciente_MedicamentoId",
-                        column: x => x.MedicamentoId,
-                        principalTable: "MedicamentosPaciente",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Pacientes_TiposExames_ExameId",
-                        column: x => x.ExameId,
-                        principalTable: "TiposExames",
                         principalColumn: "Id");
                 });
 
@@ -267,13 +244,50 @@ namespace GerenciadorHospital.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Descricao = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
-                    PacienteId = table.Column<int>(type: "INTEGER", nullable: true)
+                    PacienteId = table.Column<int>(type: "INTEGER", nullable: true),
+                    MedicoId = table.Column<int>(type: "INTEGER", nullable: true),
+                    MedicamentoId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Laudos", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Laudos_MedicamentosPaciente_MedicamentoId",
+                        column: x => x.MedicamentoId,
+                        principalTable: "MedicamentosPaciente",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Laudos_Medicos_MedicoId",
+                        column: x => x.MedicoId,
+                        principalTable: "Medicos",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_Laudos_Pacientes_PacienteId",
+                        column: x => x.PacienteId,
+                        principalTable: "Pacientes",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TiposExames",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Nome = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
+                    PacienteId = table.Column<int>(type: "INTEGER", nullable: true),
+                    MedicoId = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TiposExames", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TiposExames_Medicos_MedicoId",
+                        column: x => x.MedicoId,
+                        principalTable: "Medicos",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_TiposExames_Pacientes_PacienteId",
                         column: x => x.PacienteId,
                         principalTable: "Pacientes",
                         principalColumn: "Id");
@@ -290,11 +304,17 @@ namespace GerenciadorHospital.Migrations
                     DataConsulta = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Valor = table.Column<decimal>(type: "TEXT", nullable: true),
                     DataRetorno = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    EstadoConsulta = table.Column<int>(type: "INTEGER", nullable: true)
+                    EstadoConsulta = table.Column<int>(type: "INTEGER", nullable: true),
+                    LaudoId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_RegistrosConsultas", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RegistrosConsultas_Laudos_LaudoId",
+                        column: x => x.LaudoId,
+                        principalTable: "Laudos",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_RegistrosConsultas_Medicos_MedicoId",
                         column: x => x.MedicoId,
@@ -346,6 +366,16 @@ namespace GerenciadorHospital.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Laudos_MedicamentoId",
+                table: "Laudos",
+                column: "MedicamentoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Laudos_MedicoId",
+                table: "Laudos",
+                column: "MedicoId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Laudos_PacienteId",
                 table: "Laudos",
                 column: "PacienteId");
@@ -356,14 +386,9 @@ namespace GerenciadorHospital.Migrations
                 column: "ConvenioId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Pacientes_ExameId",
-                table: "Pacientes",
-                column: "ExameId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Pacientes_MedicamentoId",
-                table: "Pacientes",
-                column: "MedicamentoId");
+                name: "IX_RegistrosConsultas_LaudoId",
+                table: "RegistrosConsultas",
+                column: "LaudoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RegistrosConsultas_MedicoId",
@@ -373,6 +398,16 @@ namespace GerenciadorHospital.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_RegistrosConsultas_PacienteId",
                 table: "RegistrosConsultas",
+                column: "PacienteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TiposExames_MedicoId",
+                table: "TiposExames",
+                column: "MedicoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TiposExames_PacienteId",
+                table: "TiposExames",
                 column: "PacienteId");
         }
 
@@ -395,16 +430,22 @@ namespace GerenciadorHospital.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Laudos");
+                name: "RegistrosConsultas");
 
             migrationBuilder.DropTable(
-                name: "RegistrosConsultas");
+                name: "TiposExames");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Laudos");
+
+            migrationBuilder.DropTable(
+                name: "MedicamentosPaciente");
 
             migrationBuilder.DropTable(
                 name: "Medicos");
@@ -414,12 +455,6 @@ namespace GerenciadorHospital.Migrations
 
             migrationBuilder.DropTable(
                 name: "Convenios");
-
-            migrationBuilder.DropTable(
-                name: "MedicamentosPaciente");
-
-            migrationBuilder.DropTable(
-                name: "TiposExames");
         }
     }
 }

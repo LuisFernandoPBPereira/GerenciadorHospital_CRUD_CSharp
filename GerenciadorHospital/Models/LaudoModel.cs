@@ -4,9 +4,12 @@
     {
         public int Id { get; set; }
         public string Descricao { get; set; }
-        //Pegamos o ID do paciente
+        public DateTime? DataCriacao { get; set; }
         public int? PacienteId { get; set; }
-        //Usamos um publilc virutal do tipo PacienteModel para recebermos o paciente
+        public int? MedicoId { get; set; }
+        public int? MedicamentoId { get; set; }
         public virtual PacienteModel? Paciente { get; set; }
+        public virtual MedicoModel? Medico { get; set; }
+        public virtual MedicamentoPacienteModel? Medicamento { get; set; }
     }
 }
