@@ -20,6 +20,7 @@ var configuration = builder.Configuration;
 // Contexto do Banco (SQLite para testes no banco)
 builder.Services.AddDbContext<BancoContext>(options => options.UseSqlite(configuration.GetConnectionString("DataBase")));
 
+#region Configuração do SQL Server
 // Configuramos o EntityFramework
 /*
 builder.Services.AddEntityFrameworkSqlServer().
@@ -27,7 +28,9 @@ builder.Services.AddEntityFrameworkSqlServer().
         options => options.UseSqlServer(builder.Configuration.GetConnectionString("DataBase"))
 );
 */
+#endregion
 
+#region Configuração do Identity
 // Configurando a adição do Identity
 builder.Services.AddIdentity<UsuarioModel, IdentityRole>()
     .AddRoles<IdentityRole>()
@@ -36,14 +39,16 @@ builder.Services.AddIdentity<UsuarioModel, IdentityRole>()
     .AddDefaultTokenProviders()
     .AddEntityFrameworkStores<BancoContext>()
     .AddDefaultTokenProviders();
+#endregion
 
+#region Configuração da Autenticação (JWT)
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 })
-
+    #region Adicionando o JWT
     // Adição do JWT
     .AddJwtBearer(options =>
     {
@@ -60,7 +65,10 @@ builder.Services.AddAuthentication(options =>
             ClockSkew = TimeSpan.Zero
         };
     });
+#endregion
+#endregion
 
+#region Configuração de Autorização (Políticas e Roles)
 // Adicionando políticas para travar os endpoints
 builder.Services.AddAuthorization(options =>
 {
@@ -71,13 +79,14 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("StandardRights", policy =>
         policy.RequireRole(Role.Admin, Role.Paciente, Role.Medico));
 });
+#endregion
 
-// Escopo da injeção de dependência do serviço de autenticação
-builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
+#region Configuração do Swagger
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Gerenciador de Hospital", Version = "v1" });
@@ -107,8 +116,11 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
     });
+#endregion
 
+#region Configuração das Injeções de Dependência (adição do escopo)
 //Configuramos as injeções de dependências para podermos acessar a controller
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IPacienteRepositorio, PacienteRepositorio>();
 builder.Services.AddScoped<IConvenioRepositorio, ConvenioRepositorio>();
 builder.Services.AddScoped<IMedicoRepositorio, MedicoRepositorio>();
@@ -116,6 +128,7 @@ builder.Services.AddScoped<IMedicamentosPacienteRepositorio, MedicamentoPaciente
 builder.Services.AddScoped<IRegistroConsultaRepositorio, RegistroConsultaRepositorio>();
 builder.Services.AddScoped<ILaudoRepositorio, LaudoRepositorio>();
 builder.Services.AddScoped<ITipoExameRepositorio, TipoExameRepositorio>();
+#endregion
 
 var app = builder.Build();
 
