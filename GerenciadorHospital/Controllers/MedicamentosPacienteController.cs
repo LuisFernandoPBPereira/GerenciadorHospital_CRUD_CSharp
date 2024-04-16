@@ -1,5 +1,6 @@
 ﻿using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
+using GerenciadorHospital.Services.Medicamento;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -30,8 +31,10 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                List<MedicamentoPacienteModel> medicos = await _medicamentosPacienteRepositorio.BuscarTodosMedicamentosPaciente();
-                return Ok(medicos);
+                MedicamentosService medicamentosService = new MedicamentosService(_medicamentosPacienteRepositorio);
+                var response = await medicamentosService.BuscarTodosMedicamentosPaciente();
+
+                return Ok(response);
             }
             catch (Exception erro)
             {
@@ -53,8 +56,10 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                MedicamentoPacienteModel medicamentos = await _medicamentosPacienteRepositorio.BuscarPorId(id);
-                return Ok(medicamentos);
+                MedicamentosService medicamentosService = new MedicamentosService(_medicamentosPacienteRepositorio);
+                var response = await medicamentosService.BuscarPorId(id);
+
+                return Ok(response);
             }
             catch (Exception erro)
             {
@@ -76,8 +81,10 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                MedicamentoPacienteModel medicamentos = await _medicamentosPacienteRepositorio.Adicionar(medicamentoModel);
-                return Ok(medicamentos);
+                MedicamentosService medicamentosService = new MedicamentosService(_medicamentosPacienteRepositorio);
+                var response = await medicamentosService.Adicionar(medicamentoModel);
+
+                return Ok(response);
             }
             catch (Exception erro)
             {
@@ -100,9 +107,10 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                medicamentoModel.Id = id;
-                MedicamentoPacienteModel medicamentos = await _medicamentosPacienteRepositorio.Atualizar(medicamentoModel, id);
-                return Ok(medicamentos);
+                MedicamentosService medicamentosService = new MedicamentosService(_medicamentosPacienteRepositorio);
+                var response = await medicamentosService.Atualizar(medicamentoModel, id);
+
+                return Ok(response);
             }
             catch (Exception erro)
             {
@@ -124,8 +132,10 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                bool apagado = await _medicamentosPacienteRepositorio.Apagar(id);
-                return Ok(apagado);
+                MedicamentosService medicamentosService = new MedicamentosService(_medicamentosPacienteRepositorio);
+                var response = await medicamentosService.Apagar(id);
+
+                return Ok(response);
             }
             catch (Exception erro)
             {

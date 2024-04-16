@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GerenciadorHospital.Services.Paciente
 {
-    public class PacienteService
+    public class PacienteService : IPacienteService
     {
         private readonly IPacienteRepositorio _pacienteRepositorio;
         private readonly IAuthenticationService _authenticationService;
@@ -52,6 +52,73 @@ namespace GerenciadorHospital.Services.Paciente
             {
                 throw new Exception("Não foi possível cadastrar um novo paciente");
             }
+        }
+
+        public async Task<bool> Apagar(int id)
+        {
+            bool apagado = await _pacienteRepositorio.Apagar(id);
+            return apagado;
+        }
+
+        public async Task<PacienteModel> Atualizar(PacienteModel pacienteModel, int id)
+        {
+            pacienteModel.Id = id;
+            PacienteModel paciente = await _pacienteRepositorio.Atualizar(pacienteModel, id);
+            return paciente;
+        }
+
+        public async Task<DocumentoImagemDto> AtualizarDoc(DocumentoImagemDto documentoImagemDto, int id)
+        {
+            PacienteModel paciente = await _pacienteRepositorio.BuscarPorId(id);
+            ValidaImagem validaImagem = new ValidaImagem(documentoImagemDto, paciente);
+
+            var requestDtoValidado = validaImagem.ValidacaoImagem();
+
+            if (requestDtoValidado)
+            {
+                await _pacienteRepositorio.Atualizar(paciente, id);
+                return documentoImagemDto;
+            }
+
+            throw new("Não foi possível atualizar a imagem");
+        }
+
+        public async Task<FileContentResult> BuscarDocConvenioPorId(int id)
+        {
+            //Capturamos o paciente pelo ID
+            PacienteModel paciente = await _pacienteRepositorio.BuscarDocConvenioPorId(id);
+
+            if (paciente.TemConvenio == false)
+                throw new Exception("Este paciente não possui convênio");
+
+            string caminho = paciente.ImgCarteiraDoConvenio;
+
+            var imagem = new BuscaImagem(paciente);
+
+            return imagem.BuscarImagem(caminho);
+        }
+
+        public async Task<FileContentResult> BuscarDocPorId(int id)
+        {
+            PacienteModel paciente = await _pacienteRepositorio.BuscarDocPorId(id);
+
+            string caminho = paciente.ImgDocumento;
+
+            var imagem = new BuscaImagem(paciente);
+
+            return imagem.BuscarImagem(caminho);
+        }
+
+        public async Task<PacienteModel> BuscarPorId(int id)
+        {
+            PacienteModel paciente = await _pacienteRepositorio.BuscarPorId(id);
+            return paciente;
+        }
+
+        public async Task<List<PacienteModel>> BuscarTodosPacientes()
+        {
+            List<PacienteModel> pacientes = await _pacienteRepositorio.BuscarTodosPacientes();
+            return pacientes;
         }
     }
 }

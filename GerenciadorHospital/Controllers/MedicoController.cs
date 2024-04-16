@@ -37,8 +37,10 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                List<MedicoModel> medicos = await _medicoRepositorio.BuscarTodosMedicos();
-                return Ok(medicos);
+                MedicoService medicoService = new MedicoService(_authenticationService, _medicoRepositorio);
+                var response = await medicoService.BuscarTodosMedicos();
+
+                return Ok(response);
             }
             catch(Exception erro)
             {
@@ -60,8 +62,10 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                MedicoModel medicos = await _medicoRepositorio.BuscarPorId(id);
-                return Ok(medicos);
+                MedicoService medicoService = new MedicoService(_authenticationService, _medicoRepositorio);
+                var response = await medicoService.BuscarPorId(id);
+
+                return Ok(response);
             }
             catch (Exception erro)
             {
@@ -84,7 +88,7 @@ namespace GerenciadorHospital.Controllers
             try
             {
                 MedicoService medicoService = new MedicoService(_authenticationService, _medicoRepositorio);
-                var response = await medicoService.AdicionarMedico(medicoModel);
+                var response = await medicoService.Adicionar(medicoModel);
 
                 return Ok(response);
             }
@@ -109,9 +113,10 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                medicoModel.Id = id;
-                MedicoModel medico = await _medicoRepositorio.Atualizar(medicoModel, id);
-                return Ok(medico);
+                MedicoService medicoService = new MedicoService(_authenticationService, _medicoRepositorio);
+                var response = await medicoService.Atualizar(medicoModel, id);
+
+                return Ok(response);
             }
             catch (Exception erro)
             {
@@ -133,8 +138,10 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                bool apagado = await _medicoRepositorio.Apagar(id);
-                return Ok(apagado);
+                MedicoService medicoService = new MedicoService(_authenticationService, _medicoRepositorio);
+                var response = await medicoService.Apagar(id);
+
+                return Ok(response);
             }
             catch (Exception erro)
             {

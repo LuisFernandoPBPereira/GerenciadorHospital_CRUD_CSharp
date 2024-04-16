@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GerenciadorHospital.Services.Medico
 {
-    public class MedicoService
+    public class MedicoService : IMedicoService
     {
         private readonly IAuthenticationService _authenticationService;
         private readonly IMedicoRepositorio _medicoRepositorio;
@@ -17,7 +17,7 @@ namespace GerenciadorHospital.Services.Medico
             _authenticationService = authenticationService;
             _medicoRepositorio = medicoRepositorio;
         }
-        public async Task<MedicoModel> AdicionarMedico(MedicoModel medicoModel)
+        public async Task<MedicoModel> Adicionar(MedicoModel medicoModel)
         {
             MedicoModel medico = await _medicoRepositorio.Adicionar(medicoModel);
 
@@ -34,6 +34,31 @@ namespace GerenciadorHospital.Services.Medico
             await _authenticationService.Register(novoMedico);
 
             return medico;
+        }
+
+        public async Task<bool> Apagar(int id)
+        {
+            bool apagado = await _medicoRepositorio.Apagar(id);
+            return apagado;
+        }
+
+        public async Task<MedicoModel> Atualizar(MedicoModel medicoModel, int id)
+        {
+            medicoModel.Id = id;
+            MedicoModel medico = await _medicoRepositorio.Atualizar(medicoModel, id);
+            return medico;
+        }
+
+        public async Task<MedicoModel> BuscarPorId(int id)
+        {
+            MedicoModel medicos = await _medicoRepositorio.BuscarPorId(id);
+            return medicos;
+        }
+
+        public async Task<List<MedicoModel>> BuscarTodosMedicos()
+        {
+            List<MedicoModel> medicos = await _medicoRepositorio.BuscarTodosMedicos();
+            return medicos;
         }
     }
 }

@@ -41,8 +41,10 @@ public class PacienteController : ControllerBase
     {
         try
         {
-            List<PacienteModel> pacientes = await _pacienteRepositorio.BuscarTodosPacientes();
-            return Ok(pacientes);
+            PacienteService pacienteService = new PacienteService(_pacienteRepositorio, _authenticationService);
+            var response = await pacienteService.BuscarTodosPacientes();
+
+            return Ok(response);
         }
         catch(Exception erro)
         {
@@ -64,8 +66,10 @@ public class PacienteController : ControllerBase
     {
         try
         {
-            PacienteModel paciente = await _pacienteRepositorio.BuscarPorId(id);
-            return Ok(paciente);
+            PacienteService pacienteService = new PacienteService(_pacienteRepositorio, _authenticationService);
+            var response = await pacienteService.BuscarPorId(id);
+
+            return Ok(response);
         }
         catch (Exception erro)
         {
@@ -87,17 +91,10 @@ public class PacienteController : ControllerBase
     {
         try
         {
-            //Capturamos o paciente pelo ID
-            PacienteModel paciente = await _pacienteRepositorio.BuscarDocConvenioPorId(id);
+            PacienteService pacienteService = new PacienteService(_pacienteRepositorio, _authenticationService);
+            var response = await pacienteService.BuscarDocConvenioPorId(id);
 
-            if (paciente.TemConvenio == false)
-                return BadRequest("Este paciente não possui convênio");
-
-            string caminho = paciente.ImgCarteiraDoConvenio;
-
-            var imagem = new BuscaImagem(paciente);
-        
-            return imagem.BuscarImagem(caminho);
+            return Ok(response);
         }
         catch (Exception erro)
         {
@@ -119,13 +116,10 @@ public class PacienteController : ControllerBase
     {
         try
         {
-            PacienteModel paciente = await _pacienteRepositorio.BuscarDocPorId(id);
-        
-            string caminho = paciente.ImgDocumento;
+            PacienteService pacienteService = new PacienteService(_pacienteRepositorio, _authenticationService);
+            var response = await pacienteService.BuscarDocPorId(id);
 
-            var imagem = new BuscaImagem(paciente);
-
-            return imagem.BuscarImagem(caminho);
+            return Ok(response);
         }
         catch (Exception erro)
         {
@@ -173,9 +167,10 @@ public class PacienteController : ControllerBase
     {
         try
         {
-            pacienteModel.Id = id;
-            PacienteModel paciente = await _pacienteRepositorio.Atualizar(pacienteModel, id);
-            return Ok(paciente);
+            PacienteService pacienteService = new PacienteService(_pacienteRepositorio, _authenticationService);
+            var response = await pacienteService.Atualizar(pacienteModel, id);
+
+            return Ok(response);
         }
         catch (Exception erro)
         {
@@ -198,18 +193,10 @@ public class PacienteController : ControllerBase
     {
         try
         {
-            PacienteModel paciente = await _pacienteRepositorio.BuscarPorId(id);
-            ValidaImagem validaImagem = new ValidaImagem(documentoImagemDto, paciente);
+            PacienteService pacienteService = new PacienteService(_pacienteRepositorio, _authenticationService);
+            var response = await pacienteService.AtualizarDoc(documentoImagemDto, id);
 
-            var requestDtoValidado = validaImagem.ValidacaoImagem();
-
-            if (requestDtoValidado)
-            {
-                await _pacienteRepositorio.Atualizar(paciente, id);
-                return Ok(documentoImagemDto);
-            }
-
-            return BadRequest("Não foi possível atualizar a imagem");
+            return Ok(response);
         }
         catch (Exception erro)
         {
@@ -232,8 +219,10 @@ public class PacienteController : ControllerBase
     {
         try
         {
-            bool apagado = await _pacienteRepositorio.Apagar(id);
-            return Ok(apagado);
+            PacienteService pacienteService = new PacienteService(_pacienteRepositorio, _authenticationService);
+            var response = await pacienteService.Apagar(id);
+
+            return Ok(response);
         }
         catch (Exception erro)
         {

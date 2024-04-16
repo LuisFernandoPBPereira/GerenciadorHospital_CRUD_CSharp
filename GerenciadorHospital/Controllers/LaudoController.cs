@@ -1,5 +1,6 @@
 ﻿using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
+using GerenciadorHospital.Services.Laudo;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -30,8 +31,10 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                List<LaudoModel> laudos = await _laudoRepositorio.BuscarTodosLaudos();
-                return Ok(laudos);
+                LaudoService laudoService = new LaudoService(_laudoRepositorio);
+                var response = await laudoService.BuscarTodosLaudos();
+                
+                return Ok(response);
             }
             catch (Exception erro)
             {
@@ -53,8 +56,10 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                LaudoModel laudos = await _laudoRepositorio.BuscarPorId(id);
-                return Ok(laudos);
+                LaudoService laudoService = new LaudoService(_laudoRepositorio);
+                var response = await laudoService.BuscarPorId(id);
+
+                return Ok(response);
             }
             catch (Exception erro)
             {
@@ -79,10 +84,10 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                dataInicial = dataInicial ?? string.Empty;
-                dataFinal = dataFinal ?? string.Empty;
-                List<LaudoModel> laudos = await _laudoRepositorio.BuscarLaudo(dataInicial, dataFinal, medicoId, pacienteId);
-                return Ok(laudos);
+                LaudoService laudoService = new LaudoService(_laudoRepositorio);
+                var response = await laudoService.BuscarLaudo(dataInicial, dataFinal, medicoId, pacienteId);
+
+                return Ok(response);
             }
             catch (Exception erro)
             {
@@ -104,8 +109,10 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                LaudoModel laudo = await _laudoRepositorio.Adicionar(laudoModel);
-                return Ok(laudo);
+                LaudoService laudoService = new LaudoService(_laudoRepositorio);
+                var response = await laudoService.Adicionar(laudoModel);
+
+                return Ok(response);
             }
             catch (Exception erro)
             {
@@ -128,9 +135,10 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                laudoModel.Id = id;
-                LaudoModel laudo = await _laudoRepositorio.Atualizar(laudoModel, id);
-                return Ok(laudo);
+                LaudoService laudoService = new LaudoService(_laudoRepositorio);
+                var response = await laudoService.Atualizar(laudoModel, id);
+
+                return Ok(response);
             }
             catch (Exception erro)
             {
@@ -152,8 +160,10 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                bool apagado = await _laudoRepositorio.Apagar(id);
-                return Ok(apagado);
+                LaudoService laudoService = new LaudoService(_laudoRepositorio);
+                var response = await laudoService.Apagar(id);
+
+                return Ok(response);
             }
             catch (Exception erro)
             {

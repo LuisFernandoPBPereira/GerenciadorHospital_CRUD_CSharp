@@ -1,5 +1,6 @@
 ﻿using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
+using GerenciadorHospital.Services.Exame;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -30,8 +31,10 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                List<TipoExameModel> exames = await _tipoExameRepositorio.BuscarTodosExames();
-                return Ok(exames);
+                TipoExameService tipoExameService = new TipoExameService(_tipoExameRepositorio);
+                var response = await tipoExameService.BuscarTodosExames();
+
+                return Ok(response);
             }
             catch (Exception erro)
             {
@@ -53,8 +56,10 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                TipoExameModel exames = await _tipoExameRepositorio.BuscarPorId(id);
-                return Ok(exames);
+                TipoExameService tipoExameService = new TipoExameService(_tipoExameRepositorio);
+                var response = await tipoExameService.BuscarPorId(id);
+
+                return Ok(response);
             }
             catch(Exception erro)
             {
@@ -76,8 +81,10 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                TipoExameModel exame = await _tipoExameRepositorio.Adicionar(tipoExameModel);
-                return Ok(exame);
+                TipoExameService tipoExameService = new TipoExameService(_tipoExameRepositorio);
+                var response = await tipoExameService.Adicionar(tipoExameModel);
+
+                return Ok(response);
             }
             catch (Exception erro)
             {
@@ -100,9 +107,10 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                tipoExameModel.Id = id;
-                TipoExameModel exame = await _tipoExameRepositorio.Atualizar(tipoExameModel, id);
-                return Ok(exame);
+                TipoExameService tipoExameService = new TipoExameService(_tipoExameRepositorio);
+                var response = await tipoExameService.Atualizar(tipoExameModel, id);
+
+                return Ok(response);
             }
             catch (Exception erro)
             {
@@ -124,8 +132,10 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                bool apagado = await _tipoExameRepositorio.Apagar(id);
-                return Ok(apagado);
+                TipoExameService tipoExameService = new TipoExameService(_tipoExameRepositorio);
+                var response = await tipoExameService.Apagar(id);
+
+                return Ok(response);
             }
             catch (Exception erro)
             {

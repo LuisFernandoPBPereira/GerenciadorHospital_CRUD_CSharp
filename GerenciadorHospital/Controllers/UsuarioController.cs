@@ -5,6 +5,7 @@ using GerenciadorHospital.Extensions;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
 using GerenciadorHospital.Services;
+using GerenciadorHospital.Services.Usuario;
 using GerenciadorHospital.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -38,17 +39,8 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                if (usuarioModel.Role is Role.Medico or Role.Paciente) 
-                    throw new ArgumentException("Não é possível criar um paciente ou um médico nesta página");
-
-                var response = await _authenticationService.Register(usuarioModel);
-
-                var resultadoDto = response.MostraResultadoDto();
-
-                if (!resultadoDto.IsSuccess)
-                {
-                    return BadRequest(resultadoDto);
-                }
+                UsuarioService usuarioService = new UsuarioService(_authenticationService);
+                var response = await usuarioService.Cadastrar(usuarioModel);
 
                 return Ok(response);
             }
@@ -66,14 +58,8 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                var response = await _authenticationService.Login(usuarioModel);
-
-                var resultadoDto = response.MostraResultadoDto();
-
-                if (!resultadoDto.IsSuccess)
-                {
-                    return BadRequest(resultadoDto);
-                }
+                UsuarioService usuarioService = new UsuarioService(_authenticationService);
+                var response = await usuarioService.Login(usuarioModel);
 
                 return Ok(response);
             }
