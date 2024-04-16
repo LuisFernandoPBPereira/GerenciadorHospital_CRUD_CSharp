@@ -9,11 +9,15 @@ namespace GerenciadorHospital.Repositorios
     {
         //Criamos uma variável de contexto
         private readonly BancoContext _bancoContext;
+        #region Construtor
         //Injetamos o contexto no construtor
         public PacienteRepositorio(BancoContext bancoContext)
         {
             _bancoContext = bancoContext;
         }
+        #endregion
+
+        #region Repositório - Adicionar Paciente
         //Método Adicionar, que aguarda o recebimento do paciente para salvar no banco
         public async Task<PacienteModel> Adicionar(PacienteModel paciente)
         {
@@ -22,7 +26,9 @@ namespace GerenciadorHospital.Repositorios
 
             return paciente;
         }
+        #endregion
 
+        #region Repositório - Apagar Paciente
         //Método Apagar, que aguarda a requisição de busca por ID para poder fazer a deleção
         public async Task<bool> Apagar(int id)
         {
@@ -39,7 +45,9 @@ namespace GerenciadorHospital.Repositorios
 
             return true;
         }
+        #endregion
 
+        #region Repositório - Atualizar Paciente
         //Método Atualizar, que aguarda a busca pelo ID para fazer a alteração
         public async Task<PacienteModel> Atualizar(PacienteModel paciente, int id)
         {
@@ -63,7 +71,9 @@ namespace GerenciadorHospital.Repositorios
 
             return pacientePorId;
         }
+        #endregion
 
+        #region Repositório - Buscar Paciente Por ID
         //Método BuscarPorId, que através do ID recebido, faz requisição no banco para mostrar a busca
         public async Task<PacienteModel> BuscarPorId(int id)
         {
@@ -75,7 +85,9 @@ namespace GerenciadorHospital.Repositorios
                 .Include(x => x.Convenio)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
+        #endregion
 
+        #region Repositório - Buscar Documento do Convênio Por ID
         public async Task<PacienteModel> BuscarDocConvenioPorId(int id)
         {
             /*
@@ -85,6 +97,9 @@ namespace GerenciadorHospital.Repositorios
             return await _bancoContext.Pacientes
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
+        #endregion
+
+        #region Repositório - Buscar Documento do Paciente Por ID
         public async Task<PacienteModel> BuscarDocPorId(int id)
         {
             /*
@@ -94,7 +109,9 @@ namespace GerenciadorHospital.Repositorios
             return await _bancoContext.Pacientes
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
+        #endregion
 
+        #region Repositório - Buscar Todos Pacientes
         //Método BuscarTodosUsuarios, que lista todos os usuários do banco
         public async Task<List<PacienteModel>> BuscarTodosPacientes()
         {
@@ -103,5 +120,6 @@ namespace GerenciadorHospital.Repositorios
                 .Include(x => x.Convenio)
                 .ToListAsync();
         }
+        #endregion
     }
 }

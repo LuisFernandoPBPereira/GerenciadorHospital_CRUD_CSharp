@@ -9,11 +9,15 @@ namespace GerenciadorHospital.Repositorios
     {
         //Criamos o contexto do banco de dados
         private readonly BancoContext _bancoContext;
+        #region Construtor
         //Injetamos no construtor
         public TipoExameRepositorio(BancoContext bancoContext)
         {
             _bancoContext = bancoContext;
         }
+        #endregion
+
+        #region Repositório - Adicionar Exame
         public async Task<TipoExameModel> Adicionar(TipoExameModel tipoExame)
         {
             //Salvamos o exame no banco de dados e salvamos as alterações
@@ -22,7 +26,9 @@ namespace GerenciadorHospital.Repositorios
 
             return tipoExame;
         }
+        #endregion
 
+        #region Repositório - Apagar Exame
         public async Task<bool> Apagar(int id)
         {
             //Pegamos o exame pelo ID de fomra assíncrona
@@ -38,7 +44,9 @@ namespace GerenciadorHospital.Repositorios
 
             return true;
         }
+        #endregion
 
+        #region Repositório - Atualizar Exame
         public async Task<TipoExameModel> Atualizar(TipoExameModel tipoExame, int id)
         {
             //Pegamos o exame pelo ID de forma assíncrona
@@ -59,18 +67,22 @@ namespace GerenciadorHospital.Repositorios
 
             return tipoExamePorId;
         }
+        #endregion
 
+        #region Repositório - Buscar Exame Por ID
         public async Task<TipoExameModel> BuscarPorId(int id)
         {
             //Retornamos o primeiro exame ou o padrão pelo ID
             return await _bancoContext.TiposExames.FirstOrDefaultAsync(x => x.Id == id);
         }
+        #endregion
 
+        #region Repositório - Buscar Todos Exames
         public async Task<List<TipoExameModel>> BuscarTodosExames()
         {
             //Retornamos todos os exames
             return await _bancoContext.TiposExames.ToListAsync();
-
         }
+        #endregion
     }
 }

@@ -12,11 +12,14 @@ namespace GerenciadorHospital.Controllers
     public class ConvenioController : ControllerBase
     {
         private readonly IConvenioRepositorio _convenioRepositorio;
+        #region Construtor
         public ConvenioController(IConvenioRepositorio convenioRepositorio)
         {
             _convenioRepositorio = convenioRepositorio;
         }
+        #endregion
 
+        #region GET Todos Convênios
         /// <summary>
         /// Busca Todos Convênios
         /// </summary>
@@ -36,7 +39,9 @@ namespace GerenciadorHospital.Controllers
                 return BadRequest($"Não foi possível buscar todos os convênios. Erro:{erro.Message}");
             }
         }
+        #endregion
 
+        #region GET Buscar Convênio Por ID
         /// <summary>
         /// Busca Convênio por ID
         /// </summary>
@@ -57,7 +62,9 @@ namespace GerenciadorHospital.Controllers
                 return BadRequest($"Não foi possível buscar o convênio com o ID: {id}. Erro:{erro.Message}");
             }
         }
+        #endregion
 
+        #region POST Cadastrar Convênio
         /// <summary>
         /// Cadastrar Convênio
         /// </summary>
@@ -77,7 +84,9 @@ namespace GerenciadorHospital.Controllers
                 return BadRequest($"Não foi possível cadastrar o convênio. Erro:{erro.Message}");
             }
         }
+        #endregion
 
+        #region PUT Atualizar Convênio
         /// <summary>
         /// Atualizar Convênio
         /// </summary>
@@ -100,7 +109,9 @@ namespace GerenciadorHospital.Controllers
                 return BadRequest($"Não foi possível atualizar o convênio com ID: {id}. Erro:{erro.Message}");
             }
         }
+        #endregion
 
+        #region DELETE Apagar Convênio
         /// <summary>
         /// Apagar Convênio
         /// </summary>
@@ -121,5 +132,6 @@ namespace GerenciadorHospital.Controllers
                 return BadRequest($"Não foi possível apagar o convênio com ID: {id}. Erro:{erro.Message}");
             }
         }
+        #endregion
     }
 }

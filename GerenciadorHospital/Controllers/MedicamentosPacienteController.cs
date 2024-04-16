@@ -11,11 +11,14 @@ namespace GerenciadorHospital.Controllers
     public class MedicamentosPacienteController : ControllerBase
     {
         private readonly IMedicamentosPacienteRepositorio _medicamentosPacienteRepositorio;
+        #region Construtor
         public MedicamentosPacienteController(IMedicamentosPacienteRepositorio medicamentoRepositorio)
         {
             _medicamentosPacienteRepositorio = medicamentoRepositorio;
         }
+        #endregion
 
+        #region GET Buscar Todos Medicamentos
         /// <summary>
         /// Busca Todos Medicamentos
         /// </summary>
@@ -35,7 +38,9 @@ namespace GerenciadorHospital.Controllers
                 return BadRequest($"Não foi possível buscar todos medicamentos. Erro:{erro.Message}");
             }
         }
+        #endregion
 
+        #region GET Buscar Medicamento Por ID
         /// <summary>
         /// Busca Medicamento por ID
         /// </summary>
@@ -56,7 +61,9 @@ namespace GerenciadorHospital.Controllers
                 return BadRequest($"Não foi possível buscar o medicamento com ID: {id}. Erro:{erro.Message}");
             }
         }
+        #endregion
 
+        #region POST Cadastrar Medicamento
         /// <summary>
         /// Cadastrar Medicamento
         /// </summary>
@@ -77,7 +84,9 @@ namespace GerenciadorHospital.Controllers
                 return BadRequest($"Não foi possível cadastrar o medicamento. Erro:{erro.Message}");
             }
         }
+        #endregion
 
+        #region PUT Atualizar Medicamento
         /// <summary>
         /// Atualizar Medicamento
         /// </summary>
@@ -100,7 +109,9 @@ namespace GerenciadorHospital.Controllers
                 return BadRequest($"Não foi possível atualizar o medicamento com ID: {id}. Erro:{erro.Message}");
             }
         }
+        #endregion
 
+        #region DELETE Apagar Medicamento
         /// <summary>
         /// Apagar Medicamento
         /// </summary>
@@ -121,5 +132,6 @@ namespace GerenciadorHospital.Controllers
                 return BadRequest($"Não foi possível apagar o medicamento com ID: {id}. Erro: {erro.Message}");
             }
         }
+        #endregion
     }
 }

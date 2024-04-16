@@ -15,13 +15,15 @@ namespace GerenciadorHospital.Services
     {
         private readonly UserManager<UsuarioModel> _usuarioRepositorio;
         private readonly IConfiguration _configuration;
-
+        #region Construtor
         public AuthenticationService(UserManager<UsuarioModel> usuarioRepositorio, IConfiguration configuration)
         {
             _usuarioRepositorio = usuarioRepositorio;
             _configuration = configuration;
         }
+        #endregion
 
+        #region Service - Cadastro do Usuário
         public async Task<Result<string>> Register(CadastroRequestDto request)
         {
             if (request.Senha.Length < 6) return Result.Fail(new Error("A senha deve no mínimo possuir 6 caracteres"));
@@ -50,7 +52,9 @@ namespace GerenciadorHospital.Services
 
             return await Login( new LoginRequestDto { UserName = request.UserName, Senha = request.Senha });
         }
+        #endregion
 
+        #region Service - Login do Usuário
         public async Task<Result<string>> Login(LoginRequestDto request)
         {
             var user = await _usuarioRepositorio.FindByNameAsync(request.UserName);
@@ -73,7 +77,9 @@ namespace GerenciadorHospital.Services
 
             return Result.Ok(new JwtSecurityTokenHandler().WriteToken(token));
         }
+        #endregion
 
+        #region Service - Geração do Token JWT
         private JwtSecurityToken GetToken(IEnumerable<Claim> authClaims)
         {
             var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
@@ -87,10 +93,13 @@ namespace GerenciadorHospital.Services
 
             return token;
         }
+        #endregion
 
+        #region Service - Tratativa de Erro do Identity
         private string GetErrorsText(IEnumerable<IdentityError> errors)
         {
             return string.Join(", ", errors.Select(error => error.Description).ToArray());
         }
+        #endregion
     }
 }

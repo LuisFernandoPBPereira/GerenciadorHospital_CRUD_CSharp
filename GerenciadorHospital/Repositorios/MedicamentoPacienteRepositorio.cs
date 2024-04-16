@@ -9,12 +9,15 @@ namespace GerenciadorHospital.Repositorios
     {
         //Criamos a variável de contexto do banco de dados
         private readonly BancoContext _bancoContext;
-
+        #region Construtor
         //Injetamos o contexto no construtor
         public MedicamentoPacienteRepositorio(BancoContext bancoContext)
         {
             _bancoContext = bancoContext;
         }
+        #endregion
+
+        #region Repositório - Adicionar Medicamento
         public async Task<MedicamentoPacienteModel> Adicionar(MedicamentoPacienteModel medicamento)
         {
             //Adicionamos o medicamento do paciente e salvamos as alterações
@@ -23,7 +26,9 @@ namespace GerenciadorHospital.Repositorios
 
             return medicamento;
         }
+        #endregion
 
+        #region Repositório - Apagar Medicamento
         public async Task<bool> Apagar(int id)
         {
             //Pegamos um medicamento por ID de forma assíncrona
@@ -39,7 +44,9 @@ namespace GerenciadorHospital.Repositorios
 
             return true;
         }
+        #endregion
 
+        #region Repositório - Atualizar Medicamento
         public async Task<MedicamentoPacienteModel> Atualizar(MedicamentoPacienteModel medicamento, int id)
         {
             //Pegamos um medicamento por ID de forma assíncrona
@@ -61,17 +68,22 @@ namespace GerenciadorHospital.Repositorios
 
             return medicamentoPorId;
         }
+        #endregion
 
+        #region Repositório - Buscar Medicamento Por ID
         public async Task<MedicamentoPacienteModel> BuscarPorId(int id)
         {
             //Retornamos o primeiro medicamento ou o padrão pelo ID
             return await _bancoContext.MedicamentosPaciente.FirstOrDefaultAsync(x => x.Id == id);
         }
+        #endregion
 
+        #region Repositório - Buscar Todos Medicamentos
         public async Task<List<MedicamentoPacienteModel>> BuscarTodosMedicamentosPaciente()
         {
             //Retornamos todos os medicamentos
             return await _bancoContext.MedicamentosPaciente.ToListAsync();
         }
+        #endregion
     }
 }

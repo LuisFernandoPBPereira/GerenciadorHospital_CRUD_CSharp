@@ -8,7 +8,8 @@ namespace GerenciadorHospital.Data
     public class BancoContext : IdentityDbContext<UsuarioModel>
     {
         public BancoContext(DbContextOptions<BancoContext> options) : base(options) { }
-        
+
+        #region DbSet das Models
         public DbSet<PacienteModel> Pacientes { get; set; }
         public DbSet<MedicoModel> Medicos { get; set; }
         public DbSet<ConvenioModel> Convenios { get; set; }
@@ -17,8 +18,9 @@ namespace GerenciadorHospital.Data
         public DbSet<LaudoModel> Laudos { get; set; }
         public DbSet<MedicamentoPacienteModel> MedicamentosPaciente { get; set; }
         public DbSet<UsuarioModel> Usuarios { get; set; }
-        
+        #endregion
 
+        #region OnModelCreating
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new PacienteMap());
@@ -32,5 +34,6 @@ namespace GerenciadorHospital.Data
 
             base.OnModelCreating(modelBuilder);
         }
+        #endregion
     }
 }

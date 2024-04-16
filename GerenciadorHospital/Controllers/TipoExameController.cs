@@ -11,11 +11,14 @@ namespace GerenciadorHospital.Controllers
     public class TipoExameController : ControllerBase
     {
         private readonly ITipoExameRepositorio _tipoExameRepositorio;
+        #region Construtor
         public TipoExameController(ITipoExameRepositorio tipoExameRepositorio)
         {
             _tipoExameRepositorio = tipoExameRepositorio;
         }
+        #endregion
 
+        #region GET Buscar Todos Exames
         /// <summary>
         /// Busca Todos Exames
         /// </summary>
@@ -35,7 +38,9 @@ namespace GerenciadorHospital.Controllers
                 return BadRequest($"Não foi possível buscar todos exames. Erro: {erro.Message}");
             }
         }
+        #endregion
 
+        #region GET Buscar Exame Por ID
         /// <summary>
         /// Busca Exame por ID
         /// </summary>
@@ -56,7 +61,9 @@ namespace GerenciadorHospital.Controllers
                 return BadRequest($"Não foi possível buscar o exame com ID: {id}. Erro: {erro.Message}");
             }
         }
+        #endregion
 
+        #region POST Cadastrar Exame
         /// <summary>
         /// Cadastrar Exame
         /// </summary>
@@ -77,7 +84,9 @@ namespace GerenciadorHospital.Controllers
                 return BadRequest($"Não foi possível cadastrar o exame. Erro: {erro.Message}");
             }
         }
+        #endregion
 
+        #region PUT Atualizar Exame
         /// <summary>
         /// Atualizar Exame
         /// </summary>
@@ -100,7 +109,9 @@ namespace GerenciadorHospital.Controllers
                 return BadRequest($"Não foi possível atualizar o exame com ID: {id}. Erro: {erro.Message}");
             }
         }
+        #endregion
 
+        #region DELETE Apagar Exame
         /// <summary>
         /// Apagar Exame
         /// </summary>
@@ -121,5 +132,6 @@ namespace GerenciadorHospital.Controllers
                 return BadRequest($"Não foi possível apagar o exame com ID: {id}. Erro: {erro.Message}");
             }
         }
+        #endregion
     }
 }

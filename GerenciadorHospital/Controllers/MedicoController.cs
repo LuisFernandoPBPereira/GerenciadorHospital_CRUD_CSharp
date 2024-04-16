@@ -3,6 +3,7 @@ using GerenciadorHospital.Entities;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
 using GerenciadorHospital.Services;
+using GerenciadorHospital.Services.Medico;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,13 +16,16 @@ namespace GerenciadorHospital.Controllers
     {
         private readonly IMedicoRepositorio _medicoRepositorio;
         private readonly IAuthenticationService _authenticationService;
+        #region Construtor
         public MedicoController(IMedicoRepositorio medicoRepositorio,
                                 IAuthenticationService authenticationService)
         {
             _medicoRepositorio = medicoRepositorio;
             _authenticationService = authenticationService;
         }
+        #endregion
 
+        #region GET Buscar Todos Médicos
         /// <summary>
         /// Busca Todos Médicos
         /// </summary>
@@ -41,7 +45,9 @@ namespace GerenciadorHospital.Controllers
                 return BadRequest($"Não foi possível buscar todos os médicos. Erro: {erro.Message}");
             }
         }
+        #endregion
 
+        #region GET Buscar Médico Por ID
         /// <summary>
         /// Busca Médico por ID
         /// </summary>
@@ -62,7 +68,9 @@ namespace GerenciadorHospital.Controllers
                 return BadRequest($"Não foi possível buscar o médico com ID: {id}. Erro: {erro.Message}");
             }
         }
+        #endregion
 
+        #region POST Cadastrar Médico
         /// <summary>
         /// Cadastrar Médico
         /// </summary>
@@ -75,28 +83,19 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                MedicoModel medico = await _medicoRepositorio.Adicionar(medicoModel);
-            
-                CadastroRequestDto novoMedico = new CadastroRequestDto();
+                MedicoService medicoService = new MedicoService(_authenticationService, _medicoRepositorio);
+                var response = await medicoService.AdicionarMedico(medicoModel);
 
-                novoMedico.Nome = medico.Nome;
-                novoMedico.UserName = medico.Crm;
-                novoMedico.Cpf = medico.Cpf;
-                novoMedico.Senha = medico.Senha;
-                novoMedico.DataNasc = medico.DataNasc;
-                novoMedico.Endereco = medico.Endereco;
-                novoMedico.Role = Role.Medico;
-
-                await _authenticationService.Register(novoMedico);
-
-                return Ok(medico);
+                return Ok(response);
             }
             catch (Exception erro)
             {
                 return BadRequest($"Não foi possível cadastrar o médico. Erro:{erro.Message}");
             }
         }
+        #endregion
 
+        #region PUT Atualizar Médico
         /// <summary>
         /// Atualizar Médico
         /// </summary>
@@ -119,7 +118,9 @@ namespace GerenciadorHospital.Controllers
                 return BadRequest($"Não foi possível atualizar o médico com ID: {id}. Erro: {erro.Message}");
             }
         }
+        #endregion
 
+        #region DELETE Apagar Médico
         /// <summary>
         /// Apagar Médico
         /// </summary>
@@ -140,5 +141,6 @@ namespace GerenciadorHospital.Controllers
                 return BadRequest($"Não possível apagar o médico com o ID: {id}. Erro: {erro.Message}");
             }
         }
+        #endregion
     }
 }

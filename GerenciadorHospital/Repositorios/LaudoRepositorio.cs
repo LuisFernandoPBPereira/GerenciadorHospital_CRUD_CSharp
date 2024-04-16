@@ -9,11 +9,15 @@ namespace GerenciadorHospital.Repositorios
     {
         //Criamos a variável de contexto do banco de dados
         private readonly BancoContext _bancoContext;
+        #region Construtor
         //Injetamos o contexto no construtor
         public LaudoRepositorio(BancoContext bancoContext)
         {
             _bancoContext = bancoContext;
         }
+        #endregion
+
+        #region Repositório - Adicionar Laudo
         public async Task<LaudoModel> Adicionar(LaudoModel laudo)
         {
             //Adicionamos na tabela Laudos e salvamos as alterações
@@ -23,7 +27,9 @@ namespace GerenciadorHospital.Repositorios
 
             return laudo;
         }
+        #endregion
 
+        #region Repositório - Apagar Laudo
         public async Task<bool> Apagar(int id)
         {
             //Pegamos um laudo por ID de forma assíncrona
@@ -38,7 +44,9 @@ namespace GerenciadorHospital.Repositorios
 
             return true;
         }
+        #endregion
 
+        #region Repositório - Atualizar Laudo
         public async Task<LaudoModel> Atualizar(LaudoModel laudo, int id)
         {
             //Pegamos um laudo por ID de forma assíncrona
@@ -59,7 +67,9 @@ namespace GerenciadorHospital.Repositorios
 
             return laudoPorId;
         }
+        #endregion
 
+        #region Repositório - Buscar Laudo com Filtro
         public async Task<List<LaudoModel>> BuscarLaudo(string? dataInicial, string? dataFinal, int medicoId, int pacienteId)
         {
             var dataInicialConvertida = DateTime.Now;
@@ -84,7 +94,9 @@ namespace GerenciadorHospital.Repositorios
                 .Include(x => x.Medicamento)
                 .ToListAsync();
         }
+        #endregion
 
+        #region Repositório - Buscar Laudo Por ID
         public async Task<LaudoModel> BuscarPorId(int id)
         {
             /*
@@ -95,7 +107,9 @@ namespace GerenciadorHospital.Repositorios
                 .Include(x => x.Paciente)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
+        #endregion
 
+        #region Repositório - Buscar Todos Laudos
         public async Task<List<LaudoModel>> BuscarTodosLaudos()
         {
             //Retornamos todos os laudos incluindo o objeto paciente
@@ -103,5 +117,6 @@ namespace GerenciadorHospital.Repositorios
                 .Include(x => x.Paciente)
                 .ToListAsync();
         }
+        #endregion
     }
 }

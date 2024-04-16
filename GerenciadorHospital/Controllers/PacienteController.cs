@@ -5,6 +5,7 @@ using GerenciadorHospital.Entities;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
 using GerenciadorHospital.Services;
+using GerenciadorHospital.Services.Paciente;
 using GerenciadorHospital.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,13 +20,16 @@ public class PacienteController : ControllerBase
     private readonly IPacienteRepositorio _pacienteRepositorio;
     private readonly IAuthenticationService _authenticationService;
 
+    #region Construtor
     public PacienteController(IPacienteRepositorio pacienteRepositorio,
                               IAuthenticationService authenticationService)
     {
         _pacienteRepositorio = pacienteRepositorio;
         _authenticationService = authenticationService;
     }
+    #endregion
 
+    #region GET Buscar Todos Pacientes
     /// <summary>
     /// Busca Todos os Pacientes
     /// </summary>
@@ -45,7 +49,9 @@ public class PacienteController : ControllerBase
             return BadRequest($"Não foi possível buscar todos os pacientes. Erro: {erro.Message}");
         }
     }
+    #endregion
 
+    #region GET Buscar Paciente Por ID
     /// <summary>
     /// Busca Paciente por ID
     /// </summary>
@@ -66,7 +72,9 @@ public class PacienteController : ControllerBase
             return BadRequest($"Não foi possívell buscar o paciente com o ID: {id}. Erro: {erro.Message}");
         }
     }
+    #endregion
 
+    #region GET Buscar Documento do Convênio Por ID
     /// <summary>
     /// Busca Imagem do Documento do Convênio do Paciente
     /// </summary>
@@ -96,7 +104,9 @@ public class PacienteController : ControllerBase
             return BadRequest($"Não foi possível buscar o documento do convênio com ID: {id}. Erro: {erro.Message}");
         }
     }
+    #endregion
 
+    #region GET Buscar Documento do Paciente Por ID
     /// <summary>
     /// Buscar Imagem do Documento do Paciente
     /// </summary>
@@ -122,7 +132,9 @@ public class PacienteController : ControllerBase
             return BadRequest($"Não foi possível buscar o documento do paciente com o ID: {id}. Erro: {erro.Message}");
         }
     }
+    #endregion
 
+    #region POST Cadastrar Paciente 
     /// <summary>
     /// Cadastrar um Paciente
     /// </summary>
@@ -135,45 +147,19 @@ public class PacienteController : ControllerBase
     {
         try 
         {
-            if (pacienteModel.TemConvenio == false && pacienteModel.DocConvenio.Length > 0)
-            {
-                return BadRequest("Não é possível adicionar uma carteira de convênio, caso o campo TemConvenio seja falso");
-            }
-            //É instanciado um novo objeto para a validação das imagens carregadas na requisição
-            DocumentoImagemDto imagem = new DocumentoImagemDto();
-            imagem.Doc = pacienteModel.Doc;
-            imagem.DocConvenio = pacienteModel.DocConvenio;
-            ValidaImagem validaImagem = new ValidaImagem(imagem, pacienteModel);
-            var requestDtoValidado = validaImagem.ValidacaoImagem();
-
-            if (requestDtoValidado)
-            {
-                PacienteModel paciente = await _pacienteRepositorio.Adicionar(pacienteModel);
-                CadastroRequestDto novoPaciente = new CadastroRequestDto();
-
-                novoPaciente.Nome = pacienteModel.Nome;
-                novoPaciente.UserName = pacienteModel.Cpf;
-                novoPaciente.Cpf = pacienteModel.Cpf;
-                novoPaciente.Senha = pacienteModel.Senha;
-                novoPaciente.DataNasc = pacienteModel.DataNasc;
-                novoPaciente.Endereco = pacienteModel.Endereco;
-                novoPaciente.Role = Role.Paciente;
-
-                await _authenticationService.Register(novoPaciente);
-
-                return Ok(paciente);
-            }
-            else
-            {
-                return BadRequest("Não foi possível cadastrar o paciente: Imagem inválida ou inexistente");
-            }
+            PacienteService retornoService = new PacienteService(_pacienteRepositorio, _authenticationService);
+            var response = await retornoService.AdicionarPaciente(pacienteModel);
+            
+            return Ok(response);
         }
         catch (Exception erro)
         {
             return BadRequest($"Não foi possível cadastrar o paciente. Erro: {erro.Message}");
         }
     }
+    #endregion
 
+    #region PUT Atualizar Paciente
     /// <summary>
     /// Atualizar um Paciente
     /// </summary>
@@ -196,7 +182,9 @@ public class PacienteController : ControllerBase
             return BadRequest($"Não foi possível atualizar o paciente com ID: {id}. Erro: {erro.Message}");
         }
     }
+    #endregion
 
+    #region PUT Atualizar Documento do Paciente
     /// <summary>
     /// Atualizar um Paciente
     /// </summary>
@@ -229,7 +217,9 @@ public class PacienteController : ControllerBase
         }
 
     }
+    #endregion
 
+    #region DELETE Apagar Paciente
     /// <summary>
     /// Apagar um Paciente
     /// </summary>
@@ -250,4 +240,5 @@ public class PacienteController : ControllerBase
             return BadRequest($"Não foi possível apagar o paciente com o ID: {id}. Erro: {erro.Message}");
         }
     }
+    #endregion
 }
