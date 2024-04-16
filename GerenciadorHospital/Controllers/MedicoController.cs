@@ -3,6 +3,7 @@ using GerenciadorHospital.Entities;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
 using GerenciadorHospital.Services;
+using GerenciadorHospital.Services.Medico;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -82,21 +83,10 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                MedicoModel medico = await _medicoRepositorio.Adicionar(medicoModel);
-            
-                CadastroRequestDto novoMedico = new CadastroRequestDto();
+                MedicoService medicoService = new MedicoService(_authenticationService, _medicoRepositorio);
+                var response = await medicoService.AdicionarMedico(medicoModel);
 
-                novoMedico.Nome = medico.Nome;
-                novoMedico.UserName = medico.Crm;
-                novoMedico.Cpf = medico.Cpf;
-                novoMedico.Senha = medico.Senha;
-                novoMedico.DataNasc = medico.DataNasc;
-                novoMedico.Endereco = medico.Endereco;
-                novoMedico.Role = Role.Medico;
-
-                await _authenticationService.Register(novoMedico);
-
-                return Ok(medico);
+                return Ok(response);
             }
             catch (Exception erro)
             {

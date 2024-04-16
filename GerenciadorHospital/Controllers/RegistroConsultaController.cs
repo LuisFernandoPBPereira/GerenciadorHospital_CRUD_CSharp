@@ -2,6 +2,7 @@
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios;
 using GerenciadorHospital.Repositorios.Interfaces;
+using GerenciadorHospital.Services.Consulta;
 using GerenciadorHospital.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -134,19 +135,10 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                //É instanciado um novo objeto para validar o cadastro da consulta
-                ValidaConsulta validaConsulta = new ValidaConsulta(_consultaRepositorio, consultaModel, _pacienteRepositorio);
-                var consultaValidada = validaConsulta.ValidacaoConsulta();
+                RegistroConsultaService registroConsultaService = new RegistroConsultaService(_consultaRepositorio, _pacienteRepositorio);
+                var response = await registroConsultaService.AdicionarConsulta(consultaModel);
 
-                if (await consultaValidada == false)
-                    return BadRequest("Não foi possível cadastrar uma nova consulta: paciente já tem uma consulta agendada");
-
-                RegistroConsultaModel consulta = await _consultaRepositorio.Adicionar(consultaModel);
-            
-                if(consulta == null)
-                    return BadRequest("Não foi possível agendar uma consulta");
-
-                return Ok(consulta);
+                return Ok(response);
             }
             catch (Exception erro)
             {
