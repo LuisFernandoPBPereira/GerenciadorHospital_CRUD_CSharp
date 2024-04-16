@@ -17,12 +17,15 @@ namespace GerenciadorHospital.Controllers
     {
         private readonly IRegistroConsultaRepositorio _consultaRepositorio;
         private readonly IPacienteRepositorio _pacienteRepositorio;
+        private readonly ILogger<RegistroConsultaController> _logger;
         #region Construtor
         public RegistroConsultaController(IRegistroConsultaRepositorio consultaRepositorio, 
-                                          IPacienteRepositorio pacienteRepositorio)
+                                          IPacienteRepositorio pacienteRepositorio,
+                                          ILogger<RegistroConsultaController> logger)
         {
             _consultaRepositorio = consultaRepositorio;
             _pacienteRepositorio = pacienteRepositorio;
+            _logger = logger;
         }
         #endregion
 
@@ -38,18 +41,19 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                RegistroConsultaService registroConsultaService = new RegistroConsultaService(_consultaRepositorio, _pacienteRepositorio);
+                RegistroConsultaService registroConsultaService = new RegistroConsultaService(_consultaRepositorio, _pacienteRepositorio, _logger);
                 var response = await registroConsultaService.BuscarTodosRegistrosConsultas();
 
                 return Ok(response);
             }
             catch (Exception erro)
             {
+                _logger.LogInformation($"Não foi possível buscar todas as consultas. Erro: {erro.Message}");
                 return BadRequest($"Não foi possível buscar todas as consultas. Erro: {erro.Message}");
             }
         }
         #endregion
-
+        
         #region GET Consulta Por ID
         /// <summary>
         /// Busca Consulta por ID
@@ -63,13 +67,14 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                RegistroConsultaService registroConsultaService = new RegistroConsultaService(_consultaRepositorio, _pacienteRepositorio);
+                RegistroConsultaService registroConsultaService = new RegistroConsultaService(_consultaRepositorio, _pacienteRepositorio, _logger);
                 var response = await registroConsultaService.BuscarPorId(id);
 
                 return Ok(response);
             }
             catch (Exception erro)
             {
+                _logger.LogInformation($"Não foi possível buscar a consulta com o ID: {id}. Erro: {erro.Message}");
                 return BadRequest($"Não foi possível buscar a consulta com o ID: {id}. Erro: {erro.Message}");
             }
         }
@@ -89,13 +94,14 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                RegistroConsultaService registroConsultaService = new RegistroConsultaService(_consultaRepositorio, _pacienteRepositorio);
+                RegistroConsultaService registroConsultaService = new RegistroConsultaService(_consultaRepositorio, _pacienteRepositorio, _logger);
                 var response = await registroConsultaService.BuscarConsultaPorPacienteId(id, statusConsulta);
 
                 return Ok(response);
             }
             catch (Exception erro)
             {
+                _logger.LogInformation($"Não foi possível buscar a consulta com o ID: {id}. Erro: {erro.Message}");
                 return BadRequest($"Não foi possível buscar a consulta com o ID: {id}. Erro: {erro.Message}");
             }
         }
@@ -117,13 +123,14 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                RegistroConsultaService registroConsultaService = new RegistroConsultaService(_consultaRepositorio, _pacienteRepositorio);
+                RegistroConsultaService registroConsultaService = new RegistroConsultaService(_consultaRepositorio, _pacienteRepositorio, _logger);
                 var response = await registroConsultaService.BuscarConsultaPorMedicoId(id, statusConsulta, dataInicial, dataFinal);
 
                 return Ok(response);
             }
             catch (Exception erro)
             {
+                _logger.LogInformation($"Não foi possível buscar a consulta com o ID: {id}. Erro: {erro.Message}");
                 return BadRequest($"Não foi possível buscar a consulta com o ID: {id}. Erro: {erro.Message}");
             }
         }
@@ -142,13 +149,14 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                RegistroConsultaService registroConsultaService = new RegistroConsultaService(_consultaRepositorio, _pacienteRepositorio);
+                RegistroConsultaService registroConsultaService = new RegistroConsultaService(_consultaRepositorio, _pacienteRepositorio, _logger);
                 var response = await registroConsultaService.Adicionar(consultaModel);
 
                 return Ok(response);
             }
             catch (Exception erro)
             {
+                _logger.LogInformation($"Não foi possível cadastrar a consulta. Erro: {erro.Message}");
                 return BadRequest($"Não foi possível cadastrar a consulta. Erro: {erro.Message}");
             }
         }
@@ -168,13 +176,14 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                RegistroConsultaService registroConsultaService = new RegistroConsultaService(_consultaRepositorio, _pacienteRepositorio);
+                RegistroConsultaService registroConsultaService = new RegistroConsultaService(_consultaRepositorio, _pacienteRepositorio, _logger);
                 var response = await registroConsultaService.Atualizar(consultaModel, id);
 
                 return Ok(response);
             }
             catch (Exception erro)
             {
+                _logger.LogInformation($"Não foi possível atualizar a consulta com o ID: {id}. Erro: {erro.Message}");
                 return BadRequest($"Não foi possível atualizar a consulta com o ID: {id}. Erro: {erro.Message}");
             }
         }
@@ -193,13 +202,14 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                RegistroConsultaService registroConsultaService = new RegistroConsultaService(_consultaRepositorio, _pacienteRepositorio);
+                RegistroConsultaService registroConsultaService = new RegistroConsultaService(_consultaRepositorio, _pacienteRepositorio, _logger);
                 var response = await registroConsultaService.Apagar(id);
 
                 return Ok(response);
             }
             catch (Exception erro)
             {
+                _logger.LogInformation($"Não foi possível apagar a consulta com o ID: {id}. Erro: {erro.Message}");
                 return BadRequest($"Não foi possível apagar a consulta com o ID: {id}. Erro: {erro.Message}");
             }
         }

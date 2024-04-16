@@ -12,7 +12,11 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Text;
+using NLog;
+using NLog.Web;
 
+var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+logger.Debug("init main");
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -129,6 +133,9 @@ builder.Services.AddScoped<IRegistroConsultaRepositorio, RegistroConsultaReposit
 builder.Services.AddScoped<ILaudoRepositorio, LaudoRepositorio>();
 builder.Services.AddScoped<ITipoExameRepositorio, TipoExameRepositorio>();
 #endregion
+
+builder.Logging.ClearProviders();
+builder.Host.UseNLog();
 
 var app = builder.Build();
 
