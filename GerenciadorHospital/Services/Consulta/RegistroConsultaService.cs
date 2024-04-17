@@ -24,6 +24,7 @@ namespace GerenciadorHospital.Services.Consulta
             _consultaRepositorio = consultaRepositorio;
             _pacienteRepositorio = pacienteRepositorio;
             _logger = logger;
+            _logger.LogInformation($"{Enums.CodigosLogSucesso.S_Consulta}: Os valores foram atribuídos no construtor da Service.");
         }
 
         public async Task<RegistroConsultaModel> Adicionar(RegistroConsultaModel consultaModel)
@@ -34,16 +35,16 @@ namespace GerenciadorHospital.Services.Consulta
 
             if (await consultaValidada == false)
             {
-                _logger.LogError("Não foi possível cadastrar uma nova consulta: paciente já tem uma consulta agendada");
+                _logger.LogError($"{Enums.CodigosLogErro.E_Consulta}: Não foi possível cadastrar uma nova consulta: paciente já tem uma consulta agendada");
                 throw new Exception("Não foi possível cadastrar uma nova consulta: paciente já tem uma consulta agendada");
             }
 
             RegistroConsultaModel consulta = await _consultaRepositorio.Adicionar(consultaModel);
             
             if(consulta is not null) 
-                _logger.LogInformation("Consulta cadastrada com sucesso");
+                _logger.LogInformation($"{Enums.CodigosLogSucesso.S_Consulta}: Consulta cadastrada com sucesso");
              else
-                _logger.LogError("Não foi possível agendar uma consulta");
+                _logger.LogError($"{Enums.CodigosLogErro.E_Consulta}: Não foi possível agendar uma consulta");
 
             return consulta ?? throw new Exception("Não foi possível agendar uma consulta");
         }
@@ -51,6 +52,12 @@ namespace GerenciadorHospital.Services.Consulta
         public async Task<bool> Apagar(int id)
         {
             bool apagado = await _consultaRepositorio.Apagar(id);
+
+            if (apagado)
+                _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Consulta)}: Remoção de consulta com o ID: {id} realizada.");
+            else
+                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Consulta)}: Remoção de consulta com o ID: {id} não foi concluída.");
+
             return apagado;
         }
 
@@ -64,6 +71,12 @@ namespace GerenciadorHospital.Services.Consulta
             }
 
             RegistroConsultaModel consulta = await _consultaRepositorio.Atualizar(consultaModel, id);
+
+            if (consulta is not null)
+                _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Consulta)}: Atualização de consulta com o ID: {id} realizada.");
+            else
+                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Consulta)}: Atualização de consulta com o ID: {id} não foi concluída.");
+
             return consulta;
         }
 
@@ -72,18 +85,37 @@ namespace GerenciadorHospital.Services.Consulta
             if (dataInicial == null) dataInicial = string.Empty;
             if (dataFinal == null) dataFinal = string.Empty;
             List<RegistroConsultaModel> consultas = await _consultaRepositorio.BuscarConsultaPorMedicoId(id, statusConsulta, dataInicial, dataFinal);
+
+            if (consultas is not null)
+                _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Consulta)}: Busca de consultas por Médico com ID: {id} e Status Consulta {statusConsulta} realizada.");
+            else
+                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Consulta)}:  Busca de consultas por Médico com ID: {id} e Status Consulta {statusConsulta} realizada, porém sem conteúdo.");
+
             return consultas;
         }
 
         public async Task<List<RegistroConsultaModel>> BuscarConsultaPorPacienteId(int id, StatusConsulta statusConsulta)
         {
             List<RegistroConsultaModel> consultas = await _consultaRepositorio.BuscarConsultaPorPacienteId(id, statusConsulta);
+
+            if (consultas is not null)
+                _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Consulta)}: Busca de consultas por Paciente com ID: {id} e Status Consulta {statusConsulta} realizada.");
+            else
+                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Consulta)}: Busca de consultas por Paciente com ID: {id} e Status Consulta {statusConsulta} realizada, porém sem conteúdo.");
+
             return consultas;
+
         }
 
         public async Task<RegistroConsultaModel> BuscarPorId(int id)
         {
             RegistroConsultaModel consultas = await _consultaRepositorio.BuscarPorId(id);
+
+            if (consultas is not null)
+                _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Consulta)}: Busca de consulta com ID: {id} realizada.");
+            else
+                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Consulta)}: Busca de consulta com ID: {id} porém sem conteúdo.");
+
             return consultas;
         }
 
@@ -93,7 +125,7 @@ namespace GerenciadorHospital.Services.Consulta
             if(consultas is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Consulta)}: Busca de todas as consultas realizada.");
             else
-                _logger.LogInformation("Busca de todas as consultas porém sem conteúdo.");
+                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Consulta)}: Busca de todas as consultas porém sem conteúdo.");
 
 
             return consultas;

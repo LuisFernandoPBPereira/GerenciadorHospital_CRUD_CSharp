@@ -12,10 +12,13 @@ namespace GerenciadorHospital.Controllers
     public class LaudoController : ControllerBase
     {
         private readonly ILaudoRepositorio _laudoRepositorio;
+        private readonly ILogger<LaudoController> _logger;
         #region Construtor
-        public LaudoController(ILaudoRepositorio laudoRepositorio)
+        public LaudoController(ILaudoRepositorio laudoRepositorio, 
+                               ILogger<LaudoController> logger)
         {
             _laudoRepositorio = laudoRepositorio;
+            _logger = logger;
         }
         #endregion
 
@@ -31,13 +34,14 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                LaudoService laudoService = new LaudoService(_laudoRepositorio);
+                LaudoService laudoService = new LaudoService(_laudoRepositorio, _logger);
                 var response = await laudoService.BuscarTodosLaudos();
                 
                 return Ok(response);
             }
             catch (Exception erro)
             {
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Laudo)}: Não foi possível buscar todos os laudos. Erro:{erro.Message}");
                 return BadRequest($"Não foi possível buscar todos os laudos. Erro:{erro.Message}");
             }
         }
@@ -56,13 +60,14 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                LaudoService laudoService = new LaudoService(_laudoRepositorio);
+                LaudoService laudoService = new LaudoService(_laudoRepositorio, _logger);
                 var response = await laudoService.BuscarPorId(id);
 
                 return Ok(response);
             }
             catch (Exception erro)
             {
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Laudo)}: Não foi possível buscar o laudo com ID: {id}. Erro:{erro.Message}");
                 return BadRequest($"Não foi possível buscar o laudo com ID: {id}. Erro:{erro.Message}");
             }
         }
@@ -84,13 +89,14 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                LaudoService laudoService = new LaudoService(_laudoRepositorio);
+                LaudoService laudoService = new LaudoService(_laudoRepositorio, _logger);
                 var response = await laudoService.BuscarLaudo(dataInicial, dataFinal, medicoId, pacienteId);
 
                 return Ok(response);
             }
             catch (Exception erro)
             {
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Laudo)}: Não foi possível buscar o laudo com ID: . Erro: {erro.Message}");
                 return BadRequest($"Não foi possível buscar o laudo com ID: . Erro: {erro.Message}");
             }
         }
@@ -109,13 +115,14 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                LaudoService laudoService = new LaudoService(_laudoRepositorio);
+                LaudoService laudoService = new LaudoService(_laudoRepositorio, _logger);
                 var response = await laudoService.Adicionar(laudoModel);
 
                 return Ok(response);
             }
             catch (Exception erro)
             {
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Laudo)}: Não foi possível cadastrar o laudo. Erro:{erro.Message}");
                 return BadRequest($"Não foi possível cadastrar o laudo. Erro:{erro.Message}");
             }
         }
@@ -135,13 +142,14 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                LaudoService laudoService = new LaudoService(_laudoRepositorio);
+                LaudoService laudoService = new LaudoService(_laudoRepositorio, _logger);
                 var response = await laudoService.Atualizar(laudoModel, id);
 
                 return Ok(response);
             }
             catch (Exception erro)
             {
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Laudo)}: Não foi possível atualizar o laudo com ID: {id}. Erro:{erro.Message}");
                 return BadRequest($"Não foi possível atualizar o laudo com ID: {id}. Erro:{erro.Message}");
             }
         }
@@ -160,13 +168,14 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                LaudoService laudoService = new LaudoService(_laudoRepositorio);
+                LaudoService laudoService = new LaudoService(_laudoRepositorio, _logger);
                 var response = await laudoService.Apagar(id);
 
                 return Ok(response);
             }
             catch (Exception erro)
             {
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Laudo)}: Não foi possível apagar o laudo com ID: {id}. Erro:{erro.Message}");
                 return BadRequest($"Não foi possível apagar o laudo com ID: {id}. Erro:{erro.Message}");
             }
         }

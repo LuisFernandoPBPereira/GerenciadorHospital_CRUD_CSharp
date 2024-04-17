@@ -1,4 +1,5 @@
-﻿using GerenciadorHospital.Dto;
+﻿using GerenciadorHospital.Controllers;
+using GerenciadorHospital.Dto;
 using GerenciadorHospital.Entities;
 using GerenciadorHospital.Extensions;
 using Microsoft.AspNetCore.Mvc;
@@ -8,11 +9,12 @@ namespace GerenciadorHospital.Services.Usuario
     public class UsuarioService : IUsuarioService
     {
         private readonly IAuthenticationService _authenticationService;
-        public UsuarioService(IAuthenticationService authenticationService)
+        private readonly ILogger<UsuarioController> _logger;
+        public UsuarioService(IAuthenticationService authenticationService,
+                              ILogger<UsuarioController> logger)
         {
-
             _authenticationService = authenticationService;
-
+            _logger = logger;
         }
         public async Task<FluentResults.Result<string>> Cadastrar(CadastroRequestDto usuarioModel)
         {
@@ -25,8 +27,11 @@ namespace GerenciadorHospital.Services.Usuario
 
             if (!resultadoDto.IsSuccess)
             {
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Usuario)}: {resultadoDto}");
                 throw new Exception(resultadoDto.ToString());
             }
+
+            _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Usuario)}: Cadastro do usuário foi realizado.");
 
             return response;
         }
@@ -39,8 +44,11 @@ namespace GerenciadorHospital.Services.Usuario
 
             if (!resultadoDto.IsSuccess)
             {
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Usuario)}: {resultadoDto}");
                 throw new Exception(resultadoDto.ToString());
             }
+
+            _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Usuario)}: Login do usuário foi realizado");
 
             return response;
         }

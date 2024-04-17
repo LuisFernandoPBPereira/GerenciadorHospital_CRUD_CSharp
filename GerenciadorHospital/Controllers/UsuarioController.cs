@@ -18,11 +18,14 @@ namespace GerenciadorHospital.Controllers
     public class UsuarioController : ControllerBase
     {
         private readonly IAuthenticationService _authenticationService;
+        private readonly ILogger<UsuarioController> _logger;
 
         #region Construtor
-        public UsuarioController(IAuthenticationService authenticationService)
+        public UsuarioController(IAuthenticationService authenticationService, 
+                                 ILogger<UsuarioController> logger)
         {
             _authenticationService = authenticationService;
+            _logger = logger;
         }
         #endregion
 
@@ -39,13 +42,14 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                UsuarioService usuarioService = new UsuarioService(_authenticationService);
+                UsuarioService usuarioService = new UsuarioService(_authenticationService, _logger);
                 var response = await usuarioService.Cadastrar(usuarioModel);
 
                 return Ok(response);
             }
             catch (Exception erro)
             {
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Usuario)}: Não foi possível cadastrar o usuário. Erro: {erro.Message}");
                 return BadRequest($"Não foi possível cadastrar o usuário. Erro: {erro.Message}");
             }
         }
@@ -58,13 +62,14 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                UsuarioService usuarioService = new UsuarioService(_authenticationService);
+                UsuarioService usuarioService = new UsuarioService(_authenticationService, _logger);
                 var response = await usuarioService.Login(usuarioModel);
 
                 return Ok(response);
             }
             catch (Exception erro)
             {
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Usuario)}: Não foi possível realizar o login. Erro:{erro.Message}");
                 return BadRequest($"Não foi possível realizar o login. Erro:{erro.Message}");
             }
         }

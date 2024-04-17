@@ -19,13 +19,16 @@ public class PacienteController : ControllerBase
 {
     private readonly IPacienteRepositorio _pacienteRepositorio;
     private readonly IAuthenticationService _authenticationService;
+    private readonly ILogger<PacienteController> _logger;
 
     #region Construtor
     public PacienteController(IPacienteRepositorio pacienteRepositorio,
-                              IAuthenticationService authenticationService)
+                              IAuthenticationService authenticationService,
+                              ILogger<PacienteController> logger)
     {
         _pacienteRepositorio = pacienteRepositorio;
         _authenticationService = authenticationService;
+        _logger = logger;
     }
     #endregion
 
@@ -41,13 +44,14 @@ public class PacienteController : ControllerBase
     {
         try
         {
-            PacienteService pacienteService = new PacienteService(_pacienteRepositorio, _authenticationService);
+            PacienteService pacienteService = new PacienteService(_pacienteRepositorio, _authenticationService, _logger);
             var response = await pacienteService.BuscarTodosPacientes();
 
             return Ok(response);
         }
         catch(Exception erro)
         {
+            _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Paciente)}: Não foi possível buscar todos os pacientes. Erro: {erro.Message}");
             return BadRequest($"Não foi possível buscar todos os pacientes. Erro: {erro.Message}");
         }
     }
@@ -66,13 +70,14 @@ public class PacienteController : ControllerBase
     {
         try
         {
-            PacienteService pacienteService = new PacienteService(_pacienteRepositorio, _authenticationService);
+            PacienteService pacienteService = new PacienteService(_pacienteRepositorio, _authenticationService, _logger);
             var response = await pacienteService.BuscarPorId(id);
 
             return Ok(response);
         }
         catch (Exception erro)
         {
+            _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Paciente)}: Não foi possívell buscar o paciente com o ID: {id}. Erro: {erro.Message}");
             return BadRequest($"Não foi possívell buscar o paciente com o ID: {id}. Erro: {erro.Message}");
         }
     }
@@ -91,13 +96,14 @@ public class PacienteController : ControllerBase
     {
         try
         {
-            PacienteService pacienteService = new PacienteService(_pacienteRepositorio, _authenticationService);
+            PacienteService pacienteService = new PacienteService(_pacienteRepositorio, _authenticationService, _logger);
             var response = await pacienteService.BuscarDocConvenioPorId(id);
 
             return Ok(response);
         }
         catch (Exception erro)
         {
+            _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Paciente)}: Não foi possível buscar o documento do convênio com ID: {id}. Erro: {erro.Message}");
             return BadRequest($"Não foi possível buscar o documento do convênio com ID: {id}. Erro: {erro.Message}");
         }
     }
@@ -116,13 +122,14 @@ public class PacienteController : ControllerBase
     {
         try
         {
-            PacienteService pacienteService = new PacienteService(_pacienteRepositorio, _authenticationService);
+            PacienteService pacienteService = new PacienteService(_pacienteRepositorio, _authenticationService, _logger);
             var response = await pacienteService.BuscarDocPorId(id);
 
             return Ok(response);
         }
         catch (Exception erro)
         {
+            _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Paciente)}: Não foi possível buscar o documento do paciente com o ID: {id}. Erro: {erro.Message}");
             return BadRequest($"Não foi possível buscar o documento do paciente com o ID: {id}. Erro: {erro.Message}");
         }
     }
@@ -141,13 +148,14 @@ public class PacienteController : ControllerBase
     {
         try 
         {
-            PacienteService retornoService = new PacienteService(_pacienteRepositorio, _authenticationService);
+            PacienteService retornoService = new PacienteService(_pacienteRepositorio, _authenticationService, _logger);
             var response = await retornoService.AdicionarPaciente(pacienteModel);
             
             return Ok(response);
         }
         catch (Exception erro)
         {
+            _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Paciente)}: Não foi possível cadastrar o paciente. Erro: {erro.Message}");
             return BadRequest($"Não foi possível cadastrar o paciente. Erro: {erro.Message}");
         }
     }
@@ -167,13 +175,14 @@ public class PacienteController : ControllerBase
     {
         try
         {
-            PacienteService pacienteService = new PacienteService(_pacienteRepositorio, _authenticationService);
+            PacienteService pacienteService = new PacienteService(_pacienteRepositorio, _authenticationService, _logger);
             var response = await pacienteService.Atualizar(pacienteModel, id);
 
             return Ok(response);
         }
         catch (Exception erro)
         {
+            _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Paciente)}: Não foi possível atualizar o paciente com ID: {id}. Erro: {erro.Message}");
             return BadRequest($"Não foi possível atualizar o paciente com ID: {id}. Erro: {erro.Message}");
         }
     }
@@ -193,13 +202,14 @@ public class PacienteController : ControllerBase
     {
         try
         {
-            PacienteService pacienteService = new PacienteService(_pacienteRepositorio, _authenticationService);
+            PacienteService pacienteService = new PacienteService(_pacienteRepositorio, _authenticationService, _logger);
             var response = await pacienteService.AtualizarDoc(documentoImagemDto, id);
 
             return Ok(response);
         }
         catch (Exception erro)
         {
+            _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Paciente)}: Não foi possível atualizar o documento do paciente com o ID: {id}. Erro: {erro.Message}");
             return BadRequest($"Não foi possível atualizar o documento do paciente com o ID: {id}. Erro: {erro.Message}");
         }
 
@@ -219,13 +229,14 @@ public class PacienteController : ControllerBase
     {
         try
         {
-            PacienteService pacienteService = new PacienteService(_pacienteRepositorio, _authenticationService);
+            PacienteService pacienteService = new PacienteService(_pacienteRepositorio, _authenticationService, _logger);
             var response = await pacienteService.Apagar(id);
 
             return Ok(response);
         }
         catch (Exception erro)
         {
+            _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Paciente)}: Não foi possível apagar o paciente com o ID: {id}. Erro: {erro.Message}");
             return BadRequest($"Não foi possível apagar o paciente com o ID: {id}. Erro: {erro.Message}");
         }
     }

@@ -1,4 +1,5 @@
-﻿using GerenciadorHospital.Models;
+﻿using GerenciadorHospital.Controllers;
+using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
 
 namespace GerenciadorHospital.Services.Medicamento
@@ -6,19 +7,34 @@ namespace GerenciadorHospital.Services.Medicamento
     public class MedicamentosService : IMedicamentosService
     {
         private readonly IMedicamentosPacienteRepositorio _medicamentosPacienteRepositorio;
-        public MedicamentosService(IMedicamentosPacienteRepositorio medicamentosPacienteRepositorio)
+        private readonly ILogger<MedicamentosPacienteController> _logger;
+        public MedicamentosService(IMedicamentosPacienteRepositorio medicamentosPacienteRepositorio,
+                                   ILogger<MedicamentosPacienteController> logger)
         {
             _medicamentosPacienteRepositorio = medicamentosPacienteRepositorio;
+            _logger = logger;
         }
         public async Task<MedicamentoPacienteModel> Adicionar(MedicamentoPacienteModel medicamentoModel)
         {
             MedicamentoPacienteModel medicamentos = await _medicamentosPacienteRepositorio.Adicionar(medicamentoModel);
+
+            if (medicamentos is not null)
+                _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Medicamento)}: Cadastro do medicamento foi realizado.");
+            else
+                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Medicamento)}: Cadastro do medicamento não foi realizado");
+
             return medicamentos;
         }
 
         public async Task<bool> Apagar(int id)
         {
             bool apagado = await _medicamentosPacienteRepositorio.Apagar(id);
+
+            if (apagado)
+                _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Medicamento)}: Remoção do medicamento foi realizada.");
+            else
+                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Medicamento)}: Remoção do medicamento não foi realizada.");
+
             return apagado;
         }
 
@@ -26,19 +42,37 @@ namespace GerenciadorHospital.Services.Medicamento
         {
             medicamentoModel.Id = id;
             MedicamentoPacienteModel medicamentos = await _medicamentosPacienteRepositorio.Atualizar(medicamentoModel, id);
+
+            if (medicamentos is not null)
+                _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Medicamento)}: Atualização do medicamento foi realizada.");
+            else
+                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Medicamento)}: Atualização do medicamento não foi realizada.");
+
             return medicamentos;
         }
 
         public async Task<MedicamentoPacienteModel> BuscarPorId(int id)
         {
             MedicamentoPacienteModel medicamentos = await _medicamentosPacienteRepositorio.BuscarPorId(id);
+
+            if (medicamentos is not null)
+                _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Medicamento)}: Busca de medicamento com ID: {id} foi realizada.");
+            else
+                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Medicamento)}: Busca do medicamento com ID: {id} foi realizada.");
+
             return medicamentos;
         }
 
         public async Task<List<MedicamentoPacienteModel>> BuscarTodosMedicamentosPaciente()
         {
-            List<MedicamentoPacienteModel> medicos = await _medicamentosPacienteRepositorio.BuscarTodosMedicamentosPaciente();
-            return medicos;
+            List<MedicamentoPacienteModel> medicamentos = await _medicamentosPacienteRepositorio.BuscarTodosMedicamentosPaciente();
+
+            if (medicamentos is not null)
+                _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Medicamento)}: Busca de todos os medicamentos foi relizada");
+            else
+                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Medicamento)}: Busca de todos os medicamentos não foi realizada");
+            
+            return medicamentos;
         }
     }
 }
