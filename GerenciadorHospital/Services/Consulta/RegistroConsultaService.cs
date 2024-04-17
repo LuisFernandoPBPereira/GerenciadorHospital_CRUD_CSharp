@@ -16,6 +16,7 @@ namespace GerenciadorHospital.Services.Consulta
         private readonly IRegistroConsultaRepositorio _consultaRepositorio;
         private readonly IPacienteRepositorio _pacienteRepositorio;
         private readonly ILogger<RegistroConsultaController> _logger;
+        MensagensLog mensagensLog = new MensagensLog();
 
         public RegistroConsultaService(IRegistroConsultaRepositorio consultaRepositorio,
                                        IPacienteRepositorio pacienteRepositorio,
@@ -27,6 +28,7 @@ namespace GerenciadorHospital.Services.Consulta
             _logger.LogInformation($"{Enums.CodigosLogSucesso.S_Consulta}: Os valores foram atribuídos no construtor da Service.");
         }
 
+
         public async Task<RegistroConsultaModel> Adicionar(RegistroConsultaModel consultaModel)
         {
             //É instanciado um novo objeto para validar o cadastro da consulta
@@ -35,7 +37,7 @@ namespace GerenciadorHospital.Services.Consulta
 
             if (await consultaValidada == false)
             {
-                _logger.LogError($"{Enums.CodigosLogErro.E_Consulta}: Não foi possível cadastrar uma nova consulta: paciente já tem uma consulta agendada");
+                _logger.LogError($"{Enums.CodigosLogErro.E_Consulta}:  Não foi possível cadastrar uma nova consulta: paciente já tem uma consulta agendada");
                 throw new Exception("Não foi possível cadastrar uma nova consulta: paciente já tem uma consulta agendada");
             }
 
@@ -125,7 +127,7 @@ namespace GerenciadorHospital.Services.Consulta
             if(consultas is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Consulta)}: Busca de todas as consultas realizada.");
             else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Consulta)}: Busca de todas as consultas porém sem conteúdo.");
+                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Consulta)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Consulta)}");
 
 
             return consultas;
