@@ -37,7 +37,9 @@ namespace GerenciadorHospital.Services.Consulta
 
             if (await consultaValidada == false)
             {
-                _logger.LogError($"{Enums.CodigosLogErro.E_Consulta}:  Não foi possível cadastrar uma nova consulta: paciente já tem uma consulta agendada");
+                _logger.LogError(@$"{Enums.CodigosLogErro.E_POST_Consulta}:  
+                                    {mensagensLog.ExibirMensagem(CodigosLogErro.E_POST_Consulta)} ->
+                                    paciente já tem uma consulta agendada");
                 throw new Exception("Não foi possível cadastrar uma nova consulta: paciente já tem uma consulta agendada");
             }
 
@@ -46,7 +48,9 @@ namespace GerenciadorHospital.Services.Consulta
             if(consulta is not null) 
                 _logger.LogInformation($"{Enums.CodigosLogSucesso.S_Consulta}: Consulta cadastrada com sucesso");
              else
-                _logger.LogError($"{Enums.CodigosLogErro.E_Consulta}: Não foi possível agendar uma consulta");
+                _logger.LogError(@$"{Enums.CodigosLogErro.E_POST_Consulta}: 
+                                  {mensagensLog.ExibirMensagem(CodigosLogErro.E_POST_Consulta)} ->
+                                  Não foi possível agendar uma consulta");
 
             return consulta ?? throw new Exception("Não foi possível agendar uma consulta");
         }
@@ -58,7 +62,9 @@ namespace GerenciadorHospital.Services.Consulta
             if (apagado)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Consulta)}: Remoção de consulta com o ID: {id} realizada.");
             else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Consulta)}: Remoção de consulta com o ID: {id} não foi concluída.");
+                _logger.LogInformation(@$"{nameof(Enums.CodigosLogErro.E_DEL_Consulta)}: 
+                                        {mensagensLog.ExibirMensagem(CodigosLogErro.E_DEL_Consulta)} ->
+                                        Remoção de consulta com o ID: {id} não foi concluída.");
 
             return apagado;
         }
@@ -77,7 +83,9 @@ namespace GerenciadorHospital.Services.Consulta
             if (consulta is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Consulta)}: Atualização de consulta com o ID: {id} realizada.");
             else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Consulta)}: Atualização de consulta com o ID: {id} não foi concluída.");
+                _logger.LogInformation(@$"{nameof(Enums.CodigosLogErro.E_PUT_Consulta)}: 
+                                        {mensagensLog.ExibirMensagem(CodigosLogErro.E_PUT_Consulta)} ->
+                                        Atualização de consulta com o ID: {id} não foi concluída.");
 
             return consulta;
         }
@@ -91,7 +99,9 @@ namespace GerenciadorHospital.Services.Consulta
             if (consultas is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Consulta)}: Busca de consultas por Médico com ID: {id} e Status Consulta {statusConsulta} realizada.");
             else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Consulta)}:  Busca de consultas por Médico com ID: {id} e Status Consulta {statusConsulta} realizada, porém sem conteúdo.");
+                _logger.LogInformation(@$"{nameof(Enums.CodigosLogErro.E_GET_Consulta)}:  
+                                        {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Consulta)} ->
+                                        Busca de consultas por Médico com ID: {id} e Status Consulta {statusConsulta} realizada, porém sem conteúdo.");
 
             return consultas;
         }
@@ -103,7 +113,9 @@ namespace GerenciadorHospital.Services.Consulta
             if (consultas is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Consulta)}: Busca de consultas por Paciente com ID: {id} e Status Consulta {statusConsulta} realizada.");
             else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Consulta)}: Busca de consultas por Paciente com ID: {id} e Status Consulta {statusConsulta} realizada, porém sem conteúdo.");
+                _logger.LogInformation(@$"{nameof(Enums.CodigosLogErro.E_GET_Consulta)}: 
+                                        {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Consulta)} ->
+                                        Busca de consultas por Paciente com ID: {id} e Status Consulta {statusConsulta} realizada, porém sem conteúdo.");
 
             return consultas;
 
@@ -116,7 +128,9 @@ namespace GerenciadorHospital.Services.Consulta
             if (consultas is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Consulta)}: Busca de consulta com ID: {id} realizada.");
             else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Consulta)}: Busca de consulta com ID: {id} porém sem conteúdo.");
+                _logger.LogInformation(@$"{nameof(Enums.CodigosLogErro.E_GET_Consulta)}: 
+                                        {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Consulta)} ->
+                                        Busca de consulta com ID: {id} porém sem conteúdo.");
 
             return consultas;
         }
@@ -127,7 +141,7 @@ namespace GerenciadorHospital.Services.Consulta
             if(consultas is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Consulta)}: Busca de todas as consultas realizada.");
             else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Consulta)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Consulta)}");
+                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_GET_Consulta)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Consulta)}");
 
 
             return consultas;

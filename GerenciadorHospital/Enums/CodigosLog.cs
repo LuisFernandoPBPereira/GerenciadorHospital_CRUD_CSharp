@@ -32,7 +32,6 @@
         E_PUT_Paciente,
         E_DEL_Paciente,
 
-        E_Consulta,
         E_GET_Consulta,
         E_POST_Consulta,
         E_PUT_Consulta,
