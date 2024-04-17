@@ -91,7 +91,7 @@ namespace GerenciadorHospital.Services.Consulta
         {
             List<RegistroConsultaModel> consultas = await _consultaRepositorio.BuscarTodosRegistrosConsultas();
             if(consultas is not null)
-                _logger.LogInformation("Busca de todas as consultas realizada.");
+                _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Consulta)}: Busca de todas as consultas realizada.");
             else
                 _logger.LogInformation("Busca de todas as consultas porém sem conteúdo.");
 
