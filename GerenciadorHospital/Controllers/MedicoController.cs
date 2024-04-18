@@ -16,12 +16,15 @@ namespace GerenciadorHospital.Controllers
     {
         private readonly IMedicoRepositorio _medicoRepositorio;
         private readonly IAuthenticationService _authenticationService;
+        private readonly ILogger<MedicoController> _logger;
         #region Construtor
         public MedicoController(IMedicoRepositorio medicoRepositorio,
-                                IAuthenticationService authenticationService)
+                                IAuthenticationService authenticationService,
+                                ILogger<MedicoController> logger)
         {
             _medicoRepositorio = medicoRepositorio;
             _authenticationService = authenticationService;
+            _logger = logger;
         }
         #endregion
 
@@ -37,11 +40,14 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                List<MedicoModel> medicos = await _medicoRepositorio.BuscarTodosMedicos();
-                return Ok(medicos);
+                MedicoService medicoService = new MedicoService(_authenticationService, _medicoRepositorio, _logger);
+                var response = await medicoService.BuscarTodosMedicos();
+
+                return Ok(response);
             }
             catch(Exception erro)
             {
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_GET_Medico)}: Não foi possível buscar todos os médicos. Erro: {erro.Message}");
                 return BadRequest($"Não foi possível buscar todos os médicos. Erro: {erro.Message}");
             }
         }
@@ -60,11 +66,14 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                MedicoModel medicos = await _medicoRepositorio.BuscarPorId(id);
-                return Ok(medicos);
+                MedicoService medicoService = new MedicoService(_authenticationService, _medicoRepositorio, _logger);
+                var response = await medicoService.BuscarPorId(id);
+
+                return Ok(response);
             }
             catch (Exception erro)
             {
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_GET_Medico)}: Não foi possível buscar o médico com ID: {id}. Erro: {erro.Message}");
                 return BadRequest($"Não foi possível buscar o médico com ID: {id}. Erro: {erro.Message}");
             }
         }
@@ -83,13 +92,14 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                MedicoService medicoService = new MedicoService(_authenticationService, _medicoRepositorio);
-                var response = await medicoService.AdicionarMedico(medicoModel);
+                MedicoService medicoService = new MedicoService(_authenticationService, _medicoRepositorio, _logger);
+                var response = await medicoService.Adicionar(medicoModel);
 
                 return Ok(response);
             }
             catch (Exception erro)
             {
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_POST_Medico)}: Não foi possível cadastrar o médico. Erro:{erro.Message}");
                 return BadRequest($"Não foi possível cadastrar o médico. Erro:{erro.Message}");
             }
         }
@@ -109,12 +119,14 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                medicoModel.Id = id;
-                MedicoModel medico = await _medicoRepositorio.Atualizar(medicoModel, id);
-                return Ok(medico);
+                MedicoService medicoService = new MedicoService(_authenticationService, _medicoRepositorio, _logger);
+                var response = await medicoService.Atualizar(medicoModel, id);
+
+                return Ok(response);
             }
             catch (Exception erro)
             {
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_PUT_Medico)}: Não foi possível atualizar o médico com ID: {id}. Erro: {erro.Message}");
                 return BadRequest($"Não foi possível atualizar o médico com ID: {id}. Erro: {erro.Message}");
             }
         }
@@ -133,11 +145,14 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                bool apagado = await _medicoRepositorio.Apagar(id);
-                return Ok(apagado);
+                MedicoService medicoService = new MedicoService(_authenticationService, _medicoRepositorio, _logger);
+                var response = await medicoService.Apagar(id);
+
+                return Ok(response);
             }
             catch (Exception erro)
             {
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_DEL_Medico)}: Não possível apagar o médico com o ID: {id}. Erro: {erro.Message}");
                 return BadRequest($"Não possível apagar o médico com o ID: {id}. Erro: {erro.Message}");
             }
         }

@@ -1,5 +1,6 @@
 ﻿using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
+using GerenciadorHospital.Services.Medicamento;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,10 +12,14 @@ namespace GerenciadorHospital.Controllers
     public class MedicamentosPacienteController : ControllerBase
     {
         private readonly IMedicamentosPacienteRepositorio _medicamentosPacienteRepositorio;
+        private readonly ILogger<MedicamentosPacienteController> _logger;
         #region Construtor
-        public MedicamentosPacienteController(IMedicamentosPacienteRepositorio medicamentoRepositorio)
+        public MedicamentosPacienteController(IMedicamentosPacienteRepositorio medicamentoRepositorio,
+                                              ILogger<MedicamentosPacienteController> logger)
         {
             _medicamentosPacienteRepositorio = medicamentoRepositorio;
+            _logger = logger;
+            _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Medicamento)}: Os valores foram atribuídos no construtor na Controller");
         }
         #endregion
 
@@ -30,11 +35,14 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                List<MedicamentoPacienteModel> medicos = await _medicamentosPacienteRepositorio.BuscarTodosMedicamentosPaciente();
-                return Ok(medicos);
+                MedicamentosService medicamentosService = new MedicamentosService(_medicamentosPacienteRepositorio, _logger);
+                var response = await medicamentosService.BuscarTodosMedicamentosPaciente();
+
+                return Ok(response);
             }
             catch (Exception erro)
             {
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_GET_Medicamento)}: Não foi possível buscar todos medicamentos. Erro:{erro.Message}");
                 return BadRequest($"Não foi possível buscar todos medicamentos. Erro:{erro.Message}");
             }
         }
@@ -53,11 +61,14 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                MedicamentoPacienteModel medicamentos = await _medicamentosPacienteRepositorio.BuscarPorId(id);
-                return Ok(medicamentos);
+                MedicamentosService medicamentosService = new MedicamentosService(_medicamentosPacienteRepositorio, _logger);
+                var response = await medicamentosService.BuscarPorId(id);
+
+                return Ok(response);
             }
             catch (Exception erro)
             {
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_GET_Medicamento)}: Não foi possível buscar o medicamento com ID: {id}. Erro:{erro.Message}");
                 return BadRequest($"Não foi possível buscar o medicamento com ID: {id}. Erro:{erro.Message}");
             }
         }
@@ -76,11 +87,14 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                MedicamentoPacienteModel medicamentos = await _medicamentosPacienteRepositorio.Adicionar(medicamentoModel);
-                return Ok(medicamentos);
+                MedicamentosService medicamentosService = new MedicamentosService(_medicamentosPacienteRepositorio, _logger);
+                var response = await medicamentosService.Adicionar(medicamentoModel);
+
+                return Ok(response);
             }
             catch (Exception erro)
             {
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_POST_Medicamento)}: Não foi possível cadastrar o medicamento. Erro:{erro.Message}");
                 return BadRequest($"Não foi possível cadastrar o medicamento. Erro:{erro.Message}");
             }
         }
@@ -100,12 +114,14 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                medicamentoModel.Id = id;
-                MedicamentoPacienteModel medicamentos = await _medicamentosPacienteRepositorio.Atualizar(medicamentoModel, id);
-                return Ok(medicamentos);
+                MedicamentosService medicamentosService = new MedicamentosService(_medicamentosPacienteRepositorio, _logger);
+                var response = await medicamentosService.Atualizar(medicamentoModel, id);
+
+                return Ok(response);
             }
             catch (Exception erro)
             {
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_PUT_Medicamento)}: Não foi possível atualizar o medicamento com ID: {id}. Erro:{erro.Message}");
                 return BadRequest($"Não foi possível atualizar o medicamento com ID: {id}. Erro:{erro.Message}");
             }
         }
@@ -124,11 +140,14 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                bool apagado = await _medicamentosPacienteRepositorio.Apagar(id);
-                return Ok(apagado);
+                MedicamentosService medicamentosService = new MedicamentosService(_medicamentosPacienteRepositorio, _logger);
+                var response = await medicamentosService.Apagar(id);
+
+                return Ok(response);
             }
             catch (Exception erro)
             {
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_DEL_Medicamento)}: Não foi possível apagar o medicamento com ID: {id}. Erro: {erro.Message}");
                 return BadRequest($"Não foi possível apagar o medicamento com ID: {id}. Erro: {erro.Message}");
             }
         }

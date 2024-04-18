@@ -1,5 +1,6 @@
 ﻿using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
+using GerenciadorHospital.Services.Exame;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,10 +12,13 @@ namespace GerenciadorHospital.Controllers
     public class TipoExameController : ControllerBase
     {
         private readonly ITipoExameRepositorio _tipoExameRepositorio;
+        private readonly ILogger<TipoExameController> _logger;
         #region Construtor
-        public TipoExameController(ITipoExameRepositorio tipoExameRepositorio)
+        public TipoExameController(ITipoExameRepositorio tipoExameRepositorio, 
+                                   ILogger<TipoExameController> logger)
         {
             _tipoExameRepositorio = tipoExameRepositorio;
+            _logger = logger;
         }
         #endregion
 
@@ -30,11 +34,14 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                List<TipoExameModel> exames = await _tipoExameRepositorio.BuscarTodosExames();
-                return Ok(exames);
+                TipoExameService tipoExameService = new TipoExameService(_tipoExameRepositorio, _logger);
+                var response = await tipoExameService.BuscarTodosExames();
+
+                return Ok(response);
             }
             catch (Exception erro)
             {
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_GET_Exame)}: Não foi possível buscar todos exames. Erro: {erro.Message}");
                 return BadRequest($"Não foi possível buscar todos exames. Erro: {erro.Message}");
             }
         }
@@ -53,11 +60,14 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                TipoExameModel exames = await _tipoExameRepositorio.BuscarPorId(id);
-                return Ok(exames);
+                TipoExameService tipoExameService = new TipoExameService(_tipoExameRepositorio, _logger);
+                var response = await tipoExameService.BuscarPorId(id);
+
+                return Ok(response);
             }
             catch(Exception erro)
             {
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_GET_Exame)}Não foi possível buscar o exame com ID: {id}. Erro: {erro.Message}");
                 return BadRequest($"Não foi possível buscar o exame com ID: {id}. Erro: {erro.Message}");
             }
         }
@@ -76,11 +86,14 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                TipoExameModel exame = await _tipoExameRepositorio.Adicionar(tipoExameModel);
-                return Ok(exame);
+                TipoExameService tipoExameService = new TipoExameService(_tipoExameRepositorio, _logger);
+                var response = await tipoExameService.Adicionar(tipoExameModel);
+
+                return Ok(response);
             }
             catch (Exception erro)
             {
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_POST_Exame)}Não foi possível cadastrar o exame. Erro: {erro.Message}");
                 return BadRequest($"Não foi possível cadastrar o exame. Erro: {erro.Message}");
             }
         }
@@ -100,12 +113,14 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                tipoExameModel.Id = id;
-                TipoExameModel exame = await _tipoExameRepositorio.Atualizar(tipoExameModel, id);
-                return Ok(exame);
+                TipoExameService tipoExameService = new TipoExameService(_tipoExameRepositorio, _logger);
+                var response = await tipoExameService.Atualizar(tipoExameModel, id);
+
+                return Ok(response);
             }
             catch (Exception erro)
             {
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_PUT_Exame)}: Não foi possível atualizar o exame com ID: {id}. Erro: {erro.Message}");
                 return BadRequest($"Não foi possível atualizar o exame com ID: {id}. Erro: {erro.Message}");
             }
         }
@@ -124,11 +139,14 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                bool apagado = await _tipoExameRepositorio.Apagar(id);
-                return Ok(apagado);
+                TipoExameService tipoExameService = new TipoExameService(_tipoExameRepositorio, _logger);
+                var response = await tipoExameService.Apagar(id);
+
+                return Ok(response);
             }
             catch (Exception erro)
             {
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_DEL_Exame)}: Não foi possível apagar o exame com ID: {id}. Erro: {erro.Message}");
                 return BadRequest($"Não foi possível apagar o exame com ID: {id}. Erro: {erro.Message}");
             }
         }

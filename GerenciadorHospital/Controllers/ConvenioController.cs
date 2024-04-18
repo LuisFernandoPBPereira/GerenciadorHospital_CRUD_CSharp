@@ -1,6 +1,7 @@
 ﻿using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios;
 using GerenciadorHospital.Repositorios.Interfaces;
+using GerenciadorHospital.Services.Convenio;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +13,14 @@ namespace GerenciadorHospital.Controllers
     public class ConvenioController : ControllerBase
     {
         private readonly IConvenioRepositorio _convenioRepositorio;
+        private readonly ILogger<ConvenioController> _logger;
         #region Construtor
-        public ConvenioController(IConvenioRepositorio convenioRepositorio)
+        public ConvenioController(IConvenioRepositorio convenioRepositorio, 
+                                  ILogger<ConvenioController> logger)
         {
             _convenioRepositorio = convenioRepositorio;
+            _logger = logger;
+            _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Convenio)}: Os valores foram atribuídos no construtor da Controller");
         }
         #endregion
 
@@ -31,11 +36,14 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                List<ConvenioModel> convenios = await _convenioRepositorio.BuscarTodosConvenios();
-                return Ok(convenios);
+                ConvenioService convenioService = new ConvenioService(_convenioRepositorio, _logger);
+                var response  = await convenioService.BuscarTodosConvenios();
+
+                return Ok(response);
             }
             catch (Exception erro)
             {
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_GET_Convenio)}: Não foi possível buscar todos os convênios. Erro:{erro.Message}");
                 return BadRequest($"Não foi possível buscar todos os convênios. Erro:{erro.Message}");
             }
         }
@@ -54,11 +62,14 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                ConvenioModel convenio = await _convenioRepositorio.BuscarPorId(id);
-                return Ok(convenio);
+                ConvenioService convenioService = new ConvenioService(_convenioRepositorio, _logger);
+                var response = await convenioService.BuscarPorId(id);
+
+                return Ok(response);
             }
             catch (Exception erro)
             {
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_GET_Convenio)}: Não foi possível buscar o convênio com o ID: {id}. Erro:{erro.Message}");
                 return BadRequest($"Não foi possível buscar o convênio com o ID: {id}. Erro:{erro.Message}");
             }
         }
@@ -76,11 +87,14 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                ConvenioModel convenio = await _convenioRepositorio.Adicionar(convenioModel);
-                return Ok(convenio);
+                ConvenioService convenioService = new ConvenioService(_convenioRepositorio, _logger);
+                var response = await convenioService.Adicionar(convenioModel);
+
+                return Ok(response);
             }
             catch (Exception erro)
             {
+                _logger.LogError($"{Enums.CodigosLogErro.E_POST_Convenio}: Não foi possível cadastrar o convênio. Erro:{erro.Message}");
                 return BadRequest($"Não foi possível cadastrar o convênio. Erro:{erro.Message}");
             }
         }
@@ -100,12 +114,14 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                convenioModel.Id = id;
-                ConvenioModel convenio = await _convenioRepositorio.Atualizar(convenioModel, id);
-                return Ok(convenio);
+                ConvenioService convenioService = new ConvenioService(_convenioRepositorio, _logger);
+                var response = await convenioService.Atualizar(convenioModel, id);
+
+                return Ok(response);
             }
             catch (Exception erro)
             {
+                _logger.LogError($"{Enums.CodigosLogErro.E_PUT_Convenio}: Não foi possível atualizar o convênio com ID: {id}. Erro:{erro.Message}");
                 return BadRequest($"Não foi possível atualizar o convênio com ID: {id}. Erro:{erro.Message}");
             }
         }
@@ -124,11 +140,14 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                bool apagado = await _convenioRepositorio.Apagar(id);
-                return Ok(apagado);
+                ConvenioService convenioService = new ConvenioService(_convenioRepositorio, _logger);
+                var response = await convenioService.Apagar(id);
+
+                return Ok(response);
             }
             catch (Exception erro)
             {
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_DEL_Convenio)}: Não foi possível apagar o convênio com ID: {id}. Erro:{erro.Message}");
                 return BadRequest($"Não foi possível apagar o convênio com ID: {id}. Erro:{erro.Message}");
             }
         }

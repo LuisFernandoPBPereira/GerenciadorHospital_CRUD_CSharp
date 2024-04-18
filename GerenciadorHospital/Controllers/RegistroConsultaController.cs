@@ -17,12 +17,16 @@ namespace GerenciadorHospital.Controllers
     {
         private readonly IRegistroConsultaRepositorio _consultaRepositorio;
         private readonly IPacienteRepositorio _pacienteRepositorio;
+        private readonly ILogger<RegistroConsultaController> _logger;
         #region Construtor
         public RegistroConsultaController(IRegistroConsultaRepositorio consultaRepositorio, 
-                                          IPacienteRepositorio pacienteRepositorio)
+                                          IPacienteRepositorio pacienteRepositorio,
+                                          ILogger<RegistroConsultaController> logger)
         {
             _consultaRepositorio = consultaRepositorio;
             _pacienteRepositorio = pacienteRepositorio;
+            _logger = logger;
+            _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Consulta)}: Os valores foram atribuídos no construtor da Controller.");
         }
         #endregion
 
@@ -38,16 +42,19 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                List<RegistroConsultaModel> consultas = await _consultaRepositorio.BuscarTodosRegistrosConsultas();
-                return Ok(consultas);
+                RegistroConsultaService registroConsultaService = new RegistroConsultaService(_consultaRepositorio, _pacienteRepositorio, _logger);
+                var response = await registroConsultaService.BuscarTodosRegistrosConsultas();
+
+                return Ok(response);
             }
             catch (Exception erro)
             {
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_GET_Consulta)}: Não foi possível buscar todas as consultas. Erro: {erro.Message}");
                 return BadRequest($"Não foi possível buscar todas as consultas. Erro: {erro.Message}");
             }
         }
         #endregion
-
+        
         #region GET Consulta Por ID
         /// <summary>
         /// Busca Consulta por ID
@@ -61,11 +68,14 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                RegistroConsultaModel consultas = await _consultaRepositorio.BuscarPorId(id);
-                return Ok(consultas);
+                RegistroConsultaService registroConsultaService = new RegistroConsultaService(_consultaRepositorio, _pacienteRepositorio, _logger);
+                var response = await registroConsultaService.BuscarPorId(id);
+
+                return Ok(response);
             }
             catch (Exception erro)
             {
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_GET_Consulta)}: Não foi possível buscar a consulta com o ID: {id}. Erro: {erro.Message}");
                 return BadRequest($"Não foi possível buscar a consulta com o ID: {id}. Erro: {erro.Message}");
             }
         }
@@ -85,11 +95,14 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                List<RegistroConsultaModel> consultas = await _consultaRepositorio.BuscarConsultaPorPacienteId(id, statusConsulta);
-                return Ok(consultas);
+                RegistroConsultaService registroConsultaService = new RegistroConsultaService(_consultaRepositorio, _pacienteRepositorio, _logger);
+                var response = await registroConsultaService.BuscarConsultaPorPacienteId(id, statusConsulta);
+
+                return Ok(response);
             }
             catch (Exception erro)
             {
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_GET_Consulta)}: Não foi possível buscar a consulta com o ID: {id}. Erro: {erro.Message}");
                 return BadRequest($"Não foi possível buscar a consulta com o ID: {id}. Erro: {erro.Message}");
             }
         }
@@ -101,7 +114,8 @@ namespace GerenciadorHospital.Controllers
         /// </summary>
         /// <param name="id">ID da Consulta</param>
         /// <param name="statusConsulta">Estado da Consulta</param>
-        /// <param name="data">Data da Consulta</param>
+        /// <param name="dataInicial">Data inicial de busca da Consulta</param>
+        /// <param name="dataFinal">Data final de busca da Consulta</param>
         /// <returns>Consulta</returns>
         /// <response code="200">Consulta Retornada com SUCESSO</response>
         [HttpGet("BuscarConsultaPorMedico/{id}")]
@@ -110,13 +124,14 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                if (dataInicial == null) dataInicial = string.Empty;
-                if (dataFinal == null) dataFinal = string.Empty;
-                List<RegistroConsultaModel> consultas = await _consultaRepositorio.BuscarConsultaPorMedicoId(id, statusConsulta, dataInicial, dataFinal);
-                return Ok(consultas);
+                RegistroConsultaService registroConsultaService = new RegistroConsultaService(_consultaRepositorio, _pacienteRepositorio, _logger);
+                var response = await registroConsultaService.BuscarConsultaPorMedicoId(id, statusConsulta, dataInicial, dataFinal);
+
+                return Ok(response);
             }
             catch (Exception erro)
             {
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_GET_Consulta)}: Não foi possível buscar a consulta com o ID: {id}. Erro: {erro.Message}");
                 return BadRequest($"Não foi possível buscar a consulta com o ID: {id}. Erro: {erro.Message}");
             }
         }
@@ -135,13 +150,14 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                RegistroConsultaService registroConsultaService = new RegistroConsultaService(_consultaRepositorio, _pacienteRepositorio);
-                var response = await registroConsultaService.AdicionarConsulta(consultaModel);
+                RegistroConsultaService registroConsultaService = new RegistroConsultaService(_consultaRepositorio, _pacienteRepositorio, _logger);
+                var response = await registroConsultaService.Adicionar(consultaModel);
 
                 return Ok(response);
             }
             catch (Exception erro)
             {
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_POST_Consulta)}: Não foi possível cadastrar a consulta. Erro: {erro.Message}");
                 return BadRequest($"Não foi possível cadastrar a consulta. Erro: {erro.Message}");
             }
         }
@@ -161,18 +177,14 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                consultaModel.Id = id;
+                RegistroConsultaService registroConsultaService = new RegistroConsultaService(_consultaRepositorio, _pacienteRepositorio, _logger);
+                var response = await registroConsultaService.Atualizar(consultaModel, id);
 
-                if (consultaModel.EstadoConsulta == Enums.StatusConsulta.Atendida)
-                {
-                    consultaModel.DataRetorno = DateTime.Now.AddDays(30);
-                }
-
-                RegistroConsultaModel consulta = await _consultaRepositorio.Atualizar(consultaModel, id);
-                return Ok(consulta);
+                return Ok(response);
             }
             catch (Exception erro)
             {
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_PUT_Consulta)}: Não foi possível atualizar a consulta com o ID: {id}. Erro: {erro.Message}");
                 return BadRequest($"Não foi possível atualizar a consulta com o ID: {id}. Erro: {erro.Message}");
             }
         }
@@ -191,11 +203,14 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                bool apagado = await _consultaRepositorio.Apagar(id);
-                return Ok(apagado);
+                RegistroConsultaService registroConsultaService = new RegistroConsultaService(_consultaRepositorio, _pacienteRepositorio, _logger);
+                var response = await registroConsultaService.Apagar(id);
+
+                return Ok(response);
             }
             catch (Exception erro)
             {
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_DEL_Consulta)}: Não foi possível apagar a consulta com o ID: {id}. Erro: {erro.Message}");
                 return BadRequest($"Não foi possível apagar a consulta com o ID: {id}. Erro: {erro.Message}");
             }
         }
