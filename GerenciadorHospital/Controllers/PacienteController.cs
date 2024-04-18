@@ -51,7 +51,7 @@ public class PacienteController : ControllerBase
         }
         catch(Exception erro)
         {
-            _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Paciente)}: Não foi possível buscar todos os pacientes. Erro: {erro.Message}");
+            _logger.LogError($"{nameof(Enums.CodigosLogErro.E_GET_Paciente)}: Não foi possível buscar todos os pacientes. Erro: {erro.Message}");
             return BadRequest($"Não foi possível buscar todos os pacientes. Erro: {erro.Message}");
         }
     }
@@ -77,7 +77,7 @@ public class PacienteController : ControllerBase
         }
         catch (Exception erro)
         {
-            _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Paciente)}: Não foi possívell buscar o paciente com o ID: {id}. Erro: {erro.Message}");
+            _logger.LogError($"{nameof(Enums.CodigosLogErro.E_GET_Paciente)}: Não foi possívell buscar o paciente com o ID: {id}. Erro: {erro.Message}");
             return BadRequest($"Não foi possívell buscar o paciente com o ID: {id}. Erro: {erro.Message}");
         }
     }
@@ -103,7 +103,7 @@ public class PacienteController : ControllerBase
         }
         catch (Exception erro)
         {
-            _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Paciente)}: Não foi possível buscar o documento do convênio com ID: {id}. Erro: {erro.Message}");
+            _logger.LogError($"{nameof(Enums.CodigosLogErro.E_GET_Paciente)}: Não foi possível buscar o documento do convênio com ID: {id}. Erro: {erro.Message}");
             return BadRequest($"Não foi possível buscar o documento do convênio com ID: {id}. Erro: {erro.Message}");
         }
     }
@@ -129,7 +129,7 @@ public class PacienteController : ControllerBase
         }
         catch (Exception erro)
         {
-            _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Paciente)}: Não foi possível buscar o documento do paciente com o ID: {id}. Erro: {erro.Message}");
+            _logger.LogError($"{nameof(Enums.CodigosLogErro.E_GET_Paciente)}: Não foi possível buscar o documento do paciente com o ID: {id}. Erro: {erro.Message}");
             return BadRequest($"Não foi possível buscar o documento do paciente com o ID: {id}. Erro: {erro.Message}");
         }
     }
@@ -155,7 +155,7 @@ public class PacienteController : ControllerBase
         }
         catch (Exception erro)
         {
-            _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Paciente)}: Não foi possível cadastrar o paciente. Erro: {erro.Message}");
+            _logger.LogError($"{nameof(Enums.CodigosLogErro.E_POST_Paciente)}: Não foi possível cadastrar o paciente. Erro: {erro.Message}");
             return BadRequest($"Não foi possível cadastrar o paciente. Erro: {erro.Message}");
         }
     }
@@ -182,7 +182,7 @@ public class PacienteController : ControllerBase
         }
         catch (Exception erro)
         {
-            _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Paciente)}: Não foi possível atualizar o paciente com ID: {id}. Erro: {erro.Message}");
+            _logger.LogError($"{nameof(Enums.CodigosLogErro.E_PUT_Paciente)}: Não foi possível atualizar o paciente com ID: {id}. Erro: {erro.Message}");
             return BadRequest($"Não foi possível atualizar o paciente com ID: {id}. Erro: {erro.Message}");
         }
     }
@@ -209,7 +209,7 @@ public class PacienteController : ControllerBase
         }
         catch (Exception erro)
         {
-            _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Paciente)}: Não foi possível atualizar o documento do paciente com o ID: {id}. Erro: {erro.Message}");
+            _logger.LogError($"{nameof(Enums.CodigosLogErro.E_PUT_Paciente)}: Não foi possível atualizar o documento do paciente com o ID: {id}. Erro: {erro.Message}");
             return BadRequest($"Não foi possível atualizar o documento do paciente com o ID: {id}. Erro: {erro.Message}");
         }
 
@@ -236,7 +236,7 @@ public class PacienteController : ControllerBase
         }
         catch (Exception erro)
         {
-            _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Paciente)}: Não foi possível apagar o paciente com o ID: {id}. Erro: {erro.Message}");
+            _logger.LogError($"{nameof(Enums.CodigosLogErro.E_DEL_Paciente)}: Não foi possível apagar o paciente com o ID: {id}. Erro: {erro.Message}");
             return BadRequest($"Não foi possível apagar o paciente com o ID: {id}. Erro: {erro.Message}");
         }
     }

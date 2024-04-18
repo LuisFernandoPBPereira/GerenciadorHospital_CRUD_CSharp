@@ -1,6 +1,7 @@
 ﻿using GerenciadorHospital.Controllers;
 using GerenciadorHospital.Dto;
 using GerenciadorHospital.Entities;
+using GerenciadorHospital.Enums;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +13,7 @@ namespace GerenciadorHospital.Services.Medico
         private readonly IAuthenticationService _authenticationService;
         private readonly IMedicoRepositorio _medicoRepositorio;
         private readonly ILogger<MedicoController> _logger;
+        MensagensLog mensagensLog = new MensagensLog();
 
         public MedicoService(IAuthenticationService authenticationService,
                              IMedicoRepositorio medicoRepositorio,
@@ -40,7 +42,7 @@ namespace GerenciadorHospital.Services.Medico
             if (medico is not null && medicoCadastrado is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Medico)}: Cadastro do médico foi realizado.");
             else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Medico)}: Cadastro do médico não foi realizado.");
+                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_POST_Medico)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_POST_Medico)}");
 
             return medico;
         }
@@ -52,7 +54,7 @@ namespace GerenciadorHospital.Services.Medico
             if (apagado)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Medico)}: Remoção do médico foi realizada.");
             else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Medico)}: Remoção do médico não foi realizada.");
+                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_DEL_Medico)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_DEL_Medico)}");
 
             return apagado;
         }
@@ -65,7 +67,7 @@ namespace GerenciadorHospital.Services.Medico
             if (medico is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Medico)}: Atualização do médico foi realizada.");
             else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Medico)}: Atualização do médico não foi realizada.");
+                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_PUT_Medico)}:  {mensagensLog.ExibirMensagem(CodigosLogErro.E_PUT_Medico)}");
 
             return medico;
         }
@@ -77,7 +79,9 @@ namespace GerenciadorHospital.Services.Medico
             if (medicos is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Medico)}: Busca do médico com ID: {id} foi realizada.");
             else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Medico)}: Busca do médico com ID: {id} não foi realizada.");
+                _logger.LogInformation(@$"{nameof(Enums.CodigosLogErro.E_GET_Medico)}: 
+                                        {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Medico)} ->
+                                        Busca do médico com ID: {id} não foi realizada.");
 
             return medicos;
         }
@@ -89,7 +93,7 @@ namespace GerenciadorHospital.Services.Medico
             if (medicos is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Medico)}: Busca de todos os médicos foi realizada.");
             else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Medico)}: Busca de todos os médicos não foi realizada.");
+                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_GET_Medico)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Medico)}");
 
             return medicos;
         }

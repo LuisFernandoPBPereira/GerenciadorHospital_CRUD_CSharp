@@ -1,4 +1,5 @@
 ﻿using GerenciadorHospital.Controllers;
+using GerenciadorHospital.Enums;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
 
@@ -8,6 +9,7 @@ namespace GerenciadorHospital.Services.Medicamento
     {
         private readonly IMedicamentosPacienteRepositorio _medicamentosPacienteRepositorio;
         private readonly ILogger<MedicamentosPacienteController> _logger;
+        MensagensLog mensagensLog = new MensagensLog();
         public MedicamentosService(IMedicamentosPacienteRepositorio medicamentosPacienteRepositorio,
                                    ILogger<MedicamentosPacienteController> logger)
         {
@@ -21,7 +23,7 @@ namespace GerenciadorHospital.Services.Medicamento
             if (medicamentos is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Medicamento)}: Cadastro do medicamento foi realizado.");
             else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Medicamento)}: Cadastro do medicamento não foi realizado");
+                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_POST_Medicamento)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_POST_Medicamento)}");
 
             return medicamentos;
         }
@@ -33,7 +35,7 @@ namespace GerenciadorHospital.Services.Medicamento
             if (apagado)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Medicamento)}: Remoção do medicamento foi realizada.");
             else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Medicamento)}: Remoção do medicamento não foi realizada.");
+                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_DEL_Medicamento)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_DEL_Medicamento)}");
 
             return apagado;
         }
@@ -46,7 +48,7 @@ namespace GerenciadorHospital.Services.Medicamento
             if (medicamentos is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Medicamento)}: Atualização do medicamento foi realizada.");
             else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Medicamento)}: Atualização do medicamento não foi realizada.");
+                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_PUT_Medicamento)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_POST_Medicamento)}");
 
             return medicamentos;
         }
@@ -58,7 +60,9 @@ namespace GerenciadorHospital.Services.Medicamento
             if (medicamentos is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Medicamento)}: Busca de medicamento com ID: {id} foi realizada.");
             else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Medicamento)}: Busca do medicamento com ID: {id} foi realizada.");
+                _logger.LogInformation(@$"{nameof(Enums.CodigosLogErro.E_GET_Medicamento)}: 
+                                        {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Medicamento)} ->
+                                        Busca do medicamento com ID: {id} foi realizada.");
 
             return medicamentos;
         }
@@ -70,7 +74,7 @@ namespace GerenciadorHospital.Services.Medicamento
             if (medicamentos is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Medicamento)}: Busca de todos os medicamentos foi relizada");
             else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Medicamento)}: Busca de todos os medicamentos não foi realizada");
+                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_GET_Medicamento)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Medicamento)}");
             
             return medicamentos;
         }

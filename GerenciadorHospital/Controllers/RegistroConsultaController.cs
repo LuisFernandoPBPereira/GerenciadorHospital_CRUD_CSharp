@@ -49,7 +49,7 @@ namespace GerenciadorHospital.Controllers
             }
             catch (Exception erro)
             {
-                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Consulta)}: Não foi possível buscar todas as consultas. Erro: {erro.Message}");
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_GET_Consulta)}: Não foi possível buscar todas as consultas. Erro: {erro.Message}");
                 return BadRequest($"Não foi possível buscar todas as consultas. Erro: {erro.Message}");
             }
         }
@@ -75,7 +75,7 @@ namespace GerenciadorHospital.Controllers
             }
             catch (Exception erro)
             {
-                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Consulta)}: Não foi possível buscar a consulta com o ID: {id}. Erro: {erro.Message}");
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_GET_Consulta)}: Não foi possível buscar a consulta com o ID: {id}. Erro: {erro.Message}");
                 return BadRequest($"Não foi possível buscar a consulta com o ID: {id}. Erro: {erro.Message}");
             }
         }
@@ -102,7 +102,7 @@ namespace GerenciadorHospital.Controllers
             }
             catch (Exception erro)
             {
-                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Consulta)}: Não foi possível buscar a consulta com o ID: {id}. Erro: {erro.Message}");
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_GET_Consulta)}: Não foi possível buscar a consulta com o ID: {id}. Erro: {erro.Message}");
                 return BadRequest($"Não foi possível buscar a consulta com o ID: {id}. Erro: {erro.Message}");
             }
         }
@@ -131,7 +131,7 @@ namespace GerenciadorHospital.Controllers
             }
             catch (Exception erro)
             {
-                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Consulta)}: Não foi possível buscar a consulta com o ID: {id}. Erro: {erro.Message}");
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_GET_Consulta)}: Não foi possível buscar a consulta com o ID: {id}. Erro: {erro.Message}");
                 return BadRequest($"Não foi possível buscar a consulta com o ID: {id}. Erro: {erro.Message}");
             }
         }
@@ -157,7 +157,7 @@ namespace GerenciadorHospital.Controllers
             }
             catch (Exception erro)
             {
-                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Consulta)}: Não foi possível cadastrar a consulta. Erro: {erro.Message}");
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_POST_Consulta)}: Não foi possível cadastrar a consulta. Erro: {erro.Message}");
                 return BadRequest($"Não foi possível cadastrar a consulta. Erro: {erro.Message}");
             }
         }
@@ -184,7 +184,7 @@ namespace GerenciadorHospital.Controllers
             }
             catch (Exception erro)
             {
-                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Consulta)}: Não foi possível atualizar a consulta com o ID: {id}. Erro: {erro.Message}");
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_PUT_Consulta)}: Não foi possível atualizar a consulta com o ID: {id}. Erro: {erro.Message}");
                 return BadRequest($"Não foi possível atualizar a consulta com o ID: {id}. Erro: {erro.Message}");
             }
         }
@@ -210,7 +210,7 @@ namespace GerenciadorHospital.Controllers
             }
             catch (Exception erro)
             {
-                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Consulta)}: Não foi possível apagar a consulta com o ID: {id}. Erro: {erro.Message}");
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_DEL_Consulta)}: Não foi possível apagar a consulta com o ID: {id}. Erro: {erro.Message}");
                 return BadRequest($"Não foi possível apagar a consulta com o ID: {id}. Erro: {erro.Message}");
             }
         }

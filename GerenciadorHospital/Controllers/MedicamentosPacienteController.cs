@@ -42,7 +42,7 @@ namespace GerenciadorHospital.Controllers
             }
             catch (Exception erro)
             {
-                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Medicamento)}: Não foi possível buscar todos medicamentos. Erro:{erro.Message}");
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_GET_Medicamento)}: Não foi possível buscar todos medicamentos. Erro:{erro.Message}");
                 return BadRequest($"Não foi possível buscar todos medicamentos. Erro:{erro.Message}");
             }
         }
@@ -68,7 +68,7 @@ namespace GerenciadorHospital.Controllers
             }
             catch (Exception erro)
             {
-                _logger.LogError($"{nameof(Enums.CodigosLogSucesso.S_Medicamento)}: Não foi possível buscar o medicamento com ID: {id}. Erro:{erro.Message}");
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_GET_Medicamento)}: Não foi possível buscar o medicamento com ID: {id}. Erro:{erro.Message}");
                 return BadRequest($"Não foi possível buscar o medicamento com ID: {id}. Erro:{erro.Message}");
             }
         }
@@ -94,7 +94,7 @@ namespace GerenciadorHospital.Controllers
             }
             catch (Exception erro)
             {
-                _logger.LogError($"{nameof(Enums.CodigosLogSucesso.S_Medicamento)}: Não foi possível cadastrar o medicamento. Erro:{erro.Message}");
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_POST_Medicamento)}: Não foi possível cadastrar o medicamento. Erro:{erro.Message}");
                 return BadRequest($"Não foi possível cadastrar o medicamento. Erro:{erro.Message}");
             }
         }
@@ -121,7 +121,7 @@ namespace GerenciadorHospital.Controllers
             }
             catch (Exception erro)
             {
-                _logger.LogError($"{nameof(Enums.CodigosLogSucesso.S_Medicamento)}: Não foi possível atualizar o medicamento com ID: {id}. Erro:{erro.Message}");
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_PUT_Medicamento)}: Não foi possível atualizar o medicamento com ID: {id}. Erro:{erro.Message}");
                 return BadRequest($"Não foi possível atualizar o medicamento com ID: {id}. Erro:{erro.Message}");
             }
         }
@@ -147,7 +147,7 @@ namespace GerenciadorHospital.Controllers
             }
             catch (Exception erro)
             {
-                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Medicamento)}: Não foi possível apagar o medicamento com ID: {id}. Erro: {erro.Message}");
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_DEL_Medicamento)}: Não foi possível apagar o medicamento com ID: {id}. Erro: {erro.Message}");
                 return BadRequest($"Não foi possível apagar o medicamento com ID: {id}. Erro: {erro.Message}");
             }
         }

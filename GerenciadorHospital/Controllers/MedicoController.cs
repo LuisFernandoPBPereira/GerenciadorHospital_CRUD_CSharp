@@ -47,7 +47,7 @@ namespace GerenciadorHospital.Controllers
             }
             catch(Exception erro)
             {
-                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Medico)}: Não foi possível buscar todos os médicos. Erro: {erro.Message}");
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_GET_Medico)}: Não foi possível buscar todos os médicos. Erro: {erro.Message}");
                 return BadRequest($"Não foi possível buscar todos os médicos. Erro: {erro.Message}");
             }
         }
@@ -73,7 +73,7 @@ namespace GerenciadorHospital.Controllers
             }
             catch (Exception erro)
             {
-                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Medico)}: Não foi possível buscar o médico com ID: {id}. Erro: {erro.Message}");
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_GET_Medico)}: Não foi possível buscar o médico com ID: {id}. Erro: {erro.Message}");
                 return BadRequest($"Não foi possível buscar o médico com ID: {id}. Erro: {erro.Message}");
             }
         }
@@ -99,7 +99,7 @@ namespace GerenciadorHospital.Controllers
             }
             catch (Exception erro)
             {
-                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Medico)}: Não foi possível cadastrar o médico. Erro:{erro.Message}");
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_POST_Medico)}: Não foi possível cadastrar o médico. Erro:{erro.Message}");
                 return BadRequest($"Não foi possível cadastrar o médico. Erro:{erro.Message}");
             }
         }
@@ -126,7 +126,7 @@ namespace GerenciadorHospital.Controllers
             }
             catch (Exception erro)
             {
-                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Medico)}: Não foi possível atualizar o médico com ID: {id}. Erro: {erro.Message}");
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_PUT_Medico)}: Não foi possível atualizar o médico com ID: {id}. Erro: {erro.Message}");
                 return BadRequest($"Não foi possível atualizar o médico com ID: {id}. Erro: {erro.Message}");
             }
         }
@@ -152,7 +152,7 @@ namespace GerenciadorHospital.Controllers
             }
             catch (Exception erro)
             {
-                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Medico)}: Não possível apagar o médico com o ID: {id}. Erro: {erro.Message}");
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_DEL_Medico)}: Não possível apagar o médico com o ID: {id}. Erro: {erro.Message}");
                 return BadRequest($"Não possível apagar o médico com o ID: {id}. Erro: {erro.Message}");
             }
         }

@@ -1,4 +1,5 @@
 ﻿using GerenciadorHospital.Controllers;
+using GerenciadorHospital.Enums;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
 
@@ -8,6 +9,7 @@ namespace GerenciadorHospital.Services.Laudo
     {
         private readonly ILaudoRepositorio _laudoRepositorio;
         private readonly ILogger<LaudoController> _logger;
+        MensagensLog mensagensLog = new MensagensLog();
         public LaudoService(ILaudoRepositorio laudoRepositorio,
                             ILogger<LaudoController> logger)
         {
@@ -22,7 +24,7 @@ namespace GerenciadorHospital.Services.Laudo
             if (laudo is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Laudo)}: Cadastro do laudo foi realizado.");
             else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Laudo)}: Cadastro do laudo não foi concluído.");
+                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_POST_Laudo)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_POST_Laudo)}");
 
             return laudo;
         }
@@ -34,7 +36,7 @@ namespace GerenciadorHospital.Services.Laudo
             if (apagado)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Laudo)}: Remoção do laudo foi realizada.");
             else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Laudo)}: Remoção do laudo não foi realizada.");
+                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_DEL_Laudo)}:  {mensagensLog.ExibirMensagem(CodigosLogErro.E_DEL_Laudo)}");
 
             return apagado;
         }
@@ -47,7 +49,7 @@ namespace GerenciadorHospital.Services.Laudo
             if (laudo is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Laudo)}: Atualização do laudo foi realizada.");
             else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Laudo)}: Atualização do laudo não foi realizada.");
+                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_PUT_Laudo)}:  {mensagensLog.ExibirMensagem(CodigosLogErro.E_PUT_Laudo)}");
 
             return laudo;
         }
@@ -61,7 +63,7 @@ namespace GerenciadorHospital.Services.Laudo
             if (laudos is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Laudo)}: Busca do laudo foi realizada.");
             else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Laudo)}: Busca do laudo não foi realizada.");
+                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_GET_Laudo)}:  {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Laudo)}");
 
             return laudos;
         }
@@ -73,7 +75,9 @@ namespace GerenciadorHospital.Services.Laudo
             if (laudo is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Laudo)}: Busca do laudo com o ID: {id} foi realizada.");
             else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Laudo)}: Busca do laudo com o ID: {id} não foi realizada.");
+                _logger.LogInformation(@$"{nameof(Enums.CodigosLogErro.E_GET_Laudo)}: 
+                                        {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Laudo)} ->
+                                        Busca do laudo com o ID: {id} não foi realizada.");
 
             return laudo;
         }
@@ -85,7 +89,7 @@ namespace GerenciadorHospital.Services.Laudo
             if (laudos is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Laudo)}: Busca de todos os laudos foi realizada.");
             else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Laudo)}: Busca de todos os laudo não foi realizada.");
+                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_GET_Laudo)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Laudo)}");
 
             return laudos;
         }

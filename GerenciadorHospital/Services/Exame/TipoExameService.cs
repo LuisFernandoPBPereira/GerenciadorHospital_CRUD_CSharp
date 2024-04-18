@@ -1,4 +1,5 @@
 ﻿using GerenciadorHospital.Controllers;
+using GerenciadorHospital.Enums;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
 
@@ -8,6 +9,7 @@ namespace GerenciadorHospital.Services.Exame
     {
         private readonly ITipoExameRepositorio _tipoExameRepositorio;
         private readonly ILogger<TipoExameController> _logger;
+        MensagensLog mensagensLog = new MensagensLog();
         public TipoExameService(ITipoExameRepositorio tipoExameRepositorio,
                                 ILogger<TipoExameController> logger)
         {
@@ -22,7 +24,7 @@ namespace GerenciadorHospital.Services.Exame
             if (exame is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Exame)}: Cadastro do exame foi realizado");
             else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Exame)}: Cadastro do exame não foi realizado");
+                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_POST_Exame)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_POST_Exame)}");
 
             return exame;
         }
@@ -34,7 +36,7 @@ namespace GerenciadorHospital.Services.Exame
             if (apagado)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Exame)}: Remoção do exame foi realizada");
             else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Exame)}: Remoção do exame não foi realizada");
+                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_DEL_Exame)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_DEL_Exame)}");
 
             return apagado;
         }
@@ -47,7 +49,7 @@ namespace GerenciadorHospital.Services.Exame
             if (exame is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Exame)}: Atualização do exame foi realizada.");
             else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Exame)}: Atualização do exame não foi realizada.");
+                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_PUT_Exame)}:  {mensagensLog.ExibirMensagem(CodigosLogErro.E_PUT_Exame)}");
 
             return exame;
         }
@@ -59,7 +61,9 @@ namespace GerenciadorHospital.Services.Exame
             if (exames is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Exame)}: Busca de exame com ID: {id} foi realizada");
             else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Exame)}: Busca de exme com ID: {id} não foi realizada");
+                _logger.LogInformation(@$"{nameof(Enums.CodigosLogErro.E_GET_Exame)}: 
+                                        {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Exame)} ->
+                                        Busca de exme com ID: {id} não foi realizada");
 
             return exames;
         }
@@ -71,7 +75,7 @@ namespace GerenciadorHospital.Services.Exame
             if (exames is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Exame)}: Busca de todos exames foi realizada");
             else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Exame)}: Busca de todos exames não foi realizada");
+                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_GET_Exame)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Exame)}");
 
             return exames;
         }

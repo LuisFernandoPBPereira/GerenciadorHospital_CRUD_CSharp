@@ -1,4 +1,5 @@
 ﻿using GerenciadorHospital.Controllers;
+using GerenciadorHospital.Enums;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,7 @@ namespace GerenciadorHospital.Services.Convenio
     {
         private readonly IConvenioRepositorio _convenioRepositorio;
         private readonly ILogger<ConvenioController> _logger;
+        MensagensLog mensagensLog = new MensagensLog();
         public ConvenioService(IConvenioRepositorio convenioRepositorio,
                                ILogger<ConvenioController> logger)
         {
@@ -24,7 +26,7 @@ namespace GerenciadorHospital.Services.Convenio
             if (convenios is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Convenio)}: Busca de todos os convênios realizada.");
             else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Convenio)}: Busca de todos os convênios realizada, porém sem conteúdo.");
+                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_GET_Convenio)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Convenio)}");
             
             return convenios;
         }
@@ -36,7 +38,9 @@ namespace GerenciadorHospital.Services.Convenio
             if (convenio is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Convenio)}: Busca de convênio com o ID: {id} realizada.");
             else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Convenio)}: Busca de convênio com o ID: {id} realizada, porém sem conteúdo.");
+                _logger.LogInformation(@$"{nameof(Enums.CodigosLogErro.E_GET_Convenio)}: 
+                                        {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Convenio)} ->
+                                        Busca de convênio com o ID: {id} realizada, porém sem conteúdo.");
 
             return convenio;
         }
@@ -48,7 +52,7 @@ namespace GerenciadorHospital.Services.Convenio
             if (convenio is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Convenio)}: Cadastro do convênio realizado.");
             else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Convenio)}: Cadastro do convênio não foi concluído.");
+                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_POST_Convenio)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_POST_Convenio)}");
 
 
             return convenio;
@@ -62,7 +66,9 @@ namespace GerenciadorHospital.Services.Convenio
             if (convenio is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Convenio)}: Atualização do convênio realizada.");
             else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Convenio)}: Atualização do convênio não foi concluída.");
+                _logger.LogInformation(@$"{nameof(Enums.CodigosLogErro.E_PUT_Convenio)}: 
+                                        {mensagensLog.ExibirMensagem(CodigosLogErro.E_PUT_Convenio)} ->
+                                        Atualização do convênio não foi concluída.");
 
             return convenio;
         }
@@ -74,7 +80,7 @@ namespace GerenciadorHospital.Services.Convenio
             if (apagado)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Convenio)}: Remoção do convênio realizada.");
             else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Convenio)}: Remoção do convênio não foi concluída.");
+                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_DEL_Convenio)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_DEL_Convenio)}");
 
             return apagado;
         }

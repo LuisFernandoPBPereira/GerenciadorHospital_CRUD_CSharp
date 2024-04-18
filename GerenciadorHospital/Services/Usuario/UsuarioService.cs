@@ -1,6 +1,7 @@
 ﻿using GerenciadorHospital.Controllers;
 using GerenciadorHospital.Dto;
 using GerenciadorHospital.Entities;
+using GerenciadorHospital.Enums;
 using GerenciadorHospital.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,6 +11,7 @@ namespace GerenciadorHospital.Services.Usuario
     {
         private readonly IAuthenticationService _authenticationService;
         private readonly ILogger<UsuarioController> _logger;
+        MensagensLog mensagensLog = new MensagensLog();
         public UsuarioService(IAuthenticationService authenticationService,
                               ILogger<UsuarioController> logger)
         {
@@ -27,7 +29,7 @@ namespace GerenciadorHospital.Services.Usuario
 
             if (!resultadoDto.IsSuccess)
             {
-                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Usuario)}: {resultadoDto}");
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_POST_Usuario)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_POST_Usuario)}, {resultadoDto}");
                 throw new Exception(resultadoDto.ToString());
             }
 
@@ -44,7 +46,7 @@ namespace GerenciadorHospital.Services.Usuario
 
             if (!resultadoDto.IsSuccess)
             {
-                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Usuario)}: {resultadoDto}");
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_POST_Usuario)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_POST_Usuario)}, {resultadoDto}");
                 throw new Exception(resultadoDto.ToString());
             }
 

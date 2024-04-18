@@ -1,6 +1,7 @@
 ﻿using GerenciadorHospital.Controllers;
 using GerenciadorHospital.Dto;
 using GerenciadorHospital.Entities;
+using GerenciadorHospital.Enums;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
 using GerenciadorHospital.Utils;
@@ -14,6 +15,8 @@ namespace GerenciadorHospital.Services.Paciente
         private readonly IPacienteRepositorio _pacienteRepositorio;
         private readonly IAuthenticationService _authenticationService;
         private readonly ILogger<PacienteController> _logger;
+        MensagensLog mensagensLog = new MensagensLog();
+
         public PacienteService(IPacienteRepositorio pacienteRepositorio,
                                IAuthenticationService authenticationService,
                                ILogger<PacienteController> logger)
@@ -38,7 +41,7 @@ namespace GerenciadorHospital.Services.Paciente
 
             if (!requestDtoValidado)
             {
-                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Paciente)}: Não foi possível cadastrar um novo paciente.");
+                _logger.LogWarning($"{nameof(Enums.CodigosLogErro.E_POST_Paciente)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_POST_Paciente)}");
                 throw new Exception("Não foi possível cadastrar um novo paciente");
             }
 
@@ -58,7 +61,7 @@ namespace GerenciadorHospital.Services.Paciente
             if (paciente is not null && pacienteCadastrado is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Paciente)}: Cadastro do paciente foi realizado.");
             else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Paciente)}: Cadastro do paciente não foi realizado.");
+                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_POST_Paciente)}:  {mensagensLog.ExibirMensagem(CodigosLogErro.E_POST_Paciente)}");
 
             return paciente;
         }
@@ -70,7 +73,7 @@ namespace GerenciadorHospital.Services.Paciente
             if (apagado)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Paciente)}: Remoção do paciente foi realizada.");
             else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Paciente)}: Remoção do paciente não foi realizada.");
+                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_DEL_Paciente)}:  {mensagensLog.ExibirMensagem(CodigosLogErro.E_DEL_Paciente)}");
 
             return apagado;
         }
@@ -83,7 +86,7 @@ namespace GerenciadorHospital.Services.Paciente
             if (paciente is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Paciente)}: Atualização do paciente foi realizada.");
             else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Paciente)}: Atualização do paciente não foi realizada.");
+                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_PUT_Paciente)}:  {mensagensLog.ExibirMensagem(CodigosLogErro.E_PUT_Paciente)}");
 
             return paciente;
         }
@@ -97,7 +100,9 @@ namespace GerenciadorHospital.Services.Paciente
 
             if (!requestDtoValidado)
             {
-                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Paciente)}: Não foi possível atualizar a imagem");
+                _logger.LogError(@$"{nameof(Enums.CodigosLogErro.E_PUT_Paciente)}: 
+                                  {mensagensLog.ExibirMensagem(CodigosLogErro.E_PUT_Paciente)} ->
+                                  Não foi possível atualizar a imagem");
                 throw new Exception("Não foi possível atualizar a imagem");
             }
 
@@ -124,7 +129,9 @@ namespace GerenciadorHospital.Services.Paciente
             if (imagem is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Paciente)}: Busca do documento do convênio com ID: {id}, foi realizada.");
             else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Paciente)}: Busca do documento do convênio com ID: {id}, não foi realizada.");
+                _logger.LogInformation(@$"{nameof(Enums.CodigosLogErro.E_GET_Paciente)}: 
+                                        {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Paciente)} ->
+                                        Busca do documento do convênio com ID: {id}, não foi realizada.");
 
             return imagem.BuscarImagem(caminho);
         }
@@ -140,7 +147,9 @@ namespace GerenciadorHospital.Services.Paciente
             if (imagem is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Paciente)}: Busca do documento com ID: {id}, foi realizada.");
             else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Paciente)}: Busca do documento com ID: {id}, não foi realizada.");
+                _logger.LogInformation(@$"{nameof(Enums.CodigosLogErro.E_GET_Paciente)}: 
+                                        {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Paciente)} ->
+                                        Busca do documento com ID: {id}, não foi realizada.");
 
             return imagem.BuscarImagem(caminho);
         }
@@ -152,7 +161,9 @@ namespace GerenciadorHospital.Services.Paciente
             if (paciente is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Paciente)}: Busca do paciente com ID: {id}, foi realizada.");
             else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Paciente)}: Busca do paciente com ID: {id}, não foi realizada.");
+                _logger.LogInformation(@$"{nameof(Enums.CodigosLogErro.E_GET_Paciente)}: 
+                                        {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Paciente)} ->
+                                        Busca do paciente com ID: {id}, não foi realizada.");
 
             return paciente;
         }
@@ -164,7 +175,7 @@ namespace GerenciadorHospital.Services.Paciente
             if (pacientes is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Paciente)}: Busca de todos pacientes foi realizada.");
             else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_Paciente)}: Busca de todos pacientes não foi realizada.");
+                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_GET_Paciente)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Paciente)}");
 
             return pacientes;
         }

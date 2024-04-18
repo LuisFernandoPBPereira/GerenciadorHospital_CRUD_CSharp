@@ -43,7 +43,7 @@ namespace GerenciadorHospital.Controllers
             }
             catch (Exception erro)
             {
-                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Convenio)}: Não foi possível buscar todos os convênios. Erro:{erro.Message}");
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_GET_Convenio)}: Não foi possível buscar todos os convênios. Erro:{erro.Message}");
                 return BadRequest($"Não foi possível buscar todos os convênios. Erro:{erro.Message}");
             }
         }
@@ -69,7 +69,7 @@ namespace GerenciadorHospital.Controllers
             }
             catch (Exception erro)
             {
-                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Convenio)}: Não foi possível buscar o convênio com o ID: {id}. Erro:{erro.Message}");
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_GET_Convenio)}: Não foi possível buscar o convênio com o ID: {id}. Erro:{erro.Message}");
                 return BadRequest($"Não foi possível buscar o convênio com o ID: {id}. Erro:{erro.Message}");
             }
         }
@@ -94,7 +94,7 @@ namespace GerenciadorHospital.Controllers
             }
             catch (Exception erro)
             {
-                _logger.LogError($"{Enums.CodigosLogErro.E_Convenio}: Não foi possível cadastrar o convênio. Erro:{erro.Message}");
+                _logger.LogError($"{Enums.CodigosLogErro.E_POST_Convenio}: Não foi possível cadastrar o convênio. Erro:{erro.Message}");
                 return BadRequest($"Não foi possível cadastrar o convênio. Erro:{erro.Message}");
             }
         }
@@ -121,7 +121,7 @@ namespace GerenciadorHospital.Controllers
             }
             catch (Exception erro)
             {
-                _logger.LogError($"{Enums.CodigosLogErro.E_Convenio}: Não foi possível atualizar o convênio com ID: {id}. Erro:{erro.Message}");
+                _logger.LogError($"{Enums.CodigosLogErro.E_PUT_Convenio}: Não foi possível atualizar o convênio com ID: {id}. Erro:{erro.Message}");
                 return BadRequest($"Não foi possível atualizar o convênio com ID: {id}. Erro:{erro.Message}");
             }
         }
@@ -147,7 +147,7 @@ namespace GerenciadorHospital.Controllers
             }
             catch (Exception erro)
             {
-                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Convenio)}: Não foi possível apagar o convênio com ID: {id}. Erro:{erro.Message}");
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_DEL_Convenio)}: Não foi possível apagar o convênio com ID: {id}. Erro:{erro.Message}");
                 return BadRequest($"Não foi possível apagar o convênio com ID: {id}. Erro:{erro.Message}");
             }
         }

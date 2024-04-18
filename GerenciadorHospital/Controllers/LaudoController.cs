@@ -41,7 +41,7 @@ namespace GerenciadorHospital.Controllers
             }
             catch (Exception erro)
             {
-                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Laudo)}: Não foi possível buscar todos os laudos. Erro:{erro.Message}");
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_GET_Laudo)}: Não foi possível buscar todos os laudos. Erro:{erro.Message}");
                 return BadRequest($"Não foi possível buscar todos os laudos. Erro:{erro.Message}");
             }
         }
@@ -67,7 +67,7 @@ namespace GerenciadorHospital.Controllers
             }
             catch (Exception erro)
             {
-                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Laudo)}: Não foi possível buscar o laudo com ID: {id}. Erro:{erro.Message}");
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_GET_Laudo)}: Não foi possível buscar o laudo com ID: {id}. Erro:{erro.Message}");
                 return BadRequest($"Não foi possível buscar o laudo com ID: {id}. Erro:{erro.Message}");
             }
         }
@@ -96,7 +96,7 @@ namespace GerenciadorHospital.Controllers
             }
             catch (Exception erro)
             {
-                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Laudo)}: Não foi possível buscar o laudo com ID: . Erro: {erro.Message}");
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_GET_Laudo)}: Não foi possível buscar o laudo com ID: . Erro: {erro.Message}");
                 return BadRequest($"Não foi possível buscar o laudo com ID: . Erro: {erro.Message}");
             }
         }
@@ -122,7 +122,7 @@ namespace GerenciadorHospital.Controllers
             }
             catch (Exception erro)
             {
-                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Laudo)}: Não foi possível cadastrar o laudo. Erro:{erro.Message}");
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_POST_Laudo)}: Não foi possível cadastrar o laudo. Erro:{erro.Message}");
                 return BadRequest($"Não foi possível cadastrar o laudo. Erro:{erro.Message}");
             }
         }
@@ -149,7 +149,7 @@ namespace GerenciadorHospital.Controllers
             }
             catch (Exception erro)
             {
-                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Laudo)}: Não foi possível atualizar o laudo com ID: {id}. Erro:{erro.Message}");
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_PUT_Laudo)}: Não foi possível atualizar o laudo com ID: {id}. Erro:{erro.Message}");
                 return BadRequest($"Não foi possível atualizar o laudo com ID: {id}. Erro:{erro.Message}");
             }
         }
@@ -175,7 +175,7 @@ namespace GerenciadorHospital.Controllers
             }
             catch (Exception erro)
             {
-                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Laudo)}: Não foi possível apagar o laudo com ID: {id}. Erro:{erro.Message}");
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_DEL_Laudo)}: Não foi possível apagar o laudo com ID: {id}. Erro:{erro.Message}");
                 return BadRequest($"Não foi possível apagar o laudo com ID: {id}. Erro:{erro.Message}");
             }
         }

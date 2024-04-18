@@ -49,7 +49,7 @@ namespace GerenciadorHospital.Controllers
             }
             catch (Exception erro)
             {
-                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Usuario)}: Não foi possível cadastrar o usuário. Erro: {erro.Message}");
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_POST_Usuario)}: Não foi possível cadastrar o usuário. Erro: {erro.Message}");
                 return BadRequest($"Não foi possível cadastrar o usuário. Erro: {erro.Message}");
             }
         }
@@ -69,7 +69,7 @@ namespace GerenciadorHospital.Controllers
             }
             catch (Exception erro)
             {
-                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_Usuario)}: Não foi possível realizar o login. Erro:{erro.Message}");
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_POST_Usuario)}: Não foi possível realizar o login. Erro:{erro.Message}");
                 return BadRequest($"Não foi possível realizar o login. Erro:{erro.Message}");
             }
         }
