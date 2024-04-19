@@ -15,6 +15,7 @@ namespace GerenciadorHospital.Services.Paciente
         private readonly IPacienteRepositorio _pacienteRepositorio;
         private readonly IAuthenticationService _authenticationService;
         private readonly ILogger<PacienteController> _logger;
+        BCryptPasswordHasher<PacienteModel> senhaComHash = new BCryptPasswordHasher<PacienteModel>();
         MensagensLog mensagensLog = new MensagensLog();
 
         public PacienteService(IPacienteRepositorio pacienteRepositorio,
@@ -45,6 +46,9 @@ namespace GerenciadorHospital.Services.Paciente
                 _logger.LogWarning($"{nameof(Enums.CodigosLogErro.E_POST_Paciente)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_POST_Paciente)}");
                 throw new Exception("Imagem inválida.");
             }
+
+            var senhaUsuario = senhaComHash.HashPassword(pacienteModel, pacienteModel.Senha);
+            pacienteModel.Senha = senhaUsuario;
 
             PacienteModel paciente = await _pacienteRepositorio.Adicionar(pacienteModel);
             CadastroRequestDto novoPaciente = new CadastroRequestDto();

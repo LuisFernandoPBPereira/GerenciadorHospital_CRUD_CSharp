@@ -4,6 +4,7 @@ using GerenciadorHospital.Entities;
 using GerenciadorHospital.Enums;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
+using GerenciadorHospital.Utils;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GerenciadorHospital.Services.Medico
@@ -13,6 +14,7 @@ namespace GerenciadorHospital.Services.Medico
         private readonly IAuthenticationService _authenticationService;
         private readonly IMedicoRepositorio _medicoRepositorio;
         private readonly ILogger<MedicoController> _logger;
+        BCryptPasswordHasher<MedicoModel> senhaComHash = new BCryptPasswordHasher<MedicoModel>();
         MensagensLog mensagensLog = new MensagensLog();
 
         public MedicoService(IAuthenticationService authenticationService,
@@ -25,6 +27,9 @@ namespace GerenciadorHospital.Services.Medico
         }
         public async Task<MedicoModel> Adicionar(MedicoModel medicoModel)
         {
+            var senhaMedico = senhaComHash.HashPassword(medicoModel, medicoModel.Senha);
+            medicoModel.Senha = senhaMedico;
+
             MedicoModel medico = await _medicoRepositorio.Adicionar(medicoModel);
 
             CadastroRequestDto novoMedico = new CadastroRequestDto();

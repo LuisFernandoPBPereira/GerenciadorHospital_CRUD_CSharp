@@ -23,16 +23,16 @@ var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
 // Contexto do Banco (SQLite para testes no banco)
-builder.Services.AddDbContext<BancoContext>(options => options.UseSqlite(configuration.GetConnectionString("DataBase")));
+//builder.Services.AddDbContext<BancoContext>(options => options.UseSqlite(configuration.GetConnectionString("DataBase")));
 
 #region Configuração do SQL Server
 // Configuramos o EntityFramework
-/*
+
 builder.Services.AddEntityFrameworkSqlServer().
     AddDbContext<BancoContext>(
-        options => options.UseSqlServer(builder.Configuration.GetConnectionString("DataBase"))
+        options => options.UseSqlServer(builder.Configuration.GetConnectionString("DataBaseMS"))
 );
-*/
+
 #endregion
 
 #region Configuração do Identity
