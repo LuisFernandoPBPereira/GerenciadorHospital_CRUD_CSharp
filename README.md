@@ -15,6 +15,7 @@
 	<li><a href="https://github.com/LuisFernandoPBPereira/GerenciadorHospital_CRUD_CSharp/wiki/Cadastro-de-M%C3%A9dico">Cadastro de Médico</a></li>
 	<li><a href="https://github.com/LuisFernandoPBPereira/GerenciadorHospital_CRUD_CSharp/wiki/Cadastro-de-Paciente">Cadastro de Paciente</a></li>
 	<li><a href="https://github.com/LuisFernandoPBPereira/GerenciadorHospital_CRUD_CSharp/wiki/Cadastro-de-Usu%C3%A1rio">Cadastro de Usuário</a></li>
+	<li><a href="https://github.com/LuisFernandoPBPereira/GerenciadorHospital_CRUD_CSharp/wiki/Criptografia-de-Senha-%E2%80%90-BCrypt">Criptografia de senha - BCrypt</a></li>
 	<li><a href="https://github.com/LuisFernandoPBPereira/GerenciadorHospital_CRUD_CSharp/wiki/Data-Transfer-Object-(DTO)">Data Transfer Object (DTO)</a></li>
 	<li><a href="https://github.com/LuisFernandoPBPereira/GerenciadorHospital_CRUD_CSharp/wiki/Estrutura-da-API">Estrutura da API</a></li>
 	<li><a href="https://github.com/LuisFernandoPBPereira/GerenciadorHospital_CRUD_CSharp/wiki/Entidades">Entidades</a></li>
