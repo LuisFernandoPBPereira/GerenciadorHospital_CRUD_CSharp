@@ -28,21 +28,22 @@ namespace GerenciadorHospital.Services.Paciente
 
         public async Task<PacienteModel> AdicionarPaciente(PacienteModel pacienteModel)
         {
-            if (pacienteModel.TemConvenio == false && pacienteModel.DocConvenio.Length > 0)
+            if (pacienteModel.TemConvenio == false && pacienteModel.DocConvenio?.Length != null)
             {
                 throw new Exception("Não é possível adicionar uma carteira de convênio, caso o campo TemConvenio seja falso");
             }
-            //É instanciado um novo objeto para a validação das imagens carregadas na requisição
+
             DocumentoImagemDto imagem = new DocumentoImagemDto();
             imagem.Doc = pacienteModel.Doc;
             imagem.DocConvenio = pacienteModel.DocConvenio;
+
             ValidaImagem validaImagem = new ValidaImagem(imagem, pacienteModel);
             var requestDtoValidado = validaImagem.ValidacaoImagem();
 
             if (!requestDtoValidado)
             {
                 _logger.LogWarning($"{nameof(Enums.CodigosLogErro.E_POST_Paciente)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_POST_Paciente)}");
-                throw new Exception("Não foi possível cadastrar um novo paciente");
+                throw new Exception("Imagem inválida.");
             }
 
             PacienteModel paciente = await _pacienteRepositorio.Adicionar(pacienteModel);
@@ -101,8 +102,7 @@ namespace GerenciadorHospital.Services.Paciente
             if (!requestDtoValidado)
             {
                 _logger.LogError(@$"{nameof(Enums.CodigosLogErro.E_PUT_Paciente)}: 
-                                  {mensagensLog.ExibirMensagem(CodigosLogErro.E_PUT_Paciente)} ->
-                                  Não foi possível atualizar a imagem");
+                                  {mensagensLog.ExibirMensagem(CodigosLogErro.E_PUT_Paciente)}");
                 throw new Exception("Não foi possível atualizar a imagem");
             }
 
