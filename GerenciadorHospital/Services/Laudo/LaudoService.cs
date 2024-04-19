@@ -43,7 +43,6 @@ namespace GerenciadorHospital.Services.Laudo
 
         public async Task<LaudoModel> Atualizar(LaudoModel laudoModel, int id)
         {
-            laudoModel.Id = id;
             LaudoModel laudo = await _laudoRepositorio.Atualizar(laudoModel, id);
 
             if (laudo is not null)

@@ -3,6 +3,7 @@ using GerenciadorHospital.Dto;
 using GerenciadorHospital.Entities;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
+using GerenciadorHospital.Utils;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -15,6 +16,8 @@ namespace GerenciadorHospital.Services
     {
         private readonly UserManager<UsuarioModel> _usuarioRepositorio;
         private readonly IConfiguration _configuration;
+        BCryptPasswordHasher<UsuarioModel> senhaComHash = new BCryptPasswordHasher<UsuarioModel>();
+
         #region Construtor
         public AuthenticationService(UserManager<UsuarioModel> usuarioRepositorio, IConfiguration configuration)
         {
@@ -32,6 +35,8 @@ namespace GerenciadorHospital.Services
 
             if (usuarioPorUsername is not null) return Result.Fail(new Error($"Usuário com o nome {request.Nome} já existe."));
 
+
+
             UsuarioModel user = new()
             {
                 UserName = request.UserName,
@@ -44,11 +49,15 @@ namespace GerenciadorHospital.Services
                 SecurityStamp = Guid.NewGuid().ToString()
             };
 
-            var result = await _usuarioRepositorio.CreateAsync(user, request.Senha);
+            var senhaUser = senhaComHash.HashPassword(user, request.Senha);
+            user.Senha = senhaUser;
 
-            await _usuarioRepositorio.AddToRoleAsync(user, request.Role);
+            var result = await _usuarioRepositorio.CreateAsync(user, user.Senha);
 
             if (!result.Succeeded) return Result.Fail(new Error($"não foi possível cadastrar o usuário {request.Nome}, erros: {GetErrorsText(result.Errors)}"));
+            
+            await _usuarioRepositorio.AddToRoleAsync(user, request.Role);
+
 
             return await Login( new LoginRequestDto { UserName = request.UserName, Senha = request.Senha });
         }
@@ -58,24 +67,31 @@ namespace GerenciadorHospital.Services
         public async Task<Result<string>> Login(LoginRequestDto request)
         {
             var user = await _usuarioRepositorio.FindByNameAsync(request.UserName);
+            var isValidSenha = senhaComHash.VerifyHashedPassword(user, user.Senha, request.Senha);
 
-            if (user is null || !await _usuarioRepositorio.CheckPasswordAsync(user, request.Senha))
-                return Result.Fail(new Error($"Não foi possível autenticar o usuário {request.UserName}"));
-
-            var authClaims = new List<Claim>
+            if(isValidSenha == PasswordVerificationResult.Success)
             {
-                new(ClaimTypes.Name, user.UserName),
-                new(ClaimTypes.Role, user.Role),
-                new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            };
+                if (user is null || !await _usuarioRepositorio.CheckPasswordAsync(user, user.Senha))
+                    return Result.Fail(new Error($"Não foi possível autenticar o usuário {request.UserName}"));
 
-            var userRoles = await _usuarioRepositorio.GetRolesAsync(user);
+                var authClaims = new List<Claim>
+                {
+                    new(ClaimTypes.Name, user.UserName),
+                    new(ClaimTypes.Role, user.Role),
+                    new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                };
 
-            authClaims.AddRange(userRoles.Select(userRole => new Claim(ClaimTypes.Role, userRole)));
+                var userRoles = await _usuarioRepositorio.GetRolesAsync(user);
 
-            var token = GetToken(authClaims);
+                authClaims.AddRange(userRoles.Select(userRole => new Claim(ClaimTypes.Role, userRole)));
 
-            return Result.Ok(new JwtSecurityTokenHandler().WriteToken(token));
+                var token = GetToken(authClaims);
+
+                return Result.Ok(new JwtSecurityTokenHandler().WriteToken(token));
+            }
+
+            return Result.Fail(new Error($"Não foi possível autenticar o usuário {request.UserName}"));
+
         }
         #endregion
 

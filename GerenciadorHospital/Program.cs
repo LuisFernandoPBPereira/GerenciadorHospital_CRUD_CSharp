@@ -14,6 +14,7 @@ using System;
 using System.Text;
 using NLog;
 using NLog.Web;
+using GerenciadorHospital.Utils;
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 logger.Debug("init main");
@@ -132,6 +133,7 @@ builder.Services.AddScoped<IMedicamentosPacienteRepositorio, MedicamentoPaciente
 builder.Services.AddScoped<IRegistroConsultaRepositorio, RegistroConsultaRepositorio>();
 builder.Services.AddScoped<ILaudoRepositorio, LaudoRepositorio>();
 builder.Services.AddScoped<ITipoExameRepositorio, TipoExameRepositorio>();
+builder.Services.AddScoped<IPasswordHasher<UsuarioModel>, BCryptPasswordHasher<UsuarioModel>>();
 #endregion
 
 builder.Logging.ClearProviders();
