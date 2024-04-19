@@ -81,7 +81,6 @@ namespace GerenciadorHospital.Services.Paciente
 
         public async Task<PacienteModel> Atualizar(PacienteModel pacienteModel, int id)
         {
-            pacienteModel.Id = id;
             PacienteModel paciente = await _pacienteRepositorio.Atualizar(pacienteModel, id);
 
             if (paciente is not null)

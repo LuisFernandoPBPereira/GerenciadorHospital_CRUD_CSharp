@@ -42,7 +42,6 @@ namespace GerenciadorHospital.Services.Medicamento
 
         public async Task<MedicamentoPacienteModel> Atualizar(MedicamentoPacienteModel medicamentoModel, int id)
         {
-            medicamentoModel.Id = id;
             MedicamentoPacienteModel medicamentos = await _medicamentosPacienteRepositorio.Atualizar(medicamentoModel, id);
 
             if (medicamentos is not null)

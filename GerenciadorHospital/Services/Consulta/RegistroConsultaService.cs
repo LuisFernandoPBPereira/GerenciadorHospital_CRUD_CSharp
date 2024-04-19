@@ -31,7 +31,6 @@ namespace GerenciadorHospital.Services.Consulta
 
         public async Task<RegistroConsultaModel> Adicionar(RegistroConsultaModel consultaModel)
         {
-            //É instanciado um novo objeto para validar o cadastro da consulta
             ValidaConsulta validaConsulta = new ValidaConsulta(_consultaRepositorio, consultaModel, _pacienteRepositorio);
             var consultaValidada = validaConsulta.ValidacaoConsulta();
 
@@ -71,8 +70,6 @@ namespace GerenciadorHospital.Services.Consulta
 
         public async Task<RegistroConsultaModel> Atualizar(RegistroConsultaModel consultaModel, int id)
         {
-            consultaModel.Id = id;
-
             if (consultaModel.EstadoConsulta == Enums.StatusConsulta.Atendida)
             {
                 consultaModel.DataRetorno = DateTime.Now.AddDays(30);

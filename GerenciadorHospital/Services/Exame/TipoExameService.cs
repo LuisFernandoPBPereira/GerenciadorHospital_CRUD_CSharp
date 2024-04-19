@@ -43,7 +43,6 @@ namespace GerenciadorHospital.Services.Exame
 
         public async Task<TipoExameModel> Atualizar(TipoExameModel tipoExameModel, int id)
         {
-            tipoExameModel.Id = id;
             TipoExameModel exame = await _tipoExameRepositorio.Atualizar(tipoExameModel, id);
 
             if (exame is not null)

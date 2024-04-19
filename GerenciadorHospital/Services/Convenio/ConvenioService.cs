@@ -60,7 +60,6 @@ namespace GerenciadorHospital.Services.Convenio
 
         public async Task<ConvenioModel> Atualizar(ConvenioModel convenioModel, int id)
         {
-            convenioModel.Id = id;
             ConvenioModel convenio = await _convenioRepositorio.Atualizar(convenioModel, id);
 
             if (convenio is not null)
