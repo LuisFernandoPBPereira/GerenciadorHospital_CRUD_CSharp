@@ -67,6 +67,7 @@ namespace GerenciadorHospital.Repositorios
 
             return laudoPorId;
         }
+
         #endregion
 
         #region Repositório - Buscar Laudo com Filtro
@@ -118,5 +119,11 @@ namespace GerenciadorHospital.Repositorios
                 .ToListAsync();
         }
         #endregion
+
+        public async Task<LaudoModel> BuscarImagemLaudoPorId(int id)
+        {
+            return await _bancoContext.Laudos
+                .FirstOrDefaultAsync(x => x.Id == id);
+        }
     }
 }

@@ -2,6 +2,8 @@
 using GerenciadorHospital.Enums;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
+using GerenciadorHospital.Utils;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GerenciadorHospital.Services.Laudo
 {
@@ -19,14 +21,22 @@ namespace GerenciadorHospital.Services.Laudo
         }
         public async Task<LaudoModel> Adicionar(LaudoModel laudoModel)
         {
-            LaudoModel laudo = await _laudoRepositorio.Adicionar(laudoModel);
+            ValidaLaudo laudoValidado = new ValidaLaudo(laudoModel);
 
-            if (laudo is not null)
-                _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Laudo)}: Cadastro do laudo foi realizado.");
-            else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_POST_Laudo)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_POST_Laudo)}");
+            if (laudoValidado.ValidaImagem())
+            {
+                LaudoModel laudo = await _laudoRepositorio.Adicionar(laudoModel);
 
-            return laudo;
+                if (laudo is not null)
+                    _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Laudo)}: Cadastro do laudo foi realizado.");
+                else
+                    _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_POST_Laudo)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_POST_Laudo)}");
+
+                return laudo;
+            }
+
+            throw new Exception("Não foi possível validar o laudo.");
+
         }
 
         public async Task<bool> Apagar(int id)
@@ -51,6 +61,24 @@ namespace GerenciadorHospital.Services.Laudo
                 _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_PUT_Laudo)}:  {mensagensLog.ExibirMensagem(CodigosLogErro.E_PUT_Laudo)}");
 
             return laudo;
+        }
+
+        public async Task<FileContentResult> BuscarImagemLaudoPorId(int id)
+        {
+            LaudoModel laudo = await _laudoRepositorio.BuscarImagemLaudoPorId(id);
+            ValidaLaudo validaLaudo = new ValidaLaudo(laudo);
+
+            string caminho = laudo.CaminhoImagemLaudo;
+            var imagem = validaLaudo.BuscarImagemLaudo(caminho);
+
+            if (imagem is not null)
+                _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Laudo)}: Busca do documento do convênio com ID: {id}, foi realizada.");
+            else
+                _logger.LogInformation(@$"{nameof(Enums.CodigosLogErro.E_GET_Laudo)}: 
+                                        {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Laudo)} ->
+                                        Busca da imagem do laudo com ID: {id}, não foi realizada.");
+
+            return validaLaudo.BuscarImagemLaudo(caminho);
         }
 
         public async Task<List<LaudoModel>> BuscarLaudo(string? dataInicial, string? dataFinal, int medicoId, int pacienteId)

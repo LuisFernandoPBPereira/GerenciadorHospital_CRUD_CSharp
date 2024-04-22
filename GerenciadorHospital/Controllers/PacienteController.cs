@@ -118,14 +118,14 @@ public class PacienteController : ControllerBase
     /// <response code="200">Imagem retornada com sucesso</response>
     [HttpGet("MostrarDoc/{id}")]
     [Authorize(Policy = "AdminAndDoctorRights")]
-    public async Task<ActionResult<List<PacienteModel>>> BuscarDocPorId(int id)
+    public async Task<ActionResult<FileContentResult>> BuscarDocPorId(int id)
     {
         try
         {
             PacienteService pacienteService = new PacienteService(_pacienteRepositorio, _authenticationService, _logger);
             var response = await pacienteService.BuscarDocPorId(id);
 
-            return Ok(response);
+            return response;
         }
         catch (Exception erro)
         {

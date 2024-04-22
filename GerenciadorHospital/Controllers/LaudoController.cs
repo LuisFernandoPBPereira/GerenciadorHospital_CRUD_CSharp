@@ -73,6 +73,32 @@ namespace GerenciadorHospital.Controllers
         }
         #endregion
 
+        #region GET Buscar Imagem do Laudo Por ID
+        /// <summary>
+        /// Busca Laudos por ID
+        /// </summary>
+        /// <param name="id">ID do Laudo</param>
+        /// <returns>Laudo</returns>
+        /// <response code="200">Laudo Retornado com SUCESSO</response>
+        [HttpGet("BuscarImagemLaudo/{id}")]
+        [Authorize(Policy = "StandardRights")]
+        public async Task<ActionResult<LaudoModel>> BuscarImagemLaudoPorId(int id)
+        {
+            try
+            {
+                LaudoService laudoService = new LaudoService(_laudoRepositorio, _logger);
+                var response = await laudoService.BuscarImagemLaudoPorId(id);
+
+                return response;
+            }
+            catch (Exception erro)
+            {
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_GET_Laudo)}: Não foi possível buscar o laudo com ID: {id}. Erro:{erro.Message}");
+                return BadRequest($"Não foi possível buscar o laudo com ID: {id}. Erro:{erro.Message}");
+            }
+        }
+        #endregion
+
         #region GET Buscar Laudo com Filtro
         /// <summary>
         /// Busca Laudos por ID
@@ -111,7 +137,7 @@ namespace GerenciadorHospital.Controllers
         /// <response code="200">Laudo Cadastrado com SUCESSO</response>
         [HttpPost]
         [Authorize(Policy = "AdminAndDoctorRights")]
-        public async Task<ActionResult<LaudoModel>> Adicionar([FromBody] LaudoModel laudoModel)
+        public async Task<ActionResult<LaudoModel>> Adicionar(LaudoModel laudoModel)
         {
             try
             {
