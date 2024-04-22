@@ -65,7 +65,7 @@ namespace GerenciadorHospital.Repositorios
             consultaPorId.Valor = registroConsulta.Valor;
             consultaPorId.MedicoId = registroConsulta.MedicoId;
             consultaPorId.PacienteId = registroConsulta.PacienteId;
-            consultaPorId.LaudoId = registroConsulta.LaudoId;
+            consultaPorId.LaudoIds = registroConsulta.LaudoIds;
             consultaPorId.ExameId = registroConsulta.ExameId;
 
             //Atualizamos no banco de dados e salvamos as alterações
@@ -119,25 +119,60 @@ namespace GerenciadorHospital.Repositorios
         #region Repositório - Buscar Consulta Por ID
         public async Task<RegistroConsultaModel> BuscarPorId(int id)
         {
-            return await _bancoContext.RegistrosConsultas
+            var consulta =  await _bancoContext.RegistrosConsultas
                 .Include(x => x.Medico)
                 .Include(x => x.Paciente)
                 .Include(x => x.Laudo)
                 .Include(x => x.Exame)
                 .FirstOrDefaultAsync(x => x.Id == id);
+
+            List<LaudoModel> listaLaudos = new List<LaudoModel>();
+
+            if (consulta.LaudoIds is null) throw new Exception("Consulta com id de laudo nulo");
+            for (int i = 0; i < consulta.LaudoIds.Count(); i++)
+            {
+
+                var laudoModels = await _bancoContext.Laudos.Where(l => l.Id == consulta.LaudoIds[i]).ToListAsync();
+                //listaLaudos = laudoModels.Concat(laudoModels).ToList();
+                listaLaudos.AddRange(laudoModels);
+                laudoModels.Clear();
+            }
+            consulta.Laudo.AddRange(listaLaudos);
+            listaLaudos.Clear();
+
+            return consulta;
+            
         }
         #endregion
 
         #region Repositório - Buscar Todas Consultas
         public async Task<List<RegistroConsultaModel>> BuscarTodosRegistrosConsultas()
         {
-            //Retornamos todas as consultas com os objetos medico e paciente
-            return await _bancoContext.RegistrosConsultas
+            var consultas = await _bancoContext.RegistrosConsultas
                 .Include(x => x.Medico)
                 .Include(x => x.Paciente)
-                .Include(x => x.Laudo)
                 .Include(x => x.Exame)
+                .Include(x => x.Laudo)
                 .ToListAsync();
+
+            List<LaudoModel> listaLaudos = new List<LaudoModel> ();
+
+            foreach(var registroConsulta in consultas)
+            {
+                if (registroConsulta.LaudoIds is null) throw new Exception("Consulta com id de laudo nulo");
+                for (int i = 0; i < registroConsulta.LaudoIds.Count(); i++)
+                {
+
+                    var laudoModels = await _bancoContext.Laudos.Where(l => l.Id == registroConsulta.LaudoIds[i]).ToListAsync();
+                    //listaLaudos = laudoModels.Concat(laudoModels).ToList();
+                    listaLaudos.AddRange(laudoModels);
+                    laudoModels.Clear();
+                }
+                registroConsulta.Laudo.AddRange(listaLaudos);
+                listaLaudos.Clear();
+            }
+
+            return consultas;
         }
         #endregion
     }
