@@ -1,5 +1,6 @@
 ﻿using GerenciadorHospital.Entities;
 using GerenciadorHospital.Models;
+using GerenciadorHospital.Utils;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,6 +8,8 @@ namespace GerenciadorHospital.Data
 {
     public class SeedManager
     {
+        static BCryptPasswordHasher<UsuarioModel> senhaComHash = new BCryptPasswordHasher<UsuarioModel>();
+
         #region Seeds
         public static async Task Seed(IServiceProvider services)
         {
@@ -40,15 +43,19 @@ namespace GerenciadorHospital.Data
 
             if (adminUser is null)
             {
-                adminUser = new UsuarioModel { 
-                    UserName = "your@email.com", 
-                    Nome = "Teste",
-                    Cpf = "12345678900",
+                adminUser = new UsuarioModel {
+                    UserName = "adminUser",
+                    Nome = "adminUser",
+                    Cpf = "00000000000",
                     Endereco = "tal",
                     DataNasc = DateTime.Now,
-                    Senha = "blabla"
+                    Senha = "Admin123*"
                 };
-                await userManager.CreateAsync(adminUser, "VerySecretPassword!1");
+
+                var senhaAdmin = senhaComHash.HashPassword(adminUser, adminUser.Senha);
+                adminUser.Senha = senhaAdmin;
+
+                await userManager.CreateAsync(adminUser, adminUser.Senha);
                 await userManager.AddToRoleAsync(adminUser, Role.Admin);
             }
         }
@@ -61,21 +68,25 @@ namespace GerenciadorHospital.Data
             var userManager = services.GetRequiredService<UserManager<UsuarioModel>>();
             var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
-            var adminUser = await context.Usuarios.FirstOrDefaultAsync(user => user.UserName == "AuthenticationPaciente");
+            var pacienteUser = await context.Usuarios.FirstOrDefaultAsync(user => user.UserName == "AuthenticationPaciente");
 
-            if (adminUser is null)
+            if (pacienteUser is null)
             {
-                adminUser = new UsuarioModel
+                pacienteUser = new UsuarioModel
                 {
-                    UserName = "your@email.com",
-                    Nome = "Teste",
+                    UserName = "pacienteUser",
+                    Nome = "pacienteUser",
                     Cpf = "12345678900",
                     Endereco = "tal",
                     DataNasc = DateTime.Now,
-                    Senha = "blabla"
+                    Senha = "Paciente123*"
                 };
-                await userManager.CreateAsync(adminUser, "VerySecretPassword!1");
-                await userManager.AddToRoleAsync(adminUser, Role.Paciente);
+
+                var senhaPaciente = senhaComHash.HashPassword(pacienteUser, pacienteUser.Senha);
+                pacienteUser.Senha = senhaPaciente;
+
+                await userManager.CreateAsync(pacienteUser, pacienteUser.Senha);
+                await userManager.AddToRoleAsync(pacienteUser, Role.Paciente);
             }
         }
         #endregion
@@ -87,21 +98,25 @@ namespace GerenciadorHospital.Data
             var userManager = services.GetRequiredService<UserManager<UsuarioModel>>();
             var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
-            var adminUser = await context.Usuarios.FirstOrDefaultAsync(user => user.UserName == "AuthenticationMedico");
+            var medicoUser = await context.Usuarios.FirstOrDefaultAsync(user => user.UserName == "AuthenticationMedico");
 
-            if (adminUser is null)
+            if (medicoUser is null)
             {
-                adminUser = new UsuarioModel
+                medicoUser = new UsuarioModel
                 {
-                    UserName = "your@email.com",
-                    Nome = "Teste",
-                    Cpf = "12345678900",
+                    UserName = "medicoUser",
+                    Nome = "medicoUser",
+                    Cpf = "00000000000",
                     Endereco = "tal",
                     DataNasc = DateTime.Now,
-                    Senha = "blabla"
+                    Senha = "Medico123*"
                 };
-                await userManager.CreateAsync(adminUser, "VerySecretPassword!1");
-                await userManager.AddToRoleAsync(adminUser, Role.Medico);
+
+                var senhaMedico = senhaComHash.HashPassword(medicoUser, medicoUser.Senha);
+                medicoUser.Senha = senhaMedico;
+
+                await userManager.CreateAsync(medicoUser, medicoUser.Senha);
+                await userManager.AddToRoleAsync(medicoUser, Role.Medico);
             }
         }
         #endregion
