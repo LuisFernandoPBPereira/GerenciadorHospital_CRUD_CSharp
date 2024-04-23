@@ -64,6 +64,8 @@ namespace GerenciadorHospital.Repositorios
             pacientePorId.DataNasc = paciente.DataNasc;
             pacientePorId.TemConvenio = paciente.TemConvenio;
             pacientePorId.ConvenioId = paciente.ConvenioId;
+            pacientePorId.ImgDocumento = paciente.ImgDocumento;
+            pacientePorId.ImgCarteiraDoConvenio = paciente.ImgCarteiraDoConvenio;
 
             //Atualizamos no banco de dados e salvamos as alterações
             _bancoContext.Pacientes.Update(pacientePorId);
@@ -102,10 +104,6 @@ namespace GerenciadorHospital.Repositorios
         #region Repositório - Buscar Documento do Paciente Por ID
         public async Task<PacienteModel> BuscarDocPorId(int id)
         {
-            /*
-             * Retornamos o primeiro paciente ou o padrão por ID,
-             * incluindo os objetos convenio e medicamento
-            */
             return await _bancoContext.Pacientes
                 .FirstOrDefaultAsync(x => x.Id == id);
         }

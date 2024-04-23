@@ -79,6 +79,32 @@ namespace GerenciadorHospital.Controllers
         }
         #endregion
 
+        #region GET Buscar Documento do Médico Por ID
+        /// <summary>
+        /// Busca Médico por ID
+        /// </summary>
+        /// <param name="id">ID do Médico</param>
+        /// <returns>Médicos</returns>
+        /// <response code="200">Médico Retornado com SUCESSO</response>
+        [HttpGet("BuscarDocMedico/{id}")]
+        [Authorize(Policy = "ElevatedRights")]
+        public async Task<ActionResult<List<MedicoModel>>> BuscarDocMedicoPorId(int id)
+        {
+            try
+            {
+                MedicoService medicoService = new MedicoService(_authenticationService, _medicoRepositorio, _logger);
+                var response = await medicoService.BuscarDocMedicoPorId(id);
+
+                return response;
+            }
+            catch (Exception erro)
+            {
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_GET_Medico)}: Não foi possível buscar documento do médico com ID: {id}. Erro: {erro.Message}");
+                return BadRequest($"Não foi possível buscar documento do médico com ID: {id}. Erro: {erro.Message}");
+            }
+        }
+        #endregion
+
         #region POST Cadastrar Médico
         /// <summary>
         /// Cadastrar Médico
@@ -88,7 +114,7 @@ namespace GerenciadorHospital.Controllers
         /// <response code="200">Médico Cadastrado com SUCESSO</response>
         [HttpPost]
         [Authorize(Policy = "ElevatedRights")]
-        public async Task<ActionResult<MedicoModel>> Adicionar([FromBody] MedicoModel medicoModel)
+        public async Task<ActionResult<MedicoModel>> Adicionar(MedicoModel medicoModel)
         {
             try
             {
@@ -115,7 +141,7 @@ namespace GerenciadorHospital.Controllers
         /// <response code="200">Médico Atualizado com SUCESSO</response>
         [HttpPut("{id}")]
         [Authorize(Policy = "ElevatedRights")]
-        public async Task<ActionResult<MedicoModel>> Atualizar([FromBody] MedicoModel medicoModel, int id)
+        public async Task<ActionResult<MedicoModel>> Atualizar(MedicoModel medicoModel, int id)
         {
             try
             {

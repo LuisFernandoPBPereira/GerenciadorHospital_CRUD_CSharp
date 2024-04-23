@@ -164,7 +164,7 @@ namespace GerenciadorHospital.Controllers
         /// <response code="200">Laudo Atualizado com SUCESSO</response>
         [HttpPut("{id}")]
         [Authorize(Policy = "AdminAndDoctorRights")]
-        public async Task<ActionResult<LaudoModel>> Atualizar([FromBody] LaudoModel laudoModel, int id)
+        public async Task<ActionResult<LaudoModel>> Atualizar(LaudoModel laudoModel, int id)
         {
             try
             {

@@ -53,6 +53,13 @@ namespace GerenciadorHospital.Services.Laudo
 
         public async Task<LaudoModel> Atualizar(LaudoModel laudoModel, int id)
         {
+            ValidaLaudo validaLaudo = new ValidaLaudo(laudoModel);
+
+            var laudoValidado = validaLaudo.ValidaImagem();
+
+            if (laudoValidado == false)
+                throw new Exception("Não foi possível carregar a imagem");
+
             LaudoModel laudo = await _laudoRepositorio.Atualizar(laudoModel, id);
 
             if (laudo is not null)

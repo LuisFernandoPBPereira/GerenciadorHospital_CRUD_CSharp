@@ -60,6 +60,7 @@ namespace GerenciadorHospital.Repositorios
             laudoPorId.PacienteId = laudo.PacienteId;
             laudoPorId.MedicoId = laudo.MedicoId;
             laudoPorId.MedicamentoId = laudo.MedicamentoId;
+            laudoPorId.CaminhoImagemLaudo = laudo.CaminhoImagemLaudo;
 
             //Atualizamos no banco de dados e salvamos as alterações
             _bancoContext.Laudos.Update(laudoPorId);
@@ -120,10 +121,12 @@ namespace GerenciadorHospital.Repositorios
         }
         #endregion
 
+        #region Repositório - Buscar Imagem do Laudo Por ID
         public async Task<LaudoModel> BuscarImagemLaudoPorId(int id)
         {
             return await _bancoContext.Laudos
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
+        #endregion
     }
 }

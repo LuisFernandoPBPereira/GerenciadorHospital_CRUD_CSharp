@@ -128,12 +128,13 @@ namespace GerenciadorHospital.Repositorios
 
             List<LaudoModel> listaLaudos = new List<LaudoModel>();
 
+            consulta.Laudo.Clear();
+            
             if (consulta.LaudoIds is null) throw new Exception("Consulta com id de laudo nulo");
             for (int i = 0; i < consulta.LaudoIds.Count(); i++)
             {
 
                 var laudoModels = await _bancoContext.Laudos.Where(l => l.Id == consulta.LaudoIds[i]).ToListAsync();
-                //listaLaudos = laudoModels.Concat(laudoModels).ToList();
                 listaLaudos.AddRange(laudoModels);
                 laudoModels.Clear();
             }
@@ -155,16 +156,17 @@ namespace GerenciadorHospital.Repositorios
                 .Include(x => x.Laudo)
                 .ToListAsync();
 
+
             List<LaudoModel> listaLaudos = new List<LaudoModel> ();
 
-            foreach(var registroConsulta in consultas)
+            foreach (var registroConsulta in consultas)
             {
+                registroConsulta.Laudo.Clear();
                 if (registroConsulta.LaudoIds is null) throw new Exception("Consulta com id de laudo nulo");
                 for (int i = 0; i < registroConsulta.LaudoIds.Count(); i++)
                 {
 
                     var laudoModels = await _bancoContext.Laudos.Where(l => l.Id == registroConsulta.LaudoIds[i]).ToListAsync();
-                    //listaLaudos = laudoModels.Concat(laudoModels).ToList();
                     listaLaudos.AddRange(laudoModels);
                     laudoModels.Clear();
                 }

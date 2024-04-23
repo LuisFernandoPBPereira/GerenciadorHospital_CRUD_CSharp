@@ -118,7 +118,7 @@ public class PacienteController : ControllerBase
     /// <response code="200">Imagem retornada com sucesso</response>
     [HttpGet("MostrarDoc/{id}")]
     [Authorize(Policy = "AdminAndDoctorRights")]
-    public async Task<ActionResult<FileContentResult>> BuscarDocPorId(int id)
+    public async Task<ActionResult<MedicoModel>> BuscarDocPorId(int id)
     {
         try
         {
@@ -171,7 +171,7 @@ public class PacienteController : ControllerBase
     /// <response code="200">Paciente atualizado com SUCESSO</response>
     [HttpPut("{id}")]
     [Authorize(Policy = "StandardRights")]
-    public async Task<ActionResult<PacienteModel>> Atualizar([FromBody] PacienteModel pacienteModel, int id)
+    public async Task<ActionResult<PacienteModel>> Atualizar(PacienteModel pacienteModel, int id)
     {
         try
         {

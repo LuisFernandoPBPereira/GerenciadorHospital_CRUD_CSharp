@@ -1,6 +1,7 @@
 ﻿using GerenciadorHospital.Data;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace GerenciadorHospital.Repositorios
@@ -61,12 +62,22 @@ namespace GerenciadorHospital.Repositorios
             medicoPorId.Cpf = medico.Cpf;
             medicoPorId.Crm = medico.Crm;
             medicoPorId.Especializacao = medico.Especializacao;
+            medicoPorId.CaminhoDoc = medico.CaminhoDoc;
 
             //Atualizamos o banco de dados e salvamos as alterações
             _bancoContext.Medicos.Update(medicoPorId);
             await _bancoContext.SaveChangesAsync();
 
             return medicoPorId;
+        }
+
+        #endregion
+
+        #region Repositório - Buscar Documento do Médico Por ID
+        public async Task<MedicoModel> BuscarDocMedicoPorId(int id)
+        {
+            return await _bancoContext.Medicos
+                .FirstOrDefaultAsync(x => x.Id == id);
         }
         #endregion
 

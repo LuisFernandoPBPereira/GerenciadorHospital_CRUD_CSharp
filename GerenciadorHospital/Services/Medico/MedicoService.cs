@@ -3,6 +3,7 @@ using GerenciadorHospital.Dto;
 using GerenciadorHospital.Entities;
 using GerenciadorHospital.Enums;
 using GerenciadorHospital.Models;
+using GerenciadorHospital.Repositorios;
 using GerenciadorHospital.Repositorios.Interfaces;
 using GerenciadorHospital.Utils;
 using Microsoft.AspNetCore.Mvc;
@@ -29,6 +30,13 @@ namespace GerenciadorHospital.Services.Medico
         {
             var senhaMedico = senhaComHash.HashPassword(medicoModel, medicoModel.Senha);
             medicoModel.Senha = senhaMedico;
+
+            ValidaMedico validaMedico = new ValidaMedico(medicoModel);
+
+            var medicoValidado = validaMedico.ValidaImagem();
+
+            if (medicoValidado == false)
+                throw new Exception("Não foi possível carregar a imagem");
 
             MedicoModel medico = await _medicoRepositorio.Adicionar(medicoModel);
 
@@ -66,6 +74,12 @@ namespace GerenciadorHospital.Services.Medico
 
         public async Task<MedicoModel> Atualizar(MedicoModel medicoModel, int id)
         {
+            ValidaMedico validaImagem = new ValidaMedico(medicoModel);
+            var medicoValidado = validaImagem.ValidaImagem();
+
+            if (medicoValidado == false)
+                throw new Exception("Não foi possível carregar a imagem");
+
             MedicoModel medico = await _medicoRepositorio.Atualizar(medicoModel, id);
 
             if (medico is not null)
@@ -74,6 +88,24 @@ namespace GerenciadorHospital.Services.Medico
                 _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_PUT_Medico)}:  {mensagensLog.ExibirMensagem(CodigosLogErro.E_PUT_Medico)}");
 
             return medico;
+        }
+
+        public async Task<FileContentResult> BuscarDocMedicoPorId(int id)
+        {
+            MedicoModel medico = await _medicoRepositorio.BuscarDocMedicoPorId(id);
+
+            string caminho = medico.CaminhoDoc;
+
+            ValidaMedico imagem = new ValidaMedico(medico);
+
+            if (imagem is not null)
+                _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Medico)}: Busca do documento com ID: {id}, foi realizada.");
+            else
+                _logger.LogInformation(@$"{nameof(Enums.CodigosLogErro.E_GET_Medico)}: 
+                                        {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Medico)} ->
+                                        Busca do documento com ID: {id}, não foi realizada.");
+
+            return imagem.BuscarDocMedico(caminho);
         }
 
         public async Task<MedicoModel> BuscarPorId(int id)

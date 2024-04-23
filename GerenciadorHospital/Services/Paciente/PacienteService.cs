@@ -85,6 +85,14 @@ namespace GerenciadorHospital.Services.Paciente
 
         public async Task<PacienteModel> Atualizar(PacienteModel pacienteModel, int id)
         {
+            DocumentoImagemDto documentoImagemDto = new DocumentoImagemDto(); 
+            ValidaImagem validaImagem = new ValidaImagem(documentoImagemDto, pacienteModel);
+
+            var pacienteValidado = validaImagem.ValidacaoImagem();
+
+            if (pacienteValidado == false)
+                throw new Exception("Não foi possível carregar a imagem");
+
             PacienteModel paciente = await _pacienteRepositorio.Atualizar(pacienteModel, id);
 
             if (paciente is not null)
