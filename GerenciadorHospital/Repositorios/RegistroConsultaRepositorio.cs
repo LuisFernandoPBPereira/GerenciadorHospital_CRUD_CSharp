@@ -3,6 +3,7 @@ using GerenciadorHospital.Enums;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace GerenciadorHospital.Repositorios
@@ -126,11 +127,15 @@ namespace GerenciadorHospital.Repositorios
                 .Include(x => x.Exame)
                 .FirstOrDefaultAsync(x => x.Id == id);
 
-            List<LaudoModel> listaLaudos = new List<LaudoModel>();
+            if(consulta is null)
+                throw new Exception("Nenhuma consulta foi encontrada");
 
-            consulta.Laudo.Clear();
+            List<LaudoModel> listaLaudos = new List<LaudoModel>();
             
+            consulta.Laudo.Clear();
+
             if (consulta.LaudoIds is null) throw new Exception("Consulta com id de laudo nulo");
+
             for (int i = 0; i < consulta.LaudoIds.Count(); i++)
             {
 
@@ -156,18 +161,19 @@ namespace GerenciadorHospital.Repositorios
                 .Include(x => x.Laudo)
                 .ToListAsync();
 
-
             List<LaudoModel> listaLaudos = new List<LaudoModel> ();
 
             foreach (var registroConsulta in consultas)
             {
                 registroConsulta.Laudo.Clear();
+
                 if (registroConsulta.LaudoIds is null) throw new Exception("Consulta com id de laudo nulo");
+
                 for (int i = 0; i < registroConsulta.LaudoIds.Count(); i++)
                 {
-
                     var laudoModels = await _bancoContext.Laudos.Where(l => l.Id == registroConsulta.LaudoIds[i]).ToListAsync();
                     listaLaudos.AddRange(laudoModels);
+
                     laudoModels.Clear();
                 }
                 registroConsulta.Laudo.AddRange(listaLaudos);
