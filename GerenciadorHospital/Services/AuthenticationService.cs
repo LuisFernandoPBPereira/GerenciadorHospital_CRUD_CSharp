@@ -35,8 +35,6 @@ namespace GerenciadorHospital.Services
 
             if (usuarioPorUsername is not null) return Result.Fail(new Error($"Usuário com o nome {request.Nome} já existe."));
 
-
-
             UsuarioModel user = new()
             {
                 UserName = request.UserName,

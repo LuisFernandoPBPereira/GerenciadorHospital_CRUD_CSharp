@@ -28,8 +28,6 @@ namespace GerenciadorHospital.Services.Medico
         }
         public async Task<MedicoModel> Adicionar(MedicoModel medicoModel)
         {
-            var senhaMedico = senhaComHash.HashPassword(medicoModel, medicoModel.Senha);
-            medicoModel.Senha = senhaMedico;
 
             ValidaMedico validaMedico = new ValidaMedico(medicoModel);
 
@@ -38,19 +36,24 @@ namespace GerenciadorHospital.Services.Medico
             if (medicoValidado == false)
                 throw new Exception("Não foi possível carregar a imagem");
 
-            MedicoModel medico = await _medicoRepositorio.Adicionar(medicoModel);
 
             CadastroRequestDto novoMedico = new CadastroRequestDto();
 
-            novoMedico.Nome = medico.Nome;
-            novoMedico.UserName = medico.Crm;
-            novoMedico.Cpf = medico.Cpf;
-            novoMedico.Senha = medico.Senha;
-            novoMedico.DataNasc = medico.DataNasc;
-            novoMedico.Endereco = medico.Endereco;
+            novoMedico.Nome = medicoModel.Nome;
+            novoMedico.UserName = medicoModel.Crm;
+            novoMedico.Cpf = medicoModel.Cpf;
+            novoMedico.Senha = medicoModel.Senha;
+            novoMedico.DataNasc = medicoModel.DataNasc;
+            novoMedico.Endereco = medicoModel.Endereco;
             novoMedico.Role = Role.Medico;
 
+            
             var medicoCadastrado = await _authenticationService.Register(novoMedico);
+            
+            MedicoModel medico = await _medicoRepositorio.Adicionar(medicoModel);
+
+            var senhaMedico = senhaComHash.HashPassword(medicoModel, medicoModel.Senha);
+            medicoModel.Senha = senhaMedico;
 
             if (medico is not null && medicoCadastrado is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Medico)}: Cadastro do médico foi realizado.");

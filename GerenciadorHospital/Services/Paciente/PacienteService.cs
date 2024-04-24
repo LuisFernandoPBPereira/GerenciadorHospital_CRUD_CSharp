@@ -47,10 +47,7 @@ namespace GerenciadorHospital.Services.Paciente
                 throw new Exception("Imagem inválida.");
             }
 
-            var senhaUsuario = senhaComHash.HashPassword(pacienteModel, pacienteModel.Senha);
-            pacienteModel.Senha = senhaUsuario;
 
-            PacienteModel paciente = await _pacienteRepositorio.Adicionar(pacienteModel);
             CadastroRequestDto novoPaciente = new CadastroRequestDto();
 
             novoPaciente.Nome = pacienteModel.Nome;
@@ -62,6 +59,11 @@ namespace GerenciadorHospital.Services.Paciente
             novoPaciente.Role = Role.Paciente;
 
             var pacienteCadastrado = await _authenticationService.Register(novoPaciente);
+
+            var senhaUsuario = senhaComHash.HashPassword(pacienteModel, pacienteModel.Senha);
+            pacienteModel.Senha = senhaUsuario;
+
+            PacienteModel paciente = await _pacienteRepositorio.Adicionar(pacienteModel);
 
             if (paciente is not null && pacienteCadastrado is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Paciente)}: Cadastro do paciente foi realizado.");
