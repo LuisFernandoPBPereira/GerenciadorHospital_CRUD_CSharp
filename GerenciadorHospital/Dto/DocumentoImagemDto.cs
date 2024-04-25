@@ -6,5 +6,13 @@ namespace GerenciadorHospital.Dto
     {
         public IFormFile Doc { get; set; }
         public IFormFile? DocConvenio { get; set; }
+
+        public DocumentoImagemDto() {   }
+
+        public DocumentoImagemDto(PacienteModel pacienteModel)
+        {
+            Doc = pacienteModel.Doc;
+            DocConvenio = pacienteModel.DocConvenio;
+        }
     }
 }

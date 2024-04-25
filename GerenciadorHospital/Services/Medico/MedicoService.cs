@@ -30,6 +30,7 @@ namespace GerenciadorHospital.Services.Medico
         {
             MedicoModel medicoModel = new MedicoModel(medicoDto);
             ValidaMedico validaMedico = new ValidaMedico(medicoModel);
+            validaMedico.ValidacaoMedico();
 
             var medicoValidado = validaMedico.ValidaImagem();
 
@@ -78,8 +79,10 @@ namespace GerenciadorHospital.Services.Medico
         public async Task<MedicoModel> Atualizar(MedicoDto medicoDto, int id)
         {
             MedicoModel medicoModel = new MedicoModel(medicoDto);
-            ValidaMedico validaImagem = new ValidaMedico(medicoModel);
-            var medicoValidado = validaImagem.ValidaImagem();
+            ValidaMedico validaMedico = new ValidaMedico(medicoModel);
+            validaMedico.ValidacaoMedico();
+
+            var medicoValidado = validaMedico.ValidaImagem();
 
             if (medicoValidado == false)
                 throw new Exception("Não foi possível carregar a imagem");

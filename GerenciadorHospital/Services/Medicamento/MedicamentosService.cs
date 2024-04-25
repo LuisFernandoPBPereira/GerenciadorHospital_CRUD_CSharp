@@ -3,6 +3,7 @@ using GerenciadorHospital.Dto;
 using GerenciadorHospital.Enums;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
+using GerenciadorHospital.Utils;
 
 namespace GerenciadorHospital.Services.Medicamento
 {
@@ -20,6 +21,9 @@ namespace GerenciadorHospital.Services.Medicamento
         public async Task<MedicamentoPacienteModel> Adicionar(MedicamentoDto medicamentoDto)
         {
             MedicamentoPacienteModel medicamentoModel = new MedicamentoPacienteModel(medicamentoDto);
+            ValidaMedicamento validaMedicamento = new ValidaMedicamento(medicamentoModel);
+            validaMedicamento.ValidacaoMedicamento();
+
             MedicamentoPacienteModel medicamentos = await _medicamentosPacienteRepositorio.Adicionar(medicamentoModel);
 
             if (medicamentos is not null)
@@ -45,6 +49,9 @@ namespace GerenciadorHospital.Services.Medicamento
         public async Task<MedicamentoPacienteModel> Atualizar(MedicamentoDto medicamentoDto, int id)
         {
             MedicamentoPacienteModel medicamentoModel = new MedicamentoPacienteModel(medicamentoDto);
+            ValidaMedicamento validaMedicamento = new ValidaMedicamento(medicamentoModel);
+            validaMedicamento.ValidacaoMedicamento();
+
             MedicamentoPacienteModel medicamentos = await _medicamentosPacienteRepositorio.Atualizar(medicamentoModel, id);
 
             if (medicamentos is not null)

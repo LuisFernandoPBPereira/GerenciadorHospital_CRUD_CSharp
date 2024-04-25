@@ -1,4 +1,5 @@
 ﻿using GerenciadorHospital.Dto;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GerenciadorHospital.Models

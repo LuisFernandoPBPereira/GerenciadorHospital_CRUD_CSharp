@@ -1,6 +1,7 @@
 ﻿using GerenciadorHospital.Data;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
+using GerenciadorHospital.Utils;
 using Microsoft.EntityFrameworkCore;
 
 namespace GerenciadorHospital.Repositorios
@@ -55,14 +56,13 @@ namespace GerenciadorHospital.Repositorios
             {
                 throw new Exception($"Laudo para o ID: {id} não foi encontrado no banco de dados.");
             }
-            //Fazemos as devidas alterações
+
             laudoPorId.Descricao = laudo.Descricao;
             laudoPorId.PacienteId = laudo.PacienteId;
             laudoPorId.MedicoId = laudo.MedicoId;
             laudoPorId.MedicamentoId = laudo.MedicamentoId;
             laudoPorId.CaminhoImagemLaudo = laudo.CaminhoImagemLaudo;
 
-            //Atualizamos no banco de dados e salvamos as alterações
             _bancoContext.Laudos.Update(laudoPorId);
             await _bancoContext.SaveChangesAsync();
 

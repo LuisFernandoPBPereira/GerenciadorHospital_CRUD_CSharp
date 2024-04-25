@@ -3,7 +3,9 @@ using GerenciadorHospital.Dto;
 using GerenciadorHospital.Enums;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
+using GerenciadorHospital.Utils;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace GerenciadorHospital.Services.Convenio
 {
@@ -49,6 +51,9 @@ namespace GerenciadorHospital.Services.Convenio
         public async Task<ConvenioModel> Adicionar(ConvenioDto convenioDto)
         {
             ConvenioModel convenioModel = new ConvenioModel(convenioDto);
+            ValidaConvenio validaConvenio = new ValidaConvenio(convenioModel);
+            validaConvenio.ValidacaoConvenio();
+
             ConvenioModel convenio = await _convenioRepositorio.Adicionar(convenioModel);
 
             if (convenio is not null)
@@ -63,6 +68,9 @@ namespace GerenciadorHospital.Services.Convenio
         public async Task<ConvenioModel> Atualizar(ConvenioDto convenioDto, int id)
         {
             ConvenioModel convenioModel = new ConvenioModel(convenioDto);
+            ValidaConvenio validaConvenio = new ValidaConvenio(convenioModel);
+            validaConvenio.ValidacaoConvenio();
+
             ConvenioModel convenio = await _convenioRepositorio.Atualizar(convenioModel, id);
 
             if (convenio is not null)

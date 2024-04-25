@@ -1,6 +1,7 @@
 ﻿using FileTypeChecker;
 using GerenciadorHospital.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace GerenciadorHospital.Utils
 {
@@ -52,6 +53,27 @@ namespace GerenciadorHospital.Utils
             _laudoModel.CaminhoImagemLaudo = caminhoDoc;
 
             return true;
+        }
+
+        public void ValidacaoLaudo()
+        {
+            if (_laudoModel.DataCriacao > DateTime.Now)
+                throw new Exception("Não é possível colocar uma data futura para a criação do laudo");
+            
+            if (_laudoModel.DataCriacao is null)
+                throw new Exception("Informe uma data de criação");
+            
+            if (_laudoModel.Descricao.IsNullOrEmpty())
+                throw new Exception("Informe um valor para descrição");
+
+            if (_laudoModel.ImagemLaudo is null)
+                throw new Exception("Nenhuma imagem do laudo foi carregada");
+
+            if (_laudoModel.PacienteId is null or < 1)
+                throw new Exception("Informe o ID do paciente corretamente");
+
+            if (_laudoModel.MedicoId is null or < 1)
+                throw new Exception("Informe o ID do médico corretamente");
         }
     }
 }

@@ -7,6 +7,8 @@
         public const int TamanhoDataNasc = 10;
         public const string RegexSenha = 
             @"^(?=.*\d{1})(?=.*[a-z]{1})(?=.*[A-Z]{1})(?=.*[!@#$%^&*{|}?~_=+.-]{1})(?=.*[^a-zA-Z0-9])(?!.*\s).{6,24}$";
+        public const string RegexCPF =
+            @"([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})";
         
         public const string ErroDeValidacaoTamanhoUserName= "Username deve conter no mínimo 5 caracteres";
         public const string ErroDeValidacaoCPF= "Digite o CPF corretamente";

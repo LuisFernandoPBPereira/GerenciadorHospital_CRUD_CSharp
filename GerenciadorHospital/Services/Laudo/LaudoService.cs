@@ -23,6 +23,9 @@ namespace GerenciadorHospital.Services.Laudo
         public async Task<LaudoModel> Adicionar(LaudoDto laudoDto)
         {
             LaudoModel laudoModel = new LaudoModel(laudoDto);
+            ValidaLaudo validaLaudo = new ValidaLaudo(laudoModel);
+            validaLaudo.ValidacaoLaudo();
+
             ValidaLaudo laudoValidado = new ValidaLaudo(laudoModel);
 
             if (laudoValidado.ValidaImagem())
@@ -58,6 +61,7 @@ namespace GerenciadorHospital.Services.Laudo
             LaudoModel laudoModel = new LaudoModel(laudoDto);
             ValidaLaudo validaLaudo = new ValidaLaudo(laudoModel);
 
+            validaLaudo.ValidacaoLaudo();
             var laudoValidado = validaLaudo.ValidaImagem();
 
             if (laudoValidado == false)

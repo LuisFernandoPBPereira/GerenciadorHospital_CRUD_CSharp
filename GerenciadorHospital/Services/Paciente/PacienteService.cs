@@ -30,17 +30,12 @@ namespace GerenciadorHospital.Services.Paciente
         public async Task<PacienteModel> AdicionarPaciente(PacienteDto pacienteDto)
         {
             PacienteModel pacienteModel = new PacienteModel(pacienteDto);
+            ValidaPaciente validaPaciente = new ValidaPaciente(pacienteModel);
+            validaPaciente.ValidacaoPaciente();
 
-            if (pacienteModel.TemConvenio == false && pacienteModel.DocConvenio?.Length != null)
-            {
-                throw new Exception("Não é possível adicionar uma carteira de convênio, caso o campo TemConvenio seja falso");
-            }
-
-            DocumentoImagemDto imagem = new DocumentoImagemDto();
-            imagem.Doc = pacienteModel.Doc;
-            imagem.DocConvenio = pacienteModel.DocConvenio;
-
+            DocumentoImagemDto imagem = new DocumentoImagemDto(pacienteModel);
             ValidaImagem validaImagem = new ValidaImagem(imagem, pacienteModel);
+
             var requestDtoValidado = validaImagem.ValidacaoImagem();
 
             if (!requestDtoValidado)
@@ -49,16 +44,7 @@ namespace GerenciadorHospital.Services.Paciente
                 throw new Exception("Imagem inválida.");
             }
 
-
-            CadastroRequestDto novoPaciente = new CadastroRequestDto();
-
-            novoPaciente.Nome = pacienteModel.Nome;
-            novoPaciente.UserName = pacienteModel.Cpf;
-            novoPaciente.Cpf = pacienteModel.Cpf;
-            novoPaciente.Senha = pacienteModel.Senha;
-            novoPaciente.DataNasc = pacienteModel.DataNasc;
-            novoPaciente.Endereco = pacienteModel.Endereco;
-            novoPaciente.Role = Role.Paciente;
+            CadastroRequestDto novoPaciente = new CadastroRequestDto(pacienteModel);
 
             var pacienteCadastrado = await _authenticationService.Register(novoPaciente);
 
@@ -90,6 +76,9 @@ namespace GerenciadorHospital.Services.Paciente
         public async Task<PacienteModel> Atualizar(PacienteDto pacienteDto, int id)
         {
             PacienteModel pacienteModel = new PacienteModel(pacienteDto);
+            ValidaPaciente validaPaciente = new ValidaPaciente(pacienteModel);
+            validaPaciente.ValidacaoPaciente();
+
             DocumentoImagemDto documentoImagemDto = new DocumentoImagemDto(); 
             ValidaImagem validaImagem = new ValidaImagem(documentoImagemDto, pacienteModel);
 

@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using GerenciadorHospital.Entities;
+using GerenciadorHospital.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace GerenciadorHospital.Dto
 {
@@ -23,5 +25,21 @@ namespace GerenciadorHospital.Dto
         public DateTime DataNasc { get; set; }
         [Required]
         public string Role { get; set; }
+
+        public CadastroRequestDto()
+        {
+            
+        }
+
+        public CadastroRequestDto(PacienteModel pacienteModel)
+        {
+            Nome = pacienteModel.Nome;
+            UserName = pacienteModel.Cpf;
+            Cpf = pacienteModel.Cpf;
+            Senha = pacienteModel.Senha;
+            DataNasc = pacienteModel.DataNasc;
+            Endereco = pacienteModel.Endereco;
+            Role = Entities.Role.Paciente;
+        }
     }
 }

@@ -3,6 +3,7 @@ using GerenciadorHospital.Dto;
 using GerenciadorHospital.Enums;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
+using GerenciadorHospital.Utils;
 
 namespace GerenciadorHospital.Services.Exame
 {
@@ -21,6 +22,9 @@ namespace GerenciadorHospital.Services.Exame
         public async Task<TipoExameModel> Adicionar(TipoExameDto exameDto)
         {
             TipoExameModel tipoExameModel = new TipoExameModel(exameDto);
+            ValidaExame validaExame = new ValidaExame(tipoExameModel);
+            validaExame.ValidacaoExame();
+
             TipoExameModel exame = await _tipoExameRepositorio.Adicionar(tipoExameModel);
 
             if (exame is not null)
@@ -46,6 +50,9 @@ namespace GerenciadorHospital.Services.Exame
         public async Task<TipoExameModel> Atualizar(TipoExameDto exameDto, int id)
         {
             TipoExameModel tipoExameModel = new TipoExameModel(exameDto);
+            ValidaExame validaExame = new ValidaExame(tipoExameModel);
+            validaExame.ValidacaoExame();
+
             TipoExameModel exame = await _tipoExameRepositorio.Atualizar(tipoExameModel, id);
 
             if (exame is not null)
