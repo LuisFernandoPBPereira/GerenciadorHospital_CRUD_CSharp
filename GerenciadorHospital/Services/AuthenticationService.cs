@@ -65,12 +65,16 @@ namespace GerenciadorHospital.Services
         public async Task<Result<string>> Login(LoginRequestDto request)
         {
             var user = await _usuarioRepositorio.FindByNameAsync(request.UserName);
+
+            if (user is null)
+                throw new Exception("Usuário e/ou senha incorretos, tente novamente");
+
             var isValidSenha = senhaComHash.VerifyHashedPassword(user, user.Senha, request.Senha);
 
             if(isValidSenha == PasswordVerificationResult.Success)
             {
                 if (user is null || !await _usuarioRepositorio.CheckPasswordAsync(user, user.Senha))
-                    return Result.Fail(new Error($"Não foi possível autenticar o usuário {request.UserName}"));
+                    throw new Exception("Usuário e/ou senha incorretos, tente novamente.");
 
                 var authClaims = new List<Claim>
                 {

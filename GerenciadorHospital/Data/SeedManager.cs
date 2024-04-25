@@ -49,7 +49,8 @@ namespace GerenciadorHospital.Data
                     Cpf = "00000000000",
                     Endereco = "tal",
                     DataNasc = DateTime.Now,
-                    Senha = "Admin123*"
+                    Senha = "Admin123*",
+                    Role = Role.Admin
                 };
 
                 var senhaAdmin = senhaComHash.HashPassword(adminUser, adminUser.Senha);
@@ -79,7 +80,8 @@ namespace GerenciadorHospital.Data
                     Cpf = "12345678900",
                     Endereco = "tal",
                     DataNasc = DateTime.Now,
-                    Senha = "Paciente123*"
+                    Senha = "Paciente123*",
+                    Role = Role.Paciente
                 };
 
                 var senhaPaciente = senhaComHash.HashPassword(pacienteUser, pacienteUser.Senha);
@@ -109,7 +111,8 @@ namespace GerenciadorHospital.Data
                     Cpf = "00000000000",
                     Endereco = "tal",
                     DataNasc = DateTime.Now,
-                    Senha = "Medico123*"
+                    Senha = "Medico123*",
+                    Role = Role.Medico
                 };
 
                 var senhaMedico = senhaComHash.HashPassword(medicoUser, medicoUser.Senha);
