@@ -1,4 +1,5 @@
 ﻿using GerenciadorHospital.Controllers;
+using GerenciadorHospital.Dto;
 using GerenciadorHospital.Enums;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
@@ -17,8 +18,9 @@ namespace GerenciadorHospital.Services.Exame
             _logger = logger;
             _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Exame)}: Os valores foram atribuídos no construtor da Service");
         }
-        public async Task<TipoExameModel> Adicionar(TipoExameModel tipoExameModel)
+        public async Task<TipoExameModel> Adicionar(TipoExameDto exameDto)
         {
+            TipoExameModel tipoExameModel = new TipoExameModel(exameDto);
             TipoExameModel exame = await _tipoExameRepositorio.Adicionar(tipoExameModel);
 
             if (exame is not null)
@@ -41,8 +43,9 @@ namespace GerenciadorHospital.Services.Exame
             return apagado;
         }
 
-        public async Task<TipoExameModel> Atualizar(TipoExameModel tipoExameModel, int id)
+        public async Task<TipoExameModel> Atualizar(TipoExameDto exameDto, int id)
         {
+            TipoExameModel tipoExameModel = new TipoExameModel(exameDto);
             TipoExameModel exame = await _tipoExameRepositorio.Atualizar(tipoExameModel, id);
 
             if (exame is not null)

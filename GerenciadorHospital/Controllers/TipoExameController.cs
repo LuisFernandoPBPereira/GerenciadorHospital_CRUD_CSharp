@@ -1,4 +1,5 @@
-﻿using GerenciadorHospital.Models;
+﻿using GerenciadorHospital.Dto;
+using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
 using GerenciadorHospital.Services.Exame;
 using Microsoft.AspNetCore.Authorization;
@@ -77,17 +78,17 @@ namespace GerenciadorHospital.Controllers
         /// <summary>
         /// Cadastrar Exame
         /// </summary>
-        /// <param name="tipoExameModel">Dados do Exame</param>
+        /// <param name="exameDto">Dados do Exame</param>
         /// <returns>Exame Cadastrado</returns>
         /// <response code="200">Exame Cadastrado com SUCESSO</response>
         [HttpPost]
         [Authorize(Policy = "AdminAndDoctorRights")]
-        public async Task<ActionResult<TipoExameModel>> Adicionar([FromBody] TipoExameModel tipoExameModel)
+        public async Task<ActionResult<TipoExameModel>> Adicionar([FromBody] TipoExameDto exameDto)
         {
             try
             {
                 TipoExameService tipoExameService = new TipoExameService(_tipoExameRepositorio, _logger);
-                var response = await tipoExameService.Adicionar(tipoExameModel);
+                var response = await tipoExameService.Adicionar(exameDto);
 
                 return Ok(response);
             }
@@ -104,17 +105,17 @@ namespace GerenciadorHospital.Controllers
         /// Atualizar Exame
         /// </summary>
         /// <param name="id">ID do Exame</param>
-        /// <param name="tipoExameModel">Dados do Exame</param>
+        /// <param name="exameDto">Dados do Exame</param>
         /// <returns>Exame Atualizado</returns>
         /// <response code="200">Exame Atualizado com SUCESSO</response>
         [HttpPut("{id}")]
         [Authorize(Policy = "AdminAndDoctorRights")]
-        public async Task<ActionResult<TipoExameModel>> Atualizar([FromBody] TipoExameModel tipoExameModel, int id)
+        public async Task<ActionResult<TipoExameModel>> Atualizar([FromBody] TipoExameDto exameDto, int id)
         {
             try
             {
                 TipoExameService tipoExameService = new TipoExameService(_tipoExameRepositorio, _logger);
-                var response = await tipoExameService.Atualizar(tipoExameModel, id);
+                var response = await tipoExameService.Atualizar(exameDto, id);
 
                 return Ok(response);
             }

@@ -139,17 +139,17 @@ public class PacienteController : ControllerBase
     /// <summary>
     /// Cadastrar um Paciente
     /// </summary>
-    /// <param name="pacienteModel">Dados do Paciente</param>
+    /// <param name="pacienteDto">Dados do Paciente</param>
     /// <returns>Paciente Cadastrado</returns>
     /// <response code="200">Paciente cadastrado com SUCESSO</response>
     [HttpPost]
     [Authorize(Policy = "AdminAndDoctorRights")]
-    public async Task<ActionResult<PacienteModel>> Adicionar(PacienteModel pacienteModel)
+    public async Task<ActionResult<PacienteModel>> Adicionar(PacienteDto pacienteDto)
     {
         try 
         {
             PacienteService retornoService = new PacienteService(_pacienteRepositorio, _authenticationService, _logger);
-            var response = await retornoService.AdicionarPaciente(pacienteModel);
+            var response = await retornoService.AdicionarPaciente(pacienteDto);
             
             return Ok(response);
         }
@@ -165,18 +165,17 @@ public class PacienteController : ControllerBase
     /// <summary>
     /// Atualizar um Paciente
     /// </summary>
-    /// <param name="pacienteModel">Dados do Paciente</param>
+    /// <param name="pacienteDto">Dados do Paciente</param>
     /// <param name="id">ID do Paciente</param>
     /// <returns>O paciente atualizado</returns>
     /// <response code="200">Paciente atualizado com SUCESSO</response>
     [HttpPut("{id}")]
     [Authorize(Policy = "StandardRights")]
-    public async Task<ActionResult<PacienteModel>> Atualizar(PacienteModel pacienteModel, int id)
-    {
+    public async Task<ActionResult<PacienteModel>> Atualizar(PacienteDto pacienteDto, int id)    {
         try
         {
             PacienteService pacienteService = new PacienteService(_pacienteRepositorio, _authenticationService, _logger);
-            var response = await pacienteService.Atualizar(pacienteModel, id);
+            var response = await pacienteService.Atualizar(pacienteDto, id);
 
             return Ok(response);
         }

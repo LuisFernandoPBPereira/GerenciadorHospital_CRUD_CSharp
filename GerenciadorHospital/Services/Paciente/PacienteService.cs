@@ -27,8 +27,10 @@ namespace GerenciadorHospital.Services.Paciente
             _logger = logger;
         }
 
-        public async Task<PacienteModel> AdicionarPaciente(PacienteModel pacienteModel)
+        public async Task<PacienteModel> AdicionarPaciente(PacienteDto pacienteDto)
         {
+            PacienteModel pacienteModel = new PacienteModel(pacienteDto);
+
             if (pacienteModel.TemConvenio == false && pacienteModel.DocConvenio?.Length != null)
             {
                 throw new Exception("Não é possível adicionar uma carteira de convênio, caso o campo TemConvenio seja falso");
@@ -85,8 +87,9 @@ namespace GerenciadorHospital.Services.Paciente
             return apagado;
         }
 
-        public async Task<PacienteModel> Atualizar(PacienteModel pacienteModel, int id)
+        public async Task<PacienteModel> Atualizar(PacienteDto pacienteDto, int id)
         {
+            PacienteModel pacienteModel = new PacienteModel(pacienteDto);
             DocumentoImagemDto documentoImagemDto = new DocumentoImagemDto(); 
             ValidaImagem validaImagem = new ValidaImagem(documentoImagemDto, pacienteModel);
 

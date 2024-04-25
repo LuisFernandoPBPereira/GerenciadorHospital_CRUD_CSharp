@@ -1,4 +1,5 @@
-﻿using GerenciadorHospital.Models;
+﻿using GerenciadorHospital.Dto;
+using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
 using GerenciadorHospital.Services.Medicamento;
 using Microsoft.AspNetCore.Authorization;
@@ -78,17 +79,17 @@ namespace GerenciadorHospital.Controllers
         /// <summary>
         /// Cadastrar Medicamento
         /// </summary>
-        /// <param name="medicamentoModel">Dados do Medicamento</param>
+        /// <param name="medicamentoDto">Dados do Medicamento</param>
         /// <returns>Medicamento Cadastrado</returns>
         /// <response code="200">Medicamento Cadastrado com SUCESSO</response>
         [HttpPost]
         [Authorize(Policy = "ElevatedRights")]
-        public async Task<ActionResult<MedicamentoPacienteModel>> Adicionar([FromBody] MedicamentoPacienteModel medicamentoModel)
+        public async Task<ActionResult<MedicamentoPacienteModel>> Adicionar([FromBody] MedicamentoDto medicamentoDto)
         {
             try
             {
                 MedicamentosService medicamentosService = new MedicamentosService(_medicamentosPacienteRepositorio, _logger);
-                var response = await medicamentosService.Adicionar(medicamentoModel);
+                var response = await medicamentosService.Adicionar(medicamentoDto);
 
                 return Ok(response);
             }
@@ -105,17 +106,17 @@ namespace GerenciadorHospital.Controllers
         /// Atualizar Medicamento
         /// </summary>
         /// <param name="id">ID do Medicamento</param>
-        /// <param name="medicamentoModel">Dados do Medicamento</param>
+        /// <param name="medicamentoDto">Dados do Medicamento</param>
         /// <returns>Medicamento Atualizado</returns>
         /// <response code="200">Medicamento Atualizado com SUCESSO</response>
         [HttpPut("{id}")]
         [Authorize(Policy = "ElevatedRights")]
-        public async Task<ActionResult<MedicamentoPacienteModel>> Atualizar([FromBody] MedicamentoPacienteModel medicamentoModel, int id)
+        public async Task<ActionResult<MedicamentoPacienteModel>> Atualizar([FromBody] MedicamentoDto medicamentoDto, int id)
         {
             try
             {
                 MedicamentosService medicamentosService = new MedicamentosService(_medicamentosPacienteRepositorio, _logger);
-                var response = await medicamentosService.Atualizar(medicamentoModel, id);
+                var response = await medicamentosService.Atualizar(medicamentoDto, id);
 
                 return Ok(response);
             }

@@ -61,6 +61,9 @@ namespace GerenciadorHospital.Repositorios
             medicoPorId.Nome = medico.Nome;
             medicoPorId.Cpf = medico.Cpf;
             medicoPorId.Crm = medico.Crm;
+            medicoPorId.Endereco = medico.Endereco;
+            medicoPorId.DataNasc = medico.DataNasc;
+            medicoPorId.Senha = medico.Senha;
             medicoPorId.Especializacao = medico.Especializacao;
             medicoPorId.CaminhoDoc = medico.CaminhoDoc;
 

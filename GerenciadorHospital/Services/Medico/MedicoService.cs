@@ -26,9 +26,9 @@ namespace GerenciadorHospital.Services.Medico
             _medicoRepositorio = medicoRepositorio;
             _logger = logger;
         }
-        public async Task<MedicoModel> Adicionar(MedicoModel medicoModel)
+        public async Task<MedicoModel> Adicionar(MedicoDto medicoDto)
         {
-
+            MedicoModel medicoModel = new MedicoModel(medicoDto);
             ValidaMedico validaMedico = new ValidaMedico(medicoModel);
 
             var medicoValidado = validaMedico.ValidaImagem();
@@ -50,10 +50,10 @@ namespace GerenciadorHospital.Services.Medico
             
             var medicoCadastrado = await _authenticationService.Register(novoMedico);
             
-            MedicoModel medico = await _medicoRepositorio.Adicionar(medicoModel);
-
             var senhaMedico = senhaComHash.HashPassword(medicoModel, medicoModel.Senha);
             medicoModel.Senha = senhaMedico;
+
+            MedicoModel medico = await _medicoRepositorio.Adicionar(medicoModel);
 
             if (medico is not null && medicoCadastrado is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Medico)}: Cadastro do médico foi realizado.");
@@ -75,8 +75,9 @@ namespace GerenciadorHospital.Services.Medico
             return apagado;
         }
 
-        public async Task<MedicoModel> Atualizar(MedicoModel medicoModel, int id)
+        public async Task<MedicoModel> Atualizar(MedicoDto medicoDto, int id)
         {
+            MedicoModel medicoModel = new MedicoModel(medicoDto);
             ValidaMedico validaImagem = new ValidaMedico(medicoModel);
             var medicoValidado = validaImagem.ValidaImagem();
 

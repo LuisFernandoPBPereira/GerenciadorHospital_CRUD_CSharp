@@ -151,6 +151,21 @@ namespace GerenciadorHospital.Repositorios
         }
         #endregion
 
+        #region Repositório - Buscar Consulta Por ID ao Adicionar uma Consulta
+        public async Task<RegistroConsultaModel> BuscarPorIdAoAdicionar(int id)
+        {
+            var consulta = await _bancoContext.RegistrosConsultas
+                .Include(x => x.Medico)
+                .Include(x => x.Paciente)
+                .Include(x => x.Laudo)
+                .Include(x => x.Exame)
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            return consulta;
+
+        }
+        #endregion
+
         #region Repositório - Buscar Todas Consultas
         public async Task<List<RegistroConsultaModel>> BuscarTodosRegistrosConsultas()
         {

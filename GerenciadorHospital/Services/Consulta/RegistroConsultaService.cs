@@ -29,8 +29,10 @@ namespace GerenciadorHospital.Services.Consulta
         }
 
 
-        public async Task<RegistroConsultaModel> Adicionar(RegistroConsultaModel consultaModel)
+        public async Task<RegistroConsultaModel> Adicionar(RegistroConsultaDto consultaDto)
         {
+            RegistroConsultaModel consultaModel = new RegistroConsultaModel(consultaDto);
+
             ValidaConsulta validaConsulta = new ValidaConsulta(_consultaRepositorio, consultaModel, _pacienteRepositorio);
             var consultaValidada = validaConsulta.ValidacaoConsulta();
 
@@ -68,8 +70,10 @@ namespace GerenciadorHospital.Services.Consulta
             return apagado;
         }
 
-        public async Task<RegistroConsultaModel> Atualizar(RegistroConsultaModel consultaModel, int id)
+        public async Task<RegistroConsultaModel> Atualizar(RegistroConsultaDto consultaDto, int id)
         {
+            RegistroConsultaModel consultaModel = new RegistroConsultaModel(consultaDto);
+
             if (consultaModel.EstadoConsulta == Enums.StatusConsulta.Atendida)
             {
                 consultaModel.DataRetorno = DateTime.Now.AddDays(30);

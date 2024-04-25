@@ -109,17 +109,17 @@ namespace GerenciadorHospital.Controllers
         /// <summary>
         /// Cadastrar Médico
         /// </summary>
-        /// <param name="medicoModel">Dados do Médico</param>
+        /// <param name="medicoDto">Dados do Médico</param>
         /// <returns>Médico Cadastrado</returns>
         /// <response code="200">Médico Cadastrado com SUCESSO</response>
         [HttpPost]
         [Authorize(Policy = "ElevatedRights")]
-        public async Task<ActionResult<MedicoModel>> Adicionar(MedicoModel medicoModel)
+        public async Task<ActionResult<MedicoModel>> Adicionar(MedicoDto medicoDto)
         {
             try
             {
                 MedicoService medicoService = new MedicoService(_authenticationService, _medicoRepositorio, _logger);
-                var response = await medicoService.Adicionar(medicoModel);
+                var response = await medicoService.Adicionar(medicoDto);
 
                 return Ok(response);
             }
@@ -136,17 +136,17 @@ namespace GerenciadorHospital.Controllers
         /// Atualizar Médico
         /// </summary>
         /// <param name="id">ID do Médico</param>
-        /// <param name="medicoModel">Dados do Médico</param>
+        /// <param name="medicoDto">Dados do Médico</param>
         /// <returns>Médico Atualizado</returns>
         /// <response code="200">Médico Atualizado com SUCESSO</response>
         [HttpPut("{id}")]
         [Authorize(Policy = "ElevatedRights")]
-        public async Task<ActionResult<MedicoModel>> Atualizar(MedicoModel medicoModel, int id)
+        public async Task<ActionResult<MedicoModel>> Atualizar(MedicoDto medicoDto, int id)
         {
             try
             {
                 MedicoService medicoService = new MedicoService(_authenticationService, _medicoRepositorio, _logger);
-                var response = await medicoService.Atualizar(medicoModel, id);
+                var response = await medicoService.Atualizar(medicoDto, id);
 
                 return Ok(response);
             }

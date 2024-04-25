@@ -1,4 +1,5 @@
-﻿using GerenciadorHospital.Models;
+﻿using GerenciadorHospital.Dto;
+using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios;
 using GerenciadorHospital.Repositorios.Interfaces;
 using GerenciadorHospital.Services.Convenio;
@@ -79,16 +80,16 @@ namespace GerenciadorHospital.Controllers
         /// <summary>
         /// Cadastrar Convênio
         /// </summary>
-        /// <param name="convenioModel">Dados do convênio</param>
+        /// <param name="convenioDto">Dados do convênio</param>
         /// <response code="200">Convênio Cadastrado com SUCESSO</response>
         [HttpPost]
         [Authorize(Policy = "ElevatedRights")]
-        public async Task<ActionResult<ConvenioModel>> Adicionar([FromBody] ConvenioModel convenioModel)
+        public async Task<ActionResult<ConvenioModel>> Adicionar([FromBody] ConvenioDto convenioDto)
         {
             try
             {
                 ConvenioService convenioService = new ConvenioService(_convenioRepositorio, _logger);
-                var response = await convenioService.Adicionar(convenioModel);
+                var response = await convenioService.Adicionar(convenioDto);
 
                 return Ok(response);
             }
@@ -104,18 +105,18 @@ namespace GerenciadorHospital.Controllers
         /// <summary>
         /// Atualizar Convênio
         /// </summary>
-        /// <param name="convenioModel">Dados do Convênio</param>
+        /// <param name="convenioDto">Dados do Convênio</param>
         /// <param name="id">ID do Convênio</param>
         /// <returns>Os dados atualizados</returns>
         /// <response code="200">Convênio Atualizado com SUCESSO</response>
         [HttpPut("{id}")]
         [Authorize(Policy = "ElevatedRights")]
-        public async Task<ActionResult<ConvenioModel>> Atualizar([FromBody] ConvenioModel convenioModel, int id)
+        public async Task<ActionResult<ConvenioModel>> Atualizar([FromBody] ConvenioDto convenioDto, int id)
         {
             try
             {
                 ConvenioService convenioService = new ConvenioService(_convenioRepositorio, _logger);
-                var response = await convenioService.Atualizar(convenioModel, id);
+                var response = await convenioService.Atualizar(convenioDto, id);
 
                 return Ok(response);
             }

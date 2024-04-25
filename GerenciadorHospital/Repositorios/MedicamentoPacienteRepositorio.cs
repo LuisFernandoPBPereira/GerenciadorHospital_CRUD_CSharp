@@ -57,10 +57,10 @@ namespace GerenciadorHospital.Repositorios
             }
 
             //Atualizamos os devidos campos
-            medicamentoPorId.Nome = medicamentoPorId.Nome;
-            medicamentoPorId.Composicao = medicamentoPorId.Composicao;
-            medicamentoPorId.DataFabricacao = medicamentoPorId.DataFabricacao;
-            medicamentoPorId.DataValidade = medicamentoPorId.DataValidade;
+            medicamentoPorId.Nome = medicamento.Nome;
+            medicamentoPorId.Composicao = medicamento.Composicao;
+            medicamentoPorId.DataFabricacao = medicamento.DataFabricacao;
+            medicamentoPorId.DataValidade = medicamento.DataValidade;
 
             //Atualizamos no banco de dados e salvamos as alterações
             _bancoContext.MedicamentosPaciente.Update(medicamentoPorId);

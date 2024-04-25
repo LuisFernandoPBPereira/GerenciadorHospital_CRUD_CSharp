@@ -34,7 +34,7 @@ namespace GerenciadorHospital.Utils
                 }
             }
             //Buscamos a consulta e o paciente pelos IDs adquiridos 
-            RegistroConsultaModel consultaPorId = await _consultaRepositorio.BuscarPorId(consultaId);
+            RegistroConsultaModel consultaPorId = await _consultaRepositorio.BuscarPorIdAoAdicionar(consultaId);
             var paciente = _consultaModel.PacienteId;
             PacienteModel pacientePorId = await _pacienteRepositorio.BuscarPorId(paciente);
 

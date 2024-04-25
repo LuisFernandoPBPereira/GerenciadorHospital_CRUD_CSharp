@@ -1,4 +1,5 @@
 ﻿using GerenciadorHospital.Controllers;
+using GerenciadorHospital.Dto;
 using GerenciadorHospital.Enums;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
@@ -45,8 +46,9 @@ namespace GerenciadorHospital.Services.Convenio
             return convenio;
         }
 
-        public async Task<ConvenioModel> Adicionar(ConvenioModel convenioModel)
+        public async Task<ConvenioModel> Adicionar(ConvenioDto convenioDto)
         {
+            ConvenioModel convenioModel = new ConvenioModel(convenioDto);
             ConvenioModel convenio = await _convenioRepositorio.Adicionar(convenioModel);
 
             if (convenio is not null)
@@ -58,8 +60,9 @@ namespace GerenciadorHospital.Services.Convenio
             return convenio;
         }
 
-        public async Task<ConvenioModel> Atualizar(ConvenioModel convenioModel, int id)
+        public async Task<ConvenioModel> Atualizar(ConvenioDto convenioDto, int id)
         {
+            ConvenioModel convenioModel = new ConvenioModel(convenioDto);
             ConvenioModel convenio = await _convenioRepositorio.Atualizar(convenioModel, id);
 
             if (convenio is not null)

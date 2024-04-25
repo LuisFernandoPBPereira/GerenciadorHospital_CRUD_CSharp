@@ -1,4 +1,5 @@
 ﻿using GerenciadorHospital.Controllers;
+using GerenciadorHospital.Dto;
 using GerenciadorHospital.Enums;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
@@ -16,8 +17,9 @@ namespace GerenciadorHospital.Services.Medicamento
             _medicamentosPacienteRepositorio = medicamentosPacienteRepositorio;
             _logger = logger;
         }
-        public async Task<MedicamentoPacienteModel> Adicionar(MedicamentoPacienteModel medicamentoModel)
+        public async Task<MedicamentoPacienteModel> Adicionar(MedicamentoDto medicamentoDto)
         {
+            MedicamentoPacienteModel medicamentoModel = new MedicamentoPacienteModel(medicamentoDto);
             MedicamentoPacienteModel medicamentos = await _medicamentosPacienteRepositorio.Adicionar(medicamentoModel);
 
             if (medicamentos is not null)
@@ -40,8 +42,9 @@ namespace GerenciadorHospital.Services.Medicamento
             return apagado;
         }
 
-        public async Task<MedicamentoPacienteModel> Atualizar(MedicamentoPacienteModel medicamentoModel, int id)
+        public async Task<MedicamentoPacienteModel> Atualizar(MedicamentoDto medicamentoDto, int id)
         {
+            MedicamentoPacienteModel medicamentoModel = new MedicamentoPacienteModel(medicamentoDto);
             MedicamentoPacienteModel medicamentos = await _medicamentosPacienteRepositorio.Atualizar(medicamentoModel, id);
 
             if (medicamentos is not null)

@@ -1,4 +1,5 @@
 ﻿using GerenciadorHospital.Controllers;
+using GerenciadorHospital.Dto;
 using GerenciadorHospital.Enums;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
@@ -19,8 +20,9 @@ namespace GerenciadorHospital.Services.Laudo
             _logger = logger;
             _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Laudo)}: Os valores foram atribuídos no construtor da Service");
         }
-        public async Task<LaudoModel> Adicionar(LaudoModel laudoModel)
+        public async Task<LaudoModel> Adicionar(LaudoDto laudoDto)
         {
+            LaudoModel laudoModel = new LaudoModel(laudoDto);
             ValidaLaudo laudoValidado = new ValidaLaudo(laudoModel);
 
             if (laudoValidado.ValidaImagem())
@@ -51,8 +53,9 @@ namespace GerenciadorHospital.Services.Laudo
             return apagado;
         }
 
-        public async Task<LaudoModel> Atualizar(LaudoModel laudoModel, int id)
+        public async Task<LaudoModel> Atualizar(LaudoDto laudoDto, int id)
         {
+            LaudoModel laudoModel = new LaudoModel(laudoDto);
             ValidaLaudo validaLaudo = new ValidaLaudo(laudoModel);
 
             var laudoValidado = validaLaudo.ValidaImagem();

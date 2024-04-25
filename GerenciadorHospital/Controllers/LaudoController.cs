@@ -1,4 +1,5 @@
-﻿using GerenciadorHospital.Models;
+﻿using GerenciadorHospital.Dto;
+using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
 using GerenciadorHospital.Services.Laudo;
 using Microsoft.AspNetCore.Authorization;
@@ -132,17 +133,17 @@ namespace GerenciadorHospital.Controllers
         /// <summary>
         /// Cadastrar Laudo
         /// </summary>
-        /// <param name="laudoModel">Dados do Laudo</param>
+        /// <param name="laudoDto">Dados do Laudo</param>
         /// <returns>Laudo Cadastrado</returns>
         /// <response code="200">Laudo Cadastrado com SUCESSO</response>
         [HttpPost]
         [Authorize(Policy = "AdminAndDoctorRights")]
-        public async Task<ActionResult<LaudoModel>> Adicionar(LaudoModel laudoModel)
+        public async Task<ActionResult<LaudoModel>> Adicionar(LaudoDto laudoDto)
         {
             try
             {
                 LaudoService laudoService = new LaudoService(_laudoRepositorio, _logger);
-                var response = await laudoService.Adicionar(laudoModel);
+                var response = await laudoService.Adicionar(laudoDto);
 
                 return Ok(response);
             }
@@ -159,17 +160,17 @@ namespace GerenciadorHospital.Controllers
         /// Atualizar Laudo
         /// </summary>
         /// <param name="id">ID do Laudo</param>
-        /// <param name="laudoModel">Dados do Laudo</param>
+        /// <param name="laudoDto">Dados do Laudo</param>
         /// <returns>Laudo atualizado</returns>
         /// <response code="200">Laudo Atualizado com SUCESSO</response>
         [HttpPut("{id}")]
         [Authorize(Policy = "AdminAndDoctorRights")]
-        public async Task<ActionResult<LaudoModel>> Atualizar(LaudoModel laudoModel, int id)
+        public async Task<ActionResult<LaudoModel>> Atualizar(LaudoDto laudoDto, int id)
         {
             try
             {
                 LaudoService laudoService = new LaudoService(_laudoRepositorio, _logger);
-                var response = await laudoService.Atualizar(laudoModel, id);
+                var response = await laudoService.Atualizar(laudoDto, id);
 
                 return Ok(response);
             }

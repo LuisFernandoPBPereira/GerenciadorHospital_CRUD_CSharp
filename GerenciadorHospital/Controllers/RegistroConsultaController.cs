@@ -1,4 +1,5 @@
-﻿using GerenciadorHospital.Enums;
+﻿using GerenciadorHospital.Dto;
+using GerenciadorHospital.Enums;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios;
 using GerenciadorHospital.Repositorios.Interfaces;
@@ -141,17 +142,17 @@ namespace GerenciadorHospital.Controllers
         /// <summary>
         /// Cadastrar Consulta
         /// </summary>
-        /// <param name="consultaModel">Dados da Consulta</param>
+        /// <param name="consultaDto">Dados da Consulta</param>
         /// <returns>Consulta Cadastrada</returns>
         /// <response code="200">Consulta Cadastrada com SUCESSO</response>
         [HttpPost]
         [Authorize(Policy = "AdminAndDoctorRights")]
-        public async Task<ActionResult<RegistroConsultaModel>> Adicionar([FromBody] RegistroConsultaModel consultaModel)
+        public async Task<ActionResult<RegistroConsultaModel>> Adicionar([FromBody] RegistroConsultaDto consultaDto)
         {
             try
             {
                 RegistroConsultaService registroConsultaService = new RegistroConsultaService(_consultaRepositorio, _pacienteRepositorio, _logger);
-                var response = await registroConsultaService.Adicionar(consultaModel);
+                var response = await registroConsultaService.Adicionar(consultaDto);
 
                 return Ok(response);
             }
@@ -168,17 +169,17 @@ namespace GerenciadorHospital.Controllers
         /// Atualizar Consulta
         /// </summary>
         /// <param name="id">ID da Consulta</param>
-        /// <param name="consultaModel">Dados da Consulta</param>
+        /// <param name="consultaDto">Dados da Consulta</param>
         /// <returns>Consulta Atualizada</returns>
         /// <response code="200">Consulta Atualizada com SUCESSO</response>
         [HttpPut("{id}")]
         [Authorize(Policy = "AdminAndDoctorRights")]
-        public async Task<ActionResult<RegistroConsultaModel>> Atualizar([FromBody] RegistroConsultaModel consultaModel, int id)
+        public async Task<ActionResult<RegistroConsultaModel>> Atualizar([FromBody] RegistroConsultaDto consultaDto, int id)
         {
             try
             {
                 RegistroConsultaService registroConsultaService = new RegistroConsultaService(_consultaRepositorio, _pacienteRepositorio, _logger);
-                var response = await registroConsultaService.Atualizar(consultaModel, id);
+                var response = await registroConsultaService.Atualizar(consultaDto, id);
 
                 return Ok(response);
             }
