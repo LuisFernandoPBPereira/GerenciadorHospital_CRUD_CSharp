@@ -50,7 +50,6 @@ namespace GerenciadorHospital.Repositorios
         #region Repositório - Atualizar Laudo
         public async Task<LaudoModel> Atualizar(LaudoModel laudo, int id)
         {
-            //Pegamos um laudo por ID de forma assíncrona
             LaudoModel laudoPorId = await BuscarPorId(id);
             if (laudoPorId == null)
             {
@@ -91,8 +90,8 @@ namespace GerenciadorHospital.Repositorios
 
             }
             return await query 
-                .Include(x => x.Paciente)
-                .Include(x => x.Medico)
+                //.Include(x => x.Paciente)
+                //.Include(x => x.Medico)
                 .Include(x => x.Medicamento)
                 .ToListAsync();
         }
@@ -101,12 +100,8 @@ namespace GerenciadorHospital.Repositorios
         #region Repositório - Buscar Laudo Por ID
         public async Task<LaudoModel> BuscarPorId(int id)
         {
-            /*
-             * Retornamos o primeiro laudo ou o padrão, incluindo
-             * o objeto paciente, pois laudo e paciente estão relacionados
-            */
             return await _bancoContext.Laudos
-                .Include(x => x.Paciente)
+                //.Include(x => x.Paciente)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
         #endregion
@@ -114,9 +109,8 @@ namespace GerenciadorHospital.Repositorios
         #region Repositório - Buscar Todos Laudos
         public async Task<List<LaudoModel>> BuscarTodosLaudos()
         {
-            //Retornamos todos os laudos incluindo o objeto paciente
             return await _bancoContext.Laudos
-                .Include(x => x.Paciente)
+                //.Include(x => x.Paciente)
                 .ToListAsync();
         }
         #endregion

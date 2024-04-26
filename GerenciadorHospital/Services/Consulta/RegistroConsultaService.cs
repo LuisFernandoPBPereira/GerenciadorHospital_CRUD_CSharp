@@ -73,6 +73,11 @@ namespace GerenciadorHospital.Services.Consulta
         public async Task<RegistroConsultaModel> Atualizar(RegistroConsultaDto consultaDto, int id)
         {
             RegistroConsultaModel consultaModel = new RegistroConsultaModel(consultaDto);
+            ValidaConsulta validaConsulta = new ValidaConsulta(_consultaRepositorio, consultaModel, _pacienteRepositorio);
+            var consultaValidada = await validaConsulta.ValidacaoConsulta();
+
+            if (consultaValidada == false)
+                throw new Exception("Não foi possível atualizar a consulta.");
 
             if (consultaModel.EstadoConsulta == Enums.StatusConsulta.Atendida)
             {

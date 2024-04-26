@@ -1,7 +1,6 @@
 ﻿using GerenciadorHospital.Enums;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
-using Microsoft.AspNetCore.Mvc;
 
 namespace GerenciadorHospital.Utils
 {
@@ -36,34 +35,65 @@ namespace GerenciadorHospital.Utils
             var paciente = _consultaModel.PacienteId;
             PacienteModel pacientePorId = await _pacienteRepositorio.BuscarPorId(paciente);
 
-            if(_consultaModel.DataConsulta < DateTime.Now)
+            if(_consultaModel.DataConsulta < DateTime.Now && _consultaModel.Retorno == false)
                 throw new Exception("A consulta não pode ser marcada para uma data passada");
 
             if(_consultaModel.EstadoConsulta is < StatusConsulta.Agendada or > StatusConsulta.Expirada)
                 throw new Exception("Estado da consulta incorreto.");
 
+            if (_consultaModel.PacienteId is < 1)
+                throw new Exception("Informe um ID para o paciente corretamente");
+            
+            if (_consultaModel.MedicoId is < 1)
+                throw new Exception("Informe um ID para o médico corretamente");
+
+            if (_consultaModel.ExameId is < 1) 
+                throw new Exception("Informe um ID para o exame corretamente");
+
+            if(_consultaModel.LaudoIds != null)
+            {
+                foreach (var id in _consultaModel.LaudoIds)
+                {
+                    if (id < 1)
+                        throw new Exception("Informe IDs para os Laudos corretamente");
+                }
+
+            }
+
+            if (_consultaModel.EstadoConsulta == Enums.StatusConsulta.Atendida)
+                _consultaModel.DataRetorno = DateTime.Now.AddDays(30);
 
             if (consultaPorId != null)
             {
                 _consultaModel.Valor = 100;
-                _consultaModel.EstadoConsulta = Enums.StatusConsulta.Agendada;
                 
                 if (pacientePorId.TemConvenio)
-                {
                     _consultaModel.Valor = 0;
-                }
 
                 if (consultaPorId.EstadoConsulta == Enums.StatusConsulta.Expirada && pacientePorId.TemConvenio)
-                {
                     _consultaModel.Valor = 100;
-                }
 
-                if (consultaPorId.EstadoConsulta == Enums.StatusConsulta.Atendida && pacientePorId.TemConvenio)
+                if (_consultaModel.EstadoConsulta == Enums.StatusConsulta.Atendida)
                 {
-                    _consultaModel.Valor = 0;
+                    RegistroConsultaModel novaConsulta = new RegistroConsultaModel();
+                    novaConsulta.ExameId = _consultaModel.ExameId;
+                    novaConsulta.MedicoId = _consultaModel.MedicoId;
+                    novaConsulta.PacienteId = _consultaModel.PacienteId;
+                    novaConsulta.LaudoIds = _consultaModel.LaudoIds;
+                    novaConsulta.Valor = 0;
+                    novaConsulta.Retorno = true;
+                    novaConsulta.EstadoConsulta = StatusConsulta.Agendada;
+                    novaConsulta.DataConsulta = DateTime.Now.AddDays(30);
+                    novaConsulta.DataRetorno = novaConsulta.DataConsulta;
+
+                    var novoRetorno = await _consultaRepositorio.Adicionar(novaConsulta);
+
+                    if (novoRetorno is null)
+                        throw new Exception("Não foi possível atualizar a consulta");
                 }
 
-                if (consultaPorId.EstadoConsulta == Enums.StatusConsulta.Agendada)
+                if (consultaPorId.EstadoConsulta == Enums.StatusConsulta.Agendada && 
+                    _consultaModel.EstadoConsulta == Enums.StatusConsulta.Agendada)
                 {
                     return false;
                 }

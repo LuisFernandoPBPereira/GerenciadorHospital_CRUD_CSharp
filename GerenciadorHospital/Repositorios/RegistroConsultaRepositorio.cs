@@ -176,7 +176,7 @@ namespace GerenciadorHospital.Repositorios
                 .Include(x => x.Laudo)
                 .ToListAsync();
 
-            List<LaudoModel> listaLaudos = new List<LaudoModel> ();
+            List<LaudoModel> listaLaudos = new List<LaudoModel>();
 
             foreach (var registroConsulta in consultas)
             {

@@ -10,6 +10,7 @@ namespace GerenciadorHospital.Models
         public decimal? Valor { get; set; }
         public DateTime? DataRetorno { get; set; }
         public StatusConsulta? EstadoConsulta { get; set; }
+        public bool Retorno { get; set; }
         public int PacienteId { get; set; }
         public int? MedicoId { get; set; }
         public List<int>? LaudoIds { get; set; }
@@ -27,6 +28,7 @@ namespace GerenciadorHospital.Models
             Valor = consultaDto.Valor;
             DataRetorno = consultaDto.DataRetorno;
             EstadoConsulta = consultaDto.EstadoConsulta;
+            Retorno = consultaDto.Retorno;
             PacienteId = consultaDto.PacienteId;
             MedicoId = consultaDto.MedicoId;
             LaudoIds = consultaDto.LaudoIds;
