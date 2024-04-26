@@ -12,6 +12,8 @@ namespace GerenciadorHospital.Services.Exame
         private readonly ITipoExameRepositorio _tipoExameRepositorio;
         private readonly ILogger<TipoExameController> _logger;
         MensagensLog mensagensLog = new MensagensLog();
+
+        #region Construtor
         public TipoExameService(ITipoExameRepositorio tipoExameRepositorio,
                                 ILogger<TipoExameController> logger)
         {
@@ -19,6 +21,9 @@ namespace GerenciadorHospital.Services.Exame
             _logger = logger;
             _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Exame)}: Os valores foram atribuídos no construtor da Service");
         }
+        #endregion
+
+        #region Service - Adicionar Exame
         public async Task<TipoExameModel> Adicionar(TipoExameDto exameDto)
         {
             TipoExameModel tipoExameModel = new TipoExameModel(exameDto);
@@ -32,9 +37,11 @@ namespace GerenciadorHospital.Services.Exame
             else
                 _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_POST_Exame)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_POST_Exame)}");
 
-            return exame;
+            return exame ?? throw new Exception("Não foi possível cadastrar o exame");
         }
+        #endregion
 
+        #region Service - Apagar Exame
         public async Task<bool> Apagar(int id)
         {
             bool apagado = await _tipoExameRepositorio.Apagar(id);
@@ -46,7 +53,9 @@ namespace GerenciadorHospital.Services.Exame
 
             return apagado;
         }
+        #endregion
 
+        #region Service - Atualizar Exame
         public async Task<TipoExameModel> Atualizar(TipoExameDto exameDto, int id)
         {
             TipoExameModel tipoExameModel = new TipoExameModel(exameDto);
@@ -60,9 +69,11 @@ namespace GerenciadorHospital.Services.Exame
             else
                 _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_PUT_Exame)}:  {mensagensLog.ExibirMensagem(CodigosLogErro.E_PUT_Exame)}");
 
-            return exame;
+            return exame ?? throw new Exception("Não foi possível atualizar o exame");
         }
+        #endregion
 
+        #region Service - Buscar Exame Por ID
         public async Task<TipoExameModel> BuscarPorId(int id)
         {
             TipoExameModel exames = await _tipoExameRepositorio.BuscarPorId(id);
@@ -74,9 +85,11 @@ namespace GerenciadorHospital.Services.Exame
                                         {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Exame)} ->
                                         Busca de exme com ID: {id} não foi realizada");
 
-            return exames;
+            return exames ?? throw new Exception("Não foi possível buscar o exame por ID");
         }
+        #endregion
 
+        #region Service - Buscar Todos Exames
         public async Task<List<TipoExameModel>> BuscarTodosExames()
         {
             List<TipoExameModel> exames = await _tipoExameRepositorio.BuscarTodosExames();
@@ -86,7 +99,8 @@ namespace GerenciadorHospital.Services.Exame
             else
                 _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_GET_Exame)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Exame)}");
 
-            return exames;
+            return exames ?? throw new Exception("Não foi possível buscar todos exames");
         }
+        #endregion
     }
 }

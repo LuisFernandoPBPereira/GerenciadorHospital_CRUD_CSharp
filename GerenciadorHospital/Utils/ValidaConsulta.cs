@@ -50,11 +50,11 @@ namespace GerenciadorHospital.Utils
             if (_consultaModel.ExameId is < 1) 
                 throw new Exception("Informe um ID para o exame corretamente");
 
-            if(_consultaModel.LaudoIds != null)
+            if (_consultaModel.LaudoIds != null)
             {
                 foreach (var id in _consultaModel.LaudoIds)
                 {
-                    if (id < 1)
+                    if (id < 0)
                         throw new Exception("Informe IDs para os Laudos corretamente");
                 }
 
@@ -90,12 +90,6 @@ namespace GerenciadorHospital.Utils
 
                     if (novoRetorno is null)
                         throw new Exception("Não foi possível atualizar a consulta");
-                }
-
-                if (consultaPorId.EstadoConsulta == Enums.StatusConsulta.Agendada && 
-                    _consultaModel.EstadoConsulta == Enums.StatusConsulta.Agendada)
-                {
-                    return false;
                 }
             }
             return true;

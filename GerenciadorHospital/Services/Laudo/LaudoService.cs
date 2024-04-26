@@ -26,9 +26,7 @@ namespace GerenciadorHospital.Services.Laudo
             ValidaLaudo validaLaudo = new ValidaLaudo(laudoModel);
             validaLaudo.ValidacaoLaudo();
 
-            ValidaLaudo laudoValidado = new ValidaLaudo(laudoModel);
-
-            if (laudoValidado.ValidaImagem())
+            if (validaLaudo.ValidaImagem())
             {
                 LaudoModel laudo = await _laudoRepositorio.Adicionar(laudoModel);
 
