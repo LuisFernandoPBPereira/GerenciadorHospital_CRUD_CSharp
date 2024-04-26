@@ -5,11 +5,14 @@ namespace GerenciadorHospital.Dto
 {
     public class PacienteDto
     {
-        public string Nome { get; set; }
+        // Doc: O campo não anulável precisa conter um valor não nulo ao sair do construtor. Considere declará-lo como anulável.
+        #pragma warning disable CS8618
+
+        public string Nome { get; set; } = string.Empty;
         [RegularExpression(Consts.RegexCPF, ErrorMessage = Consts.ErroDeValidacaoCPF)]
-        public string Cpf { get; set; }
-        public string Senha { get; set; }
-        public string Endereco { get; set; }
+        public string Cpf { get; set; } = string.Empty;
+        public string Senha { get; set; } = string.Empty;
+        public string Endereco { get; set; } = string.Empty;
         public DateTime DataNasc { get; set; }
         public bool TemConvenio { get; set; }
         [NotMapped]

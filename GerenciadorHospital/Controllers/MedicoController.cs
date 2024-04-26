@@ -14,16 +14,13 @@ namespace GerenciadorHospital.Controllers
     [ApiController]
     public class MedicoController : ControllerBase
     {
-        private readonly IMedicoRepositorio _medicoRepositorio;
-        private readonly IAuthenticationService _authenticationService;
+        private readonly IMedicoService _medicoService;
         private readonly ILogger<MedicoController> _logger;
         #region Construtor
-        public MedicoController(IMedicoRepositorio medicoRepositorio,
-                                IAuthenticationService authenticationService,
-                                ILogger<MedicoController> logger)
+        public MedicoController(ILogger<MedicoController> logger,
+                                IMedicoService medicoService)
         {
-            _medicoRepositorio = medicoRepositorio;
-            _authenticationService = authenticationService;
+            _medicoService = medicoService;
             _logger = logger;
         }
         #endregion
@@ -40,8 +37,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                MedicoService medicoService = new MedicoService(_authenticationService, _medicoRepositorio, _logger);
-                var response = await medicoService.BuscarTodosMedicos();
+                var response = await _medicoService.BuscarTodosMedicos();
 
                 return Ok(response);
             }
@@ -66,9 +62,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                MedicoService medicoService = new MedicoService(_authenticationService, _medicoRepositorio, _logger);
-                var response = await medicoService.BuscarPorId(id);
-
+                var response = await _medicoService.BuscarPorId(id);
                 return Ok(response);
             }
             catch (Exception erro)
@@ -92,8 +86,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                MedicoService medicoService = new MedicoService(_authenticationService, _medicoRepositorio, _logger);
-                var response = await medicoService.BuscarDocMedicoPorId(id);
+                var response = await _medicoService.BuscarDocMedicoPorId(id);
 
                 return response;
             }
@@ -118,9 +111,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                MedicoService medicoService = new MedicoService(_authenticationService, _medicoRepositorio, _logger);
-                var response = await medicoService.Adicionar(medicoDto);
-
+                var response = await _medicoService.Adicionar(medicoDto);
                 return Ok(response);
             }
             catch (Exception erro)
@@ -145,9 +136,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                MedicoService medicoService = new MedicoService(_authenticationService, _medicoRepositorio, _logger);
-                var response = await medicoService.Atualizar(medicoDto, id);
-
+                var response = await _medicoService.Atualizar(medicoDto, id);
                 return Ok(response);
             }
             catch (Exception erro)
@@ -171,9 +160,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                MedicoService medicoService = new MedicoService(_authenticationService, _medicoRepositorio, _logger);
-                var response = await medicoService.Apagar(id);
-
+                var response = await _medicoService.Apagar(id);
                 return Ok(response);
             }
             catch (Exception erro)

@@ -13,13 +13,13 @@ namespace GerenciadorHospital.Controllers
     [ApiController]
     public class ConvenioController : ControllerBase
     {
-        private readonly IConvenioRepositorio _convenioRepositorio;
+        private readonly IConvenioService _convenioService;
         private readonly ILogger<ConvenioController> _logger;
         #region Construtor
-        public ConvenioController(IConvenioRepositorio convenioRepositorio, 
-                                  ILogger<ConvenioController> logger)
+        public ConvenioController(ILogger<ConvenioController> logger,
+                                  IConvenioService convenioService)
         {
-            _convenioRepositorio = convenioRepositorio;
+            _convenioService = convenioService;
             _logger = logger;
             _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Convenio)}: Os valores foram atribuídos no construtor da Controller");
         }
@@ -37,9 +37,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                ConvenioService convenioService = new ConvenioService(_convenioRepositorio, _logger);
-                var response  = await convenioService.BuscarTodosConvenios();
-
+                var response  = await _convenioService.BuscarTodosConvenios();
                 return Ok(response);
             }
             catch (Exception erro)
@@ -63,9 +61,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                ConvenioService convenioService = new ConvenioService(_convenioRepositorio, _logger);
-                var response = await convenioService.BuscarPorId(id);
-
+                var response = await _convenioService.BuscarPorId(id);
                 return Ok(response);
             }
             catch (Exception erro)
@@ -88,9 +84,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                ConvenioService convenioService = new ConvenioService(_convenioRepositorio, _logger);
-                var response = await convenioService.Adicionar(convenioDto);
-
+                var response = await _convenioService.Adicionar(convenioDto);
                 return Ok(response);
             }
             catch (Exception erro)
@@ -115,9 +109,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                ConvenioService convenioService = new ConvenioService(_convenioRepositorio, _logger);
-                var response = await convenioService.Atualizar(convenioDto, id);
-
+                var response = await _convenioService.Atualizar(convenioDto, id);
                 return Ok(response);
             }
             catch (Exception erro)
@@ -141,9 +133,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                ConvenioService convenioService = new ConvenioService(_convenioRepositorio, _logger);
-                var response = await convenioService.Apagar(id);
-
+                var response = await _convenioService.Apagar(id);
                 return Ok(response);
             }
             catch (Exception erro)

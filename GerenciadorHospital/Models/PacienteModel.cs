@@ -5,6 +5,8 @@ namespace GerenciadorHospital.Models
 {
     public class PacienteModel
     {
+        // Doc: O campo não anulável precisa conter um valor não nulo ao sair do construtor. Considere declará-lo como anulável.
+        #pragma warning disable CS8618
         public int Id { get; set; }
         public string Nome { get; set; } = string.Empty;
         public string Cpf { get; set; } = string.Empty;

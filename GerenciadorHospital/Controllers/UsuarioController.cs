@@ -1,14 +1,7 @@
-﻿using Azure.Core;
-using GerenciadorHospital.Dto;
-using GerenciadorHospital.Entities;
-using GerenciadorHospital.Extensions;
-using GerenciadorHospital.Models;
-using GerenciadorHospital.Repositorios.Interfaces;
+﻿using GerenciadorHospital.Dto;
 using GerenciadorHospital.Services;
 using GerenciadorHospital.Services.Usuario;
-using GerenciadorHospital.Utils;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GerenciadorHospital.Controllers
@@ -17,15 +10,15 @@ namespace GerenciadorHospital.Controllers
     [ApiController]
     public class UsuarioController : ControllerBase
     {
-        private readonly IAuthenticationService _authenticationService;
+        private readonly IUsuarioService _usuarioService;
         private readonly ILogger<UsuarioController> _logger;
 
         #region Construtor
-        public UsuarioController(IAuthenticationService authenticationService, 
-                                 ILogger<UsuarioController> logger)
+        public UsuarioController(ILogger<UsuarioController> logger,
+                                 IUsuarioService usuarioService)
         {
-            _authenticationService = authenticationService;
             _logger = logger;
+            _usuarioService = usuarioService;
         }
         #endregion
 
@@ -42,9 +35,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                UsuarioService usuarioService = new UsuarioService(_authenticationService, _logger);
-                var response = await usuarioService.Cadastrar(usuarioModel);
-
+                var response = await _usuarioService.Cadastrar(usuarioModel);
                 return Ok(response);
             }
             catch (Exception erro)
@@ -62,9 +53,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                UsuarioService usuarioService = new UsuarioService(_authenticationService, _logger);
-                var response = await usuarioService.Login(usuarioModel);
-
+                var response = await _usuarioService.Login(usuarioModel);
                 return Ok(response);
             }
             catch (Exception erro)

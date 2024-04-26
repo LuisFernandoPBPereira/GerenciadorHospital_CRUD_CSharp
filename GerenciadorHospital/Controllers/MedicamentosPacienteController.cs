@@ -12,13 +12,13 @@ namespace GerenciadorHospital.Controllers
     [ApiController]
     public class MedicamentosPacienteController : ControllerBase
     {
-        private readonly IMedicamentosPacienteRepositorio _medicamentosPacienteRepositorio;
+        private readonly IMedicamentosService _medicamentosService;
         private readonly ILogger<MedicamentosPacienteController> _logger;
         #region Construtor
-        public MedicamentosPacienteController(IMedicamentosPacienteRepositorio medicamentoRepositorio,
+        public MedicamentosPacienteController(IMedicamentosService medicamentosService,
                                               ILogger<MedicamentosPacienteController> logger)
         {
-            _medicamentosPacienteRepositorio = medicamentoRepositorio;
+            _medicamentosService = medicamentosService;
             _logger = logger;
             _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Medicamento)}: Os valores foram atribuídos no construtor na Controller");
         }
@@ -36,8 +36,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                MedicamentosService medicamentosService = new MedicamentosService(_medicamentosPacienteRepositorio, _logger);
-                var response = await medicamentosService.BuscarTodosMedicamentosPaciente();
+                var response = await _medicamentosService.BuscarTodosMedicamentosPaciente();
 
                 return Ok(response);
             }
@@ -62,9 +61,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                MedicamentosService medicamentosService = new MedicamentosService(_medicamentosPacienteRepositorio, _logger);
-                var response = await medicamentosService.BuscarPorId(id);
-
+                var response = await _medicamentosService.BuscarPorId(id);
                 return Ok(response);
             }
             catch (Exception erro)
@@ -88,9 +85,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                MedicamentosService medicamentosService = new MedicamentosService(_medicamentosPacienteRepositorio, _logger);
-                var response = await medicamentosService.Adicionar(medicamentoDto);
-
+                var response = await _medicamentosService.Adicionar(medicamentoDto);
                 return Ok(response);
             }
             catch (Exception erro)
@@ -115,9 +110,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                MedicamentosService medicamentosService = new MedicamentosService(_medicamentosPacienteRepositorio, _logger);
-                var response = await medicamentosService.Atualizar(medicamentoDto, id);
-
+                var response = await _medicamentosService.Atualizar(medicamentoDto, id);
                 return Ok(response);
             }
             catch (Exception erro)
@@ -141,8 +134,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                MedicamentosService medicamentosService = new MedicamentosService(_medicamentosPacienteRepositorio, _logger);
-                var response = await medicamentosService.Apagar(id);
+                var response = await _medicamentosService.Apagar(id);
 
                 return Ok(response);
             }

@@ -12,13 +12,13 @@ namespace GerenciadorHospital.Controllers
     [ApiController]
     public class LaudoController : ControllerBase
     {
-        private readonly ILaudoRepositorio _laudoRepositorio;
+        private readonly ILaudoService _laudoService;
         private readonly ILogger<LaudoController> _logger;
         #region Construtor
-        public LaudoController(ILaudoRepositorio laudoRepositorio, 
-                               ILogger<LaudoController> logger)
+        public LaudoController(ILogger<LaudoController> logger,
+                               ILaudoService laudoService)
         {
-            _laudoRepositorio = laudoRepositorio;
+            _laudoService = laudoService;
             _logger = logger;
         }
         #endregion
@@ -35,9 +35,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                LaudoService laudoService = new LaudoService(_laudoRepositorio, _logger);
-                var response = await laudoService.BuscarTodosLaudos();
-                
+                var response = await _laudoService.BuscarTodosLaudos();   
                 return Ok(response);
             }
             catch (Exception erro)
@@ -61,8 +59,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                LaudoService laudoService = new LaudoService(_laudoRepositorio, _logger);
-                var response = await laudoService.BuscarPorId(id);
+                var response = await _laudoService.BuscarPorId(id);
 
                 return Ok(response);
             }
@@ -87,9 +84,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                LaudoService laudoService = new LaudoService(_laudoRepositorio, _logger);
-                var response = await laudoService.BuscarImagemLaudoPorId(id);
-
+                var response = await _laudoService.BuscarImagemLaudoPorId(id);
                 return response;
             }
             catch (Exception erro)
@@ -116,9 +111,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                LaudoService laudoService = new LaudoService(_laudoRepositorio, _logger);
-                var response = await laudoService.BuscarLaudo(dataInicial, dataFinal, medicoId, pacienteId);
-
+                var response = await _laudoService.BuscarLaudo(dataInicial, dataFinal, medicoId, pacienteId);
                 return Ok(response);
             }
             catch (Exception erro)
@@ -142,9 +135,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                LaudoService laudoService = new LaudoService(_laudoRepositorio, _logger);
-                var response = await laudoService.Adicionar(laudoDto);
-
+                var response = await _laudoService.Adicionar(laudoDto);
                 return Ok(response);
             }
             catch (Exception erro)
@@ -169,9 +160,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                LaudoService laudoService = new LaudoService(_laudoRepositorio, _logger);
-                var response = await laudoService.Atualizar(laudoDto, id);
-
+                var response = await _laudoService.Atualizar(laudoDto, id);
                 return Ok(response);
             }
             catch (Exception erro)
@@ -195,9 +184,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                LaudoService laudoService = new LaudoService(_laudoRepositorio, _logger);
-                var response = await laudoService.Apagar(id);
-
+                var response = await _laudoService.Apagar(id);
                 return Ok(response);
             }
             catch (Exception erro)

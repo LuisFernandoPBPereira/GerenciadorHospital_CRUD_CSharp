@@ -15,6 +15,14 @@ using System.Text;
 using NLog;
 using NLog.Web;
 using GerenciadorHospital.Utils;
+using GerenciadorHospital.Services.Consulta;
+using GerenciadorHospital.Services.Convenio;
+using GerenciadorHospital.Services.Exame;
+using GerenciadorHospital.Services.Laudo;
+using GerenciadorHospital.Services.Medicamento;
+using GerenciadorHospital.Services.Medico;
+using GerenciadorHospital.Services.Paciente;
+using GerenciadorHospital.Services.Usuario;
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 logger.Debug("init main");
@@ -126,6 +134,14 @@ builder.Services.AddSwaggerGen(c =>
 #region Configuração das Injeções de Dependência (adição do escopo)
 //Configuramos as injeções de dependências para podermos acessar a controller
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<IRegistroConsultaService, RegistroConsultaService>();
+builder.Services.AddScoped<IConvenioService, ConvenioService>();
+builder.Services.AddScoped<ITipoExameService, TipoExameService>();
+builder.Services.AddScoped<ILaudoService, LaudoService>();
+builder.Services.AddScoped<IMedicamentosService, MedicamentosService>();
+builder.Services.AddScoped<IMedicoService, MedicoService>();
+builder.Services.AddScoped<IPacienteService, PacienteService>();
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IPacienteRepositorio, PacienteRepositorio>();
 builder.Services.AddScoped<IConvenioRepositorio, ConvenioRepositorio>();
 builder.Services.AddScoped<IMedicoRepositorio, MedicoRepositorio>();

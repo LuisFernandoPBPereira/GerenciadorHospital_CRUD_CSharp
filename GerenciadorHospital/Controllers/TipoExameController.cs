@@ -12,13 +12,13 @@ namespace GerenciadorHospital.Controllers
     [ApiController]
     public class TipoExameController : ControllerBase
     {
-        private readonly ITipoExameRepositorio _tipoExameRepositorio;
+        private readonly ITipoExameService _tipoExameService;
         private readonly ILogger<TipoExameController> _logger;
         #region Construtor
-        public TipoExameController(ITipoExameRepositorio tipoExameRepositorio, 
-                                   ILogger<TipoExameController> logger)
+        public TipoExameController(ILogger<TipoExameController> logger,
+                                   ITipoExameService tipoExameService)
         {
-            _tipoExameRepositorio = tipoExameRepositorio;
+            _tipoExameService = tipoExameService;
             _logger = logger;
         }
         #endregion
@@ -35,9 +35,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                TipoExameService tipoExameService = new TipoExameService(_tipoExameRepositorio, _logger);
-                var response = await tipoExameService.BuscarTodosExames();
-
+                var response = await _tipoExameService.BuscarTodosExames();
                 return Ok(response);
             }
             catch (Exception erro)
@@ -61,9 +59,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                TipoExameService tipoExameService = new TipoExameService(_tipoExameRepositorio, _logger);
-                var response = await tipoExameService.BuscarPorId(id);
-
+                var response = await _tipoExameService.BuscarPorId(id);
                 return Ok(response);
             }
             catch(Exception erro)
@@ -87,9 +83,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                TipoExameService tipoExameService = new TipoExameService(_tipoExameRepositorio, _logger);
-                var response = await tipoExameService.Adicionar(exameDto);
-
+                var response = await _tipoExameService.Adicionar(exameDto);
                 return Ok(response);
             }
             catch (Exception erro)
@@ -114,9 +108,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                TipoExameService tipoExameService = new TipoExameService(_tipoExameRepositorio, _logger);
-                var response = await tipoExameService.Atualizar(exameDto, id);
-
+                var response = await _tipoExameService.Atualizar(exameDto, id);
                 return Ok(response);
             }
             catch (Exception erro)
@@ -140,9 +132,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                TipoExameService tipoExameService = new TipoExameService(_tipoExameRepositorio, _logger);
-                var response = await tipoExameService.Apagar(id);
-
+                var response = await _tipoExameService.Apagar(id);
                 return Ok(response);
             }
             catch (Exception erro)

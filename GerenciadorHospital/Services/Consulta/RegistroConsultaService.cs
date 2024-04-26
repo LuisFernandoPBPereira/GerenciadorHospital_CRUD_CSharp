@@ -1,13 +1,9 @@
 ﻿using GerenciadorHospital.Controllers;
 using GerenciadorHospital.Dto;
-using GerenciadorHospital.Entities;
 using GerenciadorHospital.Enums;
 using GerenciadorHospital.Models;
-using GerenciadorHospital.Repositorios;
 using GerenciadorHospital.Repositorios.Interfaces;
 using GerenciadorHospital.Utils;
-using System.Globalization;
-using System.Runtime.Intrinsics.X86;
 
 namespace GerenciadorHospital.Services.Consulta
 {

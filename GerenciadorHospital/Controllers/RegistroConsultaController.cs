@@ -16,18 +16,15 @@ namespace GerenciadorHospital.Controllers
     [ApiController]
     public class RegistroConsultaController : ControllerBase
     {
-        private readonly IRegistroConsultaRepositorio _consultaRepositorio;
-        private readonly IPacienteRepositorio _pacienteRepositorio;
+        private readonly IRegistroConsultaService _registroConsultaService;
         private readonly ILogger<RegistroConsultaController> _logger;
         #region Construtor
-        public RegistroConsultaController(IRegistroConsultaRepositorio consultaRepositorio, 
-                                          IPacienteRepositorio pacienteRepositorio,
-                                          ILogger<RegistroConsultaController> logger)
+        public RegistroConsultaController(ILogger<RegistroConsultaController> logger,
+                                          IRegistroConsultaService registroConsultaService)
         {
-            _consultaRepositorio = consultaRepositorio;
-            _pacienteRepositorio = pacienteRepositorio;
             _logger = logger;
             _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Consulta)}: Os valores foram atribuídos no construtor da Controller.");
+            _registroConsultaService = registroConsultaService;
         }
         #endregion
 
@@ -42,10 +39,8 @@ namespace GerenciadorHospital.Controllers
         public async Task<ActionResult<List<RegistroConsultaModel>>> BuscarTodosRegistrosConsultas()
         {
             try
-            {
-                RegistroConsultaService registroConsultaService = new RegistroConsultaService(_consultaRepositorio, _pacienteRepositorio, _logger);
-                var response = await registroConsultaService.BuscarTodosRegistrosConsultas();
-
+            {                
+                var response = await _registroConsultaService.BuscarTodosRegistrosConsultas();
                 return Ok(response);
             }
             catch (Exception erro)
@@ -69,8 +64,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                RegistroConsultaService registroConsultaService = new RegistroConsultaService(_consultaRepositorio, _pacienteRepositorio, _logger);
-                var response = await registroConsultaService.BuscarPorId(id);
+                var response = await _registroConsultaService.BuscarPorId(id);
 
                 return Ok(response);
             }
@@ -96,9 +90,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                RegistroConsultaService registroConsultaService = new RegistroConsultaService(_consultaRepositorio, _pacienteRepositorio, _logger);
-                var response = await registroConsultaService.BuscarConsultaPorPacienteId(id, statusConsulta);
-
+                var response = await _registroConsultaService.BuscarConsultaPorPacienteId(id, statusConsulta);
                 return Ok(response);
             }
             catch (Exception erro)
@@ -125,9 +117,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                RegistroConsultaService registroConsultaService = new RegistroConsultaService(_consultaRepositorio, _pacienteRepositorio, _logger);
-                var response = await registroConsultaService.BuscarConsultaPorMedicoId(id, statusConsulta, dataInicial, dataFinal);
-
+                var response = await _registroConsultaService.BuscarConsultaPorMedicoId(id, statusConsulta, dataInicial, dataFinal);
                 return Ok(response);
             }
             catch (Exception erro)
@@ -151,9 +141,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                RegistroConsultaService registroConsultaService = new RegistroConsultaService(_consultaRepositorio, _pacienteRepositorio, _logger);
-                var response = await registroConsultaService.Adicionar(consultaDto);
-
+                var response = await _registroConsultaService.Adicionar(consultaDto);
                 return Ok(response);
             }
             catch (Exception erro)
@@ -178,9 +166,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                RegistroConsultaService registroConsultaService = new RegistroConsultaService(_consultaRepositorio, _pacienteRepositorio, _logger);
-                var response = await registroConsultaService.Atualizar(consultaDto, id);
-
+                var response = await _registroConsultaService.Atualizar(consultaDto, id);
                 return Ok(response);
             }
             catch (Exception erro)
@@ -204,9 +190,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                RegistroConsultaService registroConsultaService = new RegistroConsultaService(_consultaRepositorio, _pacienteRepositorio, _logger);
-                var response = await registroConsultaService.Apagar(id);
-
+                var response = await _registroConsultaService.Apagar(id);
                 return Ok(response);
             }
             catch (Exception erro)

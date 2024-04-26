@@ -4,7 +4,7 @@ namespace GerenciadorHospital.Dto
 {
     public class LaudoDto
     {
-        public string Descricao { get; set; }
+        public string Descricao { get; set; } = string.Empty;
         public DateTime? DataCriacao { get; set; }
         [NotMapped]
         public IFormFile? ImagemLaudo { get; set; }
