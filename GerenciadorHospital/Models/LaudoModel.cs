@@ -14,6 +14,7 @@ namespace GerenciadorHospital.Models
         public int? PacienteId { get; set; }
         public int? MedicoId { get; set; }
         public int? MedicamentoId { get; set; }
+        public int? RegistroConsultaModelId { get; set; }
         public virtual PacienteModel? Paciente { get; set; }
         public virtual MedicoModel? Medico { get; set; }
         public virtual MedicamentoPacienteModel? Medicamento { get; set; }
@@ -28,6 +29,7 @@ namespace GerenciadorHospital.Models
             PacienteId = laudoDto.PacienteId;
             MedicoId = laudoDto.MedicoId;
             MedicamentoId = laudoDto.MedicamentoId;
+            RegistroConsultaModelId = laudoDto.ConsultaId;
         }
     }
 }

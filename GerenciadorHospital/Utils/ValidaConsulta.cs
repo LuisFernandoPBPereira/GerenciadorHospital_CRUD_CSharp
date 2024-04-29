@@ -50,16 +50,6 @@ namespace GerenciadorHospital.Utils
             if (_consultaModel.ExameId is < 1) 
                 throw new Exception("Informe um ID para o exame corretamente");
 
-            if (_consultaModel.LaudoIds != null)
-            {
-                foreach (var id in _consultaModel.LaudoIds)
-                {
-                    if (id < 0)
-                        throw new Exception("Informe IDs para os Laudos corretamente");
-                }
-
-            }
-
             if (_consultaModel.EstadoConsulta == Enums.StatusConsulta.Atendida)
                 _consultaModel.DataRetorno = DateTime.Now.AddDays(30);
 
@@ -79,7 +69,6 @@ namespace GerenciadorHospital.Utils
                     novaConsulta.ExameId = _consultaModel.ExameId;
                     novaConsulta.MedicoId = _consultaModel.MedicoId;
                     novaConsulta.PacienteId = _consultaModel.PacienteId;
-                    novaConsulta.LaudoIds = _consultaModel.LaudoIds;
                     novaConsulta.Valor = 0;
                     novaConsulta.Retorno = true;
                     novaConsulta.EstadoConsulta = StatusConsulta.Agendada;

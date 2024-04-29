@@ -4,6 +4,7 @@ using GerenciadorHospital.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GerenciadorHospital.Migrations
 {
     [DbContext(typeof(BancoContext))]
-    partial class BancoContextModelSnapshot : ModelSnapshot
+    [Migration("20240429124728_ModelConsulta2")]
+    partial class ModelConsulta2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -72,16 +75,15 @@ namespace GerenciadorHospital.Migrations
                     b.Property<int?>("PacienteId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("RegistroConsultaModelConsultaId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("RegistroConsultaModelId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("MedicamentoId");
-
-                    b.HasIndex("MedicoId");
-
-                    b.HasIndex("PacienteId");
 
                     b.HasIndex("RegistroConsultaModelId");
 
@@ -510,23 +512,11 @@ namespace GerenciadorHospital.Migrations
                         .WithMany()
                         .HasForeignKey("MedicamentoId");
 
-                    b.HasOne("GerenciadorHospital.Models.MedicoModel", "Medico")
-                        .WithMany()
-                        .HasForeignKey("MedicoId");
-
-                    b.HasOne("GerenciadorHospital.Models.PacienteModel", "Paciente")
-                        .WithMany()
-                        .HasForeignKey("PacienteId");
-
                     b.HasOne("GerenciadorHospital.Models.RegistroConsultaModel", null)
                         .WithMany("Laudo")
                         .HasForeignKey("RegistroConsultaModelId");
 
                     b.Navigation("Medicamento");
-
-                    b.Navigation("Medico");
-
-                    b.Navigation("Paciente");
                 });
 
             modelBuilder.Entity("GerenciadorHospital.Models.PacienteModel", b =>

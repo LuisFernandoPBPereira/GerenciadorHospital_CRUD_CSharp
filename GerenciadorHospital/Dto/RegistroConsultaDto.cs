@@ -11,7 +11,6 @@ namespace GerenciadorHospital.Dto
         public bool Retorno { get; set; }
         public int PacienteId { get; set; }
         public int? MedicoId { get; set; }
-        public List<int>? LaudoIds { get; set; }
         public int? ExameId { get; set; }
     }
 }

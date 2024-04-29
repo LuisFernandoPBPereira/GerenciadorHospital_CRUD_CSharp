@@ -10,7 +10,6 @@ namespace GerenciadorHospital.Repositorios
 {
     public class RegistroConsultaRepositorio : IRegistroConsultaRepositorio
     {
-        //Criamos o conexto do banco de dados
         private readonly BancoContext _bancoContext;
         #region Construtor
         //Injetamos no construtor
@@ -52,24 +51,20 @@ namespace GerenciadorHospital.Repositorios
         #region Repositório - Atualizar Consulta
         public async Task<RegistroConsultaModel> Atualizar(RegistroConsultaModel registroConsulta, int id)
         {
-            //Pegamos a consulta pelo ID de forma assíncrona
             RegistroConsultaModel consultaPorId = await BuscarPorId(id);
             if (consultaPorId == null)
             {
                 throw new Exception($"Consulta para o ID: {id} não foi encontrado no banco de dados.");
             }
 
-            //Atualizamos os devidos campos
             consultaPorId.EstadoConsulta = registroConsulta.EstadoConsulta;
             consultaPorId.DataConsulta = registroConsulta.DataConsulta;
             consultaPorId.DataRetorno = registroConsulta.DataRetorno;
             consultaPorId.Valor = registroConsulta.Valor;
             consultaPorId.MedicoId = registroConsulta.MedicoId;
             consultaPorId.PacienteId = registroConsulta.PacienteId;
-            consultaPorId.LaudoIds = registroConsulta.LaudoIds;
             consultaPorId.ExameId = registroConsulta.ExameId;
 
-            //Atualizamos no banco de dados e salvamos as alterações
             _bancoContext.RegistrosConsultas.Update(consultaPorId);
             await _bancoContext.SaveChangesAsync();
 
@@ -130,22 +125,6 @@ namespace GerenciadorHospital.Repositorios
             if(consulta is null)
                 throw new Exception("Nenhuma consulta foi encontrada");
 
-            List<LaudoModel> listaLaudos = new List<LaudoModel>();
-            
-            consulta.Laudo.Clear();
-
-            if (consulta.LaudoIds is null) throw new Exception("Consulta com id de laudo nulo");
-
-            for (int i = 0; i < consulta.LaudoIds.Count(); i++)
-            {
-
-                var laudoModels = await _bancoContext.Laudos.Where(l => l.Id == consulta.LaudoIds[i]).ToListAsync();
-                listaLaudos.AddRange(laudoModels);
-                laudoModels.Clear();
-            }
-            consulta.Laudo.AddRange(listaLaudos);
-            listaLaudos.Clear();
-
             return consulta;
             
         }
@@ -175,25 +154,6 @@ namespace GerenciadorHospital.Repositorios
                 .Include(x => x.Exame)
                 .Include(x => x.Laudo)
                 .ToListAsync();
-
-            List<LaudoModel> listaLaudos = new List<LaudoModel>();
-
-            foreach (var registroConsulta in consultas)
-            {
-                registroConsulta.Laudo.Clear();
-
-                if (registroConsulta.LaudoIds is null) throw new Exception("Consulta com id de laudo nulo");
-
-                for (int i = 0; i < registroConsulta.LaudoIds.Count(); i++)
-                {
-                    var laudoModels = await _bancoContext.Laudos.Where(l => l.Id == registroConsulta.LaudoIds[i]).ToListAsync();
-                    listaLaudos.AddRange(laudoModels);
-
-                    laudoModels.Clear();
-                }
-                registroConsulta.Laudo.AddRange(listaLaudos);
-                listaLaudos.Clear();
-            }
 
             return consultas;
         }

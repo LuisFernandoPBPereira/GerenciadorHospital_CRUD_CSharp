@@ -11,5 +11,6 @@ namespace GerenciadorHospital.Dto
         public int? PacienteId { get; set; }
         public int? MedicoId { get; set; }
         public int? MedicamentoId { get; set; }
+        public int? ConsultaId { get; set; }
     }
 }

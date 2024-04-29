@@ -15,6 +15,7 @@ namespace GerenciadorHospital.Data.Map
             builder.Property(x => x.PacienteId);
             builder.Property(x => x.MedicoId);
             builder.Property(x => x.MedicamentoId);
+            builder.Property(x => x.RegistroConsultaModelId);
             builder.HasOne(x => x.Paciente);
             builder.HasOne(x => x.Medico);
             builder.HasOne(x => x.Medicamento);
