@@ -1,11 +1,11 @@
 ﻿using GerenciadorHospital.Dto;
-using GerenciadorHospital.Services;
 using GerenciadorHospital.Services.Usuario;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GerenciadorHospital.Controllers
 {
+    [Tags("Login e Cadastro")]
     [Route("api/[controller]")]
     [ApiController]
     public class UsuarioController : ControllerBase

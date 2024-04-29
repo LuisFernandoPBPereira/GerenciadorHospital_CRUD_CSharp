@@ -30,10 +30,10 @@ namespace GerenciadorHospital.Utils
                     consultaId = itemConsulta.Id;
             }
 
-            RegistroConsultaModel consultaPorId = await _consultaRepositorio.BuscarPorIdAoAdicionar(consultaId);
+            RegistroConsultaModel? consultaPorId = await _consultaRepositorio.BuscarPorIdAoAdicionar(consultaId);
 
             var paciente = _consultaModel.PacienteId;
-            PacienteModel pacientePorId = await _pacienteRepositorio.BuscarPorId(paciente);
+            PacienteModel? pacientePorId = await _pacienteRepositorio.BuscarPorId(paciente);
 
             if(_consultaModel.DataConsulta < DateTime.Now && _consultaModel.Retorno == false)
                 throw new Exception("A consulta não pode ser marcada para uma data passada");
@@ -53,7 +53,7 @@ namespace GerenciadorHospital.Utils
             if (_consultaModel.EstadoConsulta == Enums.StatusConsulta.Atendida)
                 _consultaModel.DataRetorno = DateTime.Now.AddDays(30);
 
-            if (consultaPorId != null)
+            if (consultaPorId is not null && pacientePorId is not null)
             {
                 _consultaModel.Valor = 100;
                 

@@ -69,17 +69,17 @@ namespace GerenciadorHospital.Services
             if (user is null)
                 throw new Exception("Usuário e/ou senha incorretos, tente novamente");
 
-            var isValidSenha = senhaComHash.VerifyHashedPassword(user, user.Senha, request.Senha);
+            var isValidSenha = senhaComHash.VerifyHashedPassword(user, user.Senha!, request.Senha!);
 
             if(isValidSenha == PasswordVerificationResult.Success)
             {
-                if (user is null || !await _usuarioRepositorio.CheckPasswordAsync(user, user.Senha))
+                if (user is null || !await _usuarioRepositorio.CheckPasswordAsync(user, user.Senha!))
                     throw new Exception("Usuário e/ou senha incorretos, tente novamente.");
 
                 var authClaims = new List<Claim>
                 {
-                    new(ClaimTypes.Name, user.UserName),
-                    new(ClaimTypes.Role, user.Role),
+                    new(ClaimTypes.Name, user.UserName!),
+                    new(ClaimTypes.Role, user.Role!),
                     new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
 
@@ -100,7 +100,7 @@ namespace GerenciadorHospital.Services
         #region Service - Geração do Token JWT
         private JwtSecurityToken GetToken(IEnumerable<Claim> authClaims)
         {
-            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]!));
 
             var token = new JwtSecurityToken(
                 issuer: _configuration["JWT:ValidIssuer"],

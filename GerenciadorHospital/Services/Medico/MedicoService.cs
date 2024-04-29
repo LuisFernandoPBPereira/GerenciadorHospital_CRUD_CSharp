@@ -99,9 +99,9 @@ namespace GerenciadorHospital.Services.Medico
         #region Service - Buscar Documento do Médico Por ID
         public async Task<FileContentResult> BuscarDocMedicoPorId(int id)
         {
-            MedicoModel medico = await _medicoRepositorio.BuscarDocMedicoPorId(id);
+            MedicoModel? medico = await _medicoRepositorio.BuscarDocMedicoPorId(id);
 
-            string caminho = medico.CaminhoDoc ?? string.Empty;
+            string caminho = medico!.CaminhoDoc ?? string.Empty;
 
             ValidaMedico imagem = new ValidaMedico(medico);
 
@@ -120,7 +120,7 @@ namespace GerenciadorHospital.Services.Medico
         #region Service - Buscar Medico Por ID
         public async Task<MedicoModel> BuscarPorId(int id)
         {
-            MedicoModel medicos = await _medicoRepositorio.BuscarPorId(id);
+            MedicoModel? medicos = await _medicoRepositorio.BuscarPorId(id);
 
             if (medicos is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Medico)}: Busca do médico com ID: {id} foi realizada.");

@@ -1,5 +1,4 @@
-﻿using GerenciadorHospital.Dto;
-using GerenciadorHospital.Models;
+﻿using GerenciadorHospital.Models;
 using Microsoft.IdentityModel.Tokens;
 
 namespace GerenciadorHospital.Utils

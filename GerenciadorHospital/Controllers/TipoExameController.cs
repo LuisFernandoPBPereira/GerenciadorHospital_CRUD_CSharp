@@ -1,13 +1,12 @@
 ﻿using GerenciadorHospital.Dto;
 using GerenciadorHospital.Models;
-using GerenciadorHospital.Repositorios.Interfaces;
 using GerenciadorHospital.Services.Exame;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GerenciadorHospital.Controllers
 {
+    [Tags("Exame")]
     [Route("api/[controller]")]
     [ApiController]
     public class TipoExameController : ControllerBase

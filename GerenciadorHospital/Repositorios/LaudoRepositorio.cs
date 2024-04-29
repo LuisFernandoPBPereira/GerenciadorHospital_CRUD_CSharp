@@ -8,10 +8,8 @@ namespace GerenciadorHospital.Repositorios
 {
     public class LaudoRepositorio : ILaudoRepositorio
     {
-        //Criamos a variável de contexto do banco de dados
         private readonly BancoContext _bancoContext;
         #region Construtor
-        //Injetamos o contexto no construtor
         public LaudoRepositorio(BancoContext bancoContext)
         {
             _bancoContext = bancoContext;
@@ -21,7 +19,6 @@ namespace GerenciadorHospital.Repositorios
         #region Repositório - Adicionar Laudo
         public async Task<LaudoModel> Adicionar(LaudoModel laudo)
         {
-            //Adicionamos na tabela Laudos e salvamos as alterações
             laudo.DataCriacao = DateTime.Now;
             await _bancoContext.Laudos.AddAsync(laudo);
             await _bancoContext.SaveChangesAsync();
@@ -33,13 +30,11 @@ namespace GerenciadorHospital.Repositorios
         #region Repositório - Apagar Laudo
         public async Task<bool> Apagar(int id)
         {
-            //Pegamos um laudo por ID de forma assíncrona
             LaudoModel? laudoPorId = await BuscarPorId(id);
+
             if (laudoPorId == null)
-            {
                 throw new Exception($"Laudo para o ID: {id} não foi encontrado no banco de dados.");
-            }
-            //Removemos do banco de dados e salvamos as alterações
+            
             _bancoContext.Laudos.Remove(laudoPorId);
             await _bancoContext.SaveChangesAsync();
 
@@ -51,10 +46,9 @@ namespace GerenciadorHospital.Repositorios
         public async Task<LaudoModel> Atualizar(LaudoModel laudo, int id)
         {
             LaudoModel? laudoPorId = await BuscarPorId(id);
+            
             if (laudoPorId == null)
-            {
                 throw new Exception($"Laudo para o ID: {id} não foi encontrado no banco de dados.");
-            }
 
             laudoPorId.Descricao = laudo.Descricao;
             laudoPorId.PacienteId = laudo.PacienteId;

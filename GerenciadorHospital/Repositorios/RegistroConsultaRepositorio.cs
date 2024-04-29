@@ -12,7 +12,6 @@ namespace GerenciadorHospital.Repositorios
     {
         private readonly BancoContext _bancoContext;
         #region Construtor
-        //Injetamos no construtor
         public RegistroConsultaRepositorio(BancoContext bancoContext)
         {
             _bancoContext = bancoContext;
@@ -22,7 +21,6 @@ namespace GerenciadorHospital.Repositorios
         #region Repositório - Adicionar Consulta
         public async Task<RegistroConsultaModel> Adicionar(RegistroConsultaModel registroConsulta)
         {
-            //Adicionamos uma consulta na tabela RegistrosConsultas e salvamos as alterações
             await _bancoContext.RegistrosConsultas.AddAsync(registroConsulta);
             await _bancoContext.SaveChangesAsync();
 
@@ -33,14 +31,11 @@ namespace GerenciadorHospital.Repositorios
         #region Repositório - Apagar Consulta
         public async Task<bool> Apagar(int id)
         {
-            //Pegamos a primeira consulta pelo ID de forma assíncrona
             RegistroConsultaModel consultaPorId = await BuscarPorId(id);
-            if (consultaPorId == null)
-            {
-                throw new Exception($"Consulta para o ID: {id} não foi encontrado no banco de dados.");
-            }
 
-            //Removemos do banco de dados e salvamos as alterações
+            if (consultaPorId == null)
+                throw new Exception($"Consulta para o ID: {id} não foi encontrado no banco de dados.");
+
             _bancoContext.RegistrosConsultas.Remove(consultaPorId);
             await _bancoContext.SaveChangesAsync();
 
@@ -52,11 +47,10 @@ namespace GerenciadorHospital.Repositorios
         public async Task<RegistroConsultaModel> Atualizar(RegistroConsultaModel registroConsulta, int id)
         {
             RegistroConsultaModel consultaPorId = await BuscarPorId(id);
+            
             if (consultaPorId == null)
-            {
                 throw new Exception($"Consulta para o ID: {id} não foi encontrado no banco de dados.");
-            }
-
+            
             consultaPorId.EstadoConsulta = registroConsulta.EstadoConsulta;
             consultaPorId.DataConsulta = registroConsulta.DataConsulta;
             consultaPorId.DataRetorno = registroConsulta.DataRetorno;

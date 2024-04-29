@@ -7,10 +7,8 @@ namespace GerenciadorHospital.Repositorios
 {
     public class ConvenioRepositorio : IConvenioRepositorio
     {
-        //Criamos uma variável de contexto
         private readonly BancoContext _bancoContext;
         #region Construtor
-        //Iniciamos o construtor e injetamos o contexto do banco de dados
         public ConvenioRepositorio(BancoContext bancoContext)
         {
             _bancoContext = bancoContext;
@@ -20,7 +18,6 @@ namespace GerenciadorHospital.Repositorios
         #region Repositório - Adicionar Convênio
         public async Task<ConvenioModel> Adicionar(ConvenioModel convenio)
         {
-            //Os dados recebidos são inseridos na tabela Convenios
             await _bancoContext.Convenios.AddAsync(convenio);
             await _bancoContext.SaveChangesAsync();
 
@@ -32,13 +29,10 @@ namespace GerenciadorHospital.Repositorios
         #region Repositório - Apagar Convênio
         public async Task<bool> Apagar(int id)
         {
-            //Pegamos um convênio por Id de forma assíncrona
             ConvenioModel? convenioPorId = await BuscarPorId(id);
             if (convenioPorId == null)
-            {
                 throw new Exception($"Convênio para o ID: {id} não foi encontrado no banco de dados.");
-            }
-            //Removemos da tabela Convenios e salvamos as alterações
+            
             _bancoContext.Convenios.Remove(convenioPorId);
             await _bancoContext.SaveChangesAsync();
 
@@ -75,7 +69,6 @@ namespace GerenciadorHospital.Repositorios
         #region Repositório - Buscar Todos Convênios
         public async Task<List<ConvenioModel>> BuscarTodosConvenios()
         {
-            //Buscamos todos os Convenios
             return await _bancoContext.Convenios.ToListAsync();
         }
         #endregion

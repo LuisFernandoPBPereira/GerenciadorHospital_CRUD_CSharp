@@ -76,7 +76,7 @@ namespace GerenciadorHospital.Services.Exame
         #region Service - Buscar Exame Por ID
         public async Task<TipoExameModel> BuscarPorId(int id)
         {
-            TipoExameModel exames = await _tipoExameRepositorio.BuscarPorId(id);
+            TipoExameModel? exames = await _tipoExameRepositorio.BuscarPorId(id);
 
             if (exames is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Exame)}: Busca de exame com ID: {id} foi realizada");

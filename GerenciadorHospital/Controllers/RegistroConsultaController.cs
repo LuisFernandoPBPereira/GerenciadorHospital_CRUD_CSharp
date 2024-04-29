@@ -1,17 +1,13 @@
 ﻿using GerenciadorHospital.Dto;
 using GerenciadorHospital.Enums;
 using GerenciadorHospital.Models;
-using GerenciadorHospital.Repositorios;
-using GerenciadorHospital.Repositorios.Interfaces;
 using GerenciadorHospital.Services.Consulta;
-using GerenciadorHospital.Utils;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
 
 namespace GerenciadorHospital.Controllers
 {
+    [Tags("Consulta")]
     [Route("api/[controller]")]
     [ApiController]
     public class RegistroConsultaController : ControllerBase

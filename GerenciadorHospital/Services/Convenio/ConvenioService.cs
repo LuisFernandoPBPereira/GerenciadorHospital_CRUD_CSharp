@@ -4,8 +4,6 @@ using GerenciadorHospital.Enums;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
 using GerenciadorHospital.Utils;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 
 namespace GerenciadorHospital.Services.Convenio
 {
@@ -42,7 +40,7 @@ namespace GerenciadorHospital.Services.Convenio
         #region Service - Buscar Convênio por ID
         public async Task<ConvenioModel> BuscarPorId(int id)
         {
-            ConvenioModel convenio = await _convenioRepositorio.BuscarPorId(id);
+            ConvenioModel? convenio = await _convenioRepositorio.BuscarPorId(id);
 
             if (convenio is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Convenio)}: Busca de convênio com o ID: {id} realizada.");

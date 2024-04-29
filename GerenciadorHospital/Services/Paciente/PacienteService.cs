@@ -108,8 +108,8 @@ namespace GerenciadorHospital.Services.Paciente
         #region Service - Atualizar Documento do Paciente
         public async Task<DocumentoImagemDto> AtualizarDoc(DocumentoImagemDto documentoImagemDto, int id)
         {
-            PacienteModel paciente = await _pacienteRepositorio.BuscarPorId(id);
-            ValidaImagem validaImagem = new ValidaImagem(documentoImagemDto, paciente);
+            PacienteModel? paciente = await _pacienteRepositorio.BuscarPorId(id);
+            ValidaImagem validaImagem = new ValidaImagem(documentoImagemDto, paciente!);
 
             var requestDtoValidado = validaImagem.ValidacaoImagem();
 
@@ -120,7 +120,7 @@ namespace GerenciadorHospital.Services.Paciente
                 throw new Exception("Não foi possível atualizar a imagem");
             }
 
-            await _pacienteRepositorio.Atualizar(paciente, id);
+            await _pacienteRepositorio.Atualizar(paciente!, id);
 
             _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Paciente)}: Atualização da imagem foi realizada");
 
@@ -131,13 +131,12 @@ namespace GerenciadorHospital.Services.Paciente
         #region Service - Buscar Documento do Convênio do Paciente Por ID
         public async Task<FileContentResult> BuscarDocConvenioPorId(int id)
         {
-            //Capturamos o paciente pelo ID
-            PacienteModel paciente = await _pacienteRepositorio.BuscarDocConvenioPorId(id);
+            PacienteModel? paciente = await _pacienteRepositorio.BuscarDocConvenioPorId(id);
 
-            if (paciente.TemConvenio == false)
+            if (paciente is not null && paciente.TemConvenio == false)
                 throw new Exception("Este paciente não possui convênio");
 
-            string caminho = paciente.ImgCarteiraDoConvenio ?? string.Empty;
+            string caminho = paciente!.ImgCarteiraDoConvenio ?? string.Empty;
 
             var imagem = new BuscaImagem(paciente);
 
@@ -156,9 +155,9 @@ namespace GerenciadorHospital.Services.Paciente
         #region Service - Buscar Documento do Paciente Por ID
         public async Task<FileContentResult> BuscarDocPorId(int id)
         {
-            PacienteModel paciente = await _pacienteRepositorio.BuscarDocPorId(id);
+            PacienteModel? paciente = await _pacienteRepositorio.BuscarDocPorId(id);
 
-            string caminho = paciente.ImgDocumento ?? string.Empty;
+            string caminho = paciente!.ImgDocumento ?? string.Empty;
 
             var imagem = new BuscaImagem(paciente);
 
@@ -177,7 +176,7 @@ namespace GerenciadorHospital.Services.Paciente
         #region Service - Buscar Paciente Por ID
         public async Task<PacienteModel> BuscarPorId(int id)
         {
-            PacienteModel paciente = await _pacienteRepositorio.BuscarPorId(id);
+            PacienteModel? paciente = await _pacienteRepositorio.BuscarPorId(id);
 
             if (paciente is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Paciente)}: Busca do paciente com ID: {id}, foi realizada.");

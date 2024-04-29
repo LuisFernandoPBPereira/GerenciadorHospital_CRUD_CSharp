@@ -1,7 +1,6 @@
 ﻿using FileTypeChecker;
 using GerenciadorHospital.Dto;
 using GerenciadorHospital.Models;
-using GerenciadorHospital.Repositorios.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GerenciadorHospital.Utils

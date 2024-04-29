@@ -88,10 +88,10 @@ namespace GerenciadorHospital.Services.Laudo
         #region Service - Buscar Imagem do Laudo Por ID
         public async Task<FileContentResult> BuscarImagemLaudoPorId(int id)
         {
-            LaudoModel laudo = await _laudoRepositorio.BuscarImagemLaudoPorId(id);
-            ValidaLaudo validaLaudo = new ValidaLaudo(laudo);
+            LaudoModel? laudo = await _laudoRepositorio.BuscarImagemLaudoPorId(id);
+            ValidaLaudo validaLaudo = new ValidaLaudo(laudo!);
 
-            string caminho = laudo.CaminhoImagemLaudo ?? string.Empty;
+            string caminho = laudo!.CaminhoImagemLaudo ?? string.Empty;
             var imagem = validaLaudo.BuscarImagemLaudo(caminho);
 
             if (imagem is not null)
@@ -124,7 +124,7 @@ namespace GerenciadorHospital.Services.Laudo
         #region Service - Buscar Laudo Por ID
         public async Task<LaudoModel> BuscarPorId(int id)
         {
-            LaudoModel laudo = await _laudoRepositorio.BuscarPorId(id);
+            LaudoModel? laudo = await _laudoRepositorio.BuscarPorId(id);
 
             if (laudo is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Laudo)}: Busca do laudo com o ID: {id} foi realizada.");

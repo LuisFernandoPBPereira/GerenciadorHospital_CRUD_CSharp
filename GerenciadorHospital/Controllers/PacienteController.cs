@@ -1,18 +1,12 @@
-﻿using FileTypeChecker;
-using FileTypeChecker.Abstracts;
-using GerenciadorHospital.Dto;
-using GerenciadorHospital.Entities;
+﻿using GerenciadorHospital.Dto;
 using GerenciadorHospital.Models;
-using GerenciadorHospital.Repositorios.Interfaces;
-using GerenciadorHospital.Services;
 using GerenciadorHospital.Services.Paciente;
-using GerenciadorHospital.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace GerenciadorHospital.Controllers;
 
+[Tags("Paciente")]
 [Route("api/[controller]")]
 [ApiController]
 public class PacienteController : ControllerBase

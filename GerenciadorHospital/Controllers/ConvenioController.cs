@@ -1,14 +1,12 @@
 ﻿using GerenciadorHospital.Dto;
 using GerenciadorHospital.Models;
-using GerenciadorHospital.Repositorios;
-using GerenciadorHospital.Repositorios.Interfaces;
 using GerenciadorHospital.Services.Convenio;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GerenciadorHospital.Controllers
 {
+    [Tags("Convênio")]
     [Route("api/[controller]")]
     [ApiController]
     public class ConvenioController : ControllerBase

@@ -75,7 +75,7 @@ namespace GerenciadorHospital.Services.Medicamento
         #region Service - Buscar Laudo Por ID
         public async Task<MedicamentoPacienteModel> BuscarPorId(int id)
         {
-            MedicamentoPacienteModel medicamentos = await _medicamentosPacienteRepositorio.BuscarPorId(id);
+            MedicamentoPacienteModel? medicamentos = await _medicamentosPacienteRepositorio.BuscarPorId(id);
 
             if (medicamentos is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Medicamento)}: Busca de medicamento com ID: {id} foi realizada.");
