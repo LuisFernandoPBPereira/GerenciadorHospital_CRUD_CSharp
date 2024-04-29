@@ -1,4 +1,5 @@
 ﻿using GerenciadorHospital.Dto;
+using GerenciadorHospital.Dto.Responses;
 using GerenciadorHospital.Enums;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Services.Consulta;
@@ -56,13 +57,13 @@ namespace GerenciadorHospital.Controllers
         /// <response code="200">Consulta Retornada com SUCESSO</response>
         [HttpGet("{id}")]
         [Authorize(Policy = "AdminAndDoctorRights")]
-        public async Task<ActionResult<List<RegistroConsultaModel>>> BuscarPorId(int id)
+        public async Task<ActionResult<List<ConsultaResponseDto>>> BuscarPorId(int id)
         {
             try
             {
                 var response = await _registroConsultaService.BuscarPorId(id);
-
-                return Ok(response);
+                ConsultaResponseDto consultaResponse = new ConsultaResponseDto(response);
+                return Ok(consultaResponse);
             }
             catch (Exception erro)
             {

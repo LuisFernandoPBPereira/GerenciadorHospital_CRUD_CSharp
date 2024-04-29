@@ -71,29 +71,25 @@ namespace GerenciadorHospital.Services
 
             var isValidSenha = senhaComHash.VerifyHashedPassword(user, user.Senha!, request.Senha!);
 
-            if(isValidSenha == PasswordVerificationResult.Success)
+            if(isValidSenha == PasswordVerificationResult.Failed)
             {
-                if (user is null || !await _usuarioRepositorio.CheckPasswordAsync(user, user.Senha!))
-                    throw new Exception("Usuário e/ou senha incorretos, tente novamente.");
-
-                var authClaims = new List<Claim>
-                {
-                    new(ClaimTypes.Name, user.UserName!),
-                    new(ClaimTypes.Role, user.Role!),
-                    new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                };
-
-                var userRoles = await _usuarioRepositorio.GetRolesAsync(user);
-
-                authClaims.AddRange(userRoles.Select(userRole => new Claim(ClaimTypes.Role, userRole)));
-
-                var token = GetToken(authClaims);
-
-                return Result.Ok(new JwtSecurityTokenHandler().WriteToken(token));
+                return Result.Fail(new Error($"Usuário e/ou senha incorretos, tente novamente"));
             }
 
-            return Result.Fail(new Error($"Não foi possível autenticar o usuário {request.UserName}"));
+            var authClaims = new List<Claim>
+            {
+                new(ClaimTypes.Name, user.UserName!),
+                new(ClaimTypes.Role, user.Role!),
+                new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            };
 
+            var userRoles = await _usuarioRepositorio.GetRolesAsync(user);
+
+            authClaims.AddRange(userRoles.Select(userRole => new Claim(ClaimTypes.Role, userRole)));
+
+            var token = GetToken(authClaims);
+
+            return Result.Ok(new JwtSecurityTokenHandler().WriteToken(token));
         }
         #endregion
 

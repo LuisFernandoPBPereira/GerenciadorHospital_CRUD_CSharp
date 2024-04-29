@@ -46,8 +46,8 @@ namespace GerenciadorHospital.Services.Usuario
 
             if (!resultadoDto.IsSuccess)
             {
-                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_POST_Usuario)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_POST_Usuario)}, {resultadoDto}");
-                throw new Exception(resultadoDto.ToString());
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_POST_Usuario)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_POST_Usuario)}, {resultadoDto.Erros!.FirstOrDefault()}");
+                throw new Exception(resultadoDto.Erros!.FirstOrDefault());
             }
 
             _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Usuario)}: Login do usuário foi realizado");
