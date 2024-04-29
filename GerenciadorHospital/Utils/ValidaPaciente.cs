@@ -19,9 +19,6 @@ namespace GerenciadorHospital.Utils
             if (_pacienteModel.Cpf.IsNullOrEmpty()) 
                 throw new Exception("Informe um CPF para o paciente");
 
-            if (_pacienteModel.DataNasc == null)
-                throw new Exception("Informe uma data de nascimento para o paciente");
-
             if (_pacienteModel.DataNasc > DateTime.Now || _pacienteModel.DataNasc.Year < 1900) 
                 throw new Exception("Informe uma data de nascimento corretamente");
 

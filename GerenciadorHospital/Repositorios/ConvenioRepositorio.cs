@@ -33,7 +33,7 @@ namespace GerenciadorHospital.Repositorios
         public async Task<bool> Apagar(int id)
         {
             //Pegamos um convênio por Id de forma assíncrona
-            ConvenioModel convenioPorId = await BuscarPorId(id);
+            ConvenioModel? convenioPorId = await BuscarPorId(id);
             if (convenioPorId == null)
             {
                 throw new Exception($"Convênio para o ID: {id} não foi encontrado no banco de dados.");
@@ -49,18 +49,14 @@ namespace GerenciadorHospital.Repositorios
         #region Repositório - Atualizar Convênio
         public async Task<ConvenioModel> Atualizar(ConvenioModel convenio, int id)
         {
-            //Pegamos um convênio por Id de forma assíncrona
-            ConvenioModel convenioPorId = await BuscarPorId(id);
-            if (convenioPorId == null)
-            {
-                throw new Exception($"Convênio para o ID: {id} não foi encontrado no banco de dados.");
-            }
+            ConvenioModel? convenioPorId = await BuscarPorId(id);
 
-            //Atualizamos os devidos campos
+            if (convenioPorId == null)
+                throw new Exception($"Convênio para o ID: {id} não foi encontrado no banco de dados.");
+
             convenioPorId.Nome = convenio.Nome;
             convenioPorId.Preco = convenio.Preco;
             
-            //Atualizamos a tabela Convenios e salvamos as alterações
             _bancoContext.Convenios.Update(convenioPorId);
             await _bancoContext.SaveChangesAsync();
 
@@ -69,9 +65,8 @@ namespace GerenciadorHospital.Repositorios
         #endregion
 
         #region Repositório - Buscar Convênio Por ID
-        public async Task<ConvenioModel> BuscarPorId(int id)
+        public async Task<ConvenioModel?> BuscarPorId(int id)
         {
-            //Retornamos o primeiro ou o padrão achado pelo id na tabela Convenios
             return await _bancoContext.Convenios.FirstOrDefaultAsync(x => x.Id == id);
 
         }

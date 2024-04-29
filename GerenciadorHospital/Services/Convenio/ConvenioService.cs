@@ -35,7 +35,7 @@ namespace GerenciadorHospital.Services.Convenio
             else
                 _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_GET_Convenio)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Convenio)}");
             
-            return convenios ?? throw new Exception("Não foi possível buscar todos os convênios");
+            return convenios ?? throw new Exception("Não foi possível buscar todos os convênios, a busca retornou nulo");
         }
         #endregion
 
@@ -51,7 +51,7 @@ namespace GerenciadorHospital.Services.Convenio
                                         {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Convenio)} ->
                                         Busca de convênio com o ID: {id} realizada, porém sem conteúdo.");
 
-            return convenio ?? throw new Exception("Não foi possível buscar convênio por ID");
+            return convenio ?? throw new Exception("Não foi possível buscar convênio por ID, a busca retornou nulo");
         }
         #endregion
 
@@ -69,7 +69,7 @@ namespace GerenciadorHospital.Services.Convenio
             else
                 _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_POST_Convenio)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_POST_Convenio)}");
 
-            return convenio ?? throw new Exception("Não foi possível cadastrar convênio");
+            return convenio ?? throw new Exception("Não foi possível cadastrar convênio, a response foi nula");
         }
         #endregion
 
@@ -89,7 +89,7 @@ namespace GerenciadorHospital.Services.Convenio
                                         {mensagensLog.ExibirMensagem(CodigosLogErro.E_PUT_Convenio)} ->
                                         Atualização do convênio não foi concluída.");
 
-            return convenio ?? throw new Exception("Não foi possível atualizar o convênio");
+            return convenio ?? throw new Exception("Não foi possível atualizar o convênio, a response foi nula");
         }
         #endregion
 

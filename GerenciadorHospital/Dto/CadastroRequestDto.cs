@@ -38,5 +38,16 @@ namespace GerenciadorHospital.Dto
             Endereco = pacienteModel.Endereco;
             Role = Entities.Role.Paciente;
         }
+        
+        public CadastroRequestDto(MedicoModel medicoModel)
+        {
+            Nome = medicoModel.Nome;
+            UserName = medicoModel.Crm;
+            Cpf = medicoModel.Cpf;
+            Senha = medicoModel.Senha;
+            DataNasc = medicoModel.DataNasc;
+            Endereco = medicoModel.Endereco;
+            Role = Entities.Role.Medico;
+        }
     }
 }

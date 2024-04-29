@@ -18,6 +18,7 @@ namespace GerenciadorHospital.Services.Medico
         BCryptPasswordHasher<MedicoModel> senhaComHash = new BCryptPasswordHasher<MedicoModel>();
         MensagensLog mensagensLog = new MensagensLog();
 
+        #region Construtor
         public MedicoService(IAuthenticationService authenticationService,
                              IMedicoRepositorio medicoRepositorio,
                              ILogger<MedicoController> logger)
@@ -26,6 +27,9 @@ namespace GerenciadorHospital.Services.Medico
             _medicoRepositorio = medicoRepositorio;
             _logger = logger;
         }
+        #endregion
+
+        #region Service - Adicionar Médico
         public async Task<MedicoModel> Adicionar(MedicoDto medicoDto)
         {
             MedicoModel medicoModel = new MedicoModel(medicoDto);
@@ -37,17 +41,7 @@ namespace GerenciadorHospital.Services.Medico
             if (medicoValidado == false)
                 throw new Exception("Não foi possível carregar a imagem");
 
-
-            CadastroRequestDto novoMedico = new CadastroRequestDto();
-
-            novoMedico.Nome = medicoModel.Nome;
-            novoMedico.UserName = medicoModel.Crm;
-            novoMedico.Cpf = medicoModel.Cpf;
-            novoMedico.Senha = medicoModel.Senha;
-            novoMedico.DataNasc = medicoModel.DataNasc;
-            novoMedico.Endereco = medicoModel.Endereco;
-            novoMedico.Role = Role.Medico;
-
+            CadastroRequestDto novoMedico = new CadastroRequestDto(medicoModel);
             
             var medicoCadastrado = await _authenticationService.Register(novoMedico);
             
@@ -61,9 +55,11 @@ namespace GerenciadorHospital.Services.Medico
             else
                 _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_POST_Medico)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_POST_Medico)}");
 
-            return medico;
+            return medico ?? throw new Exception("Não foi possível cadastrar o médico, a response foi nula");
         }
+        #endregion
 
+        #region Service - Apagar Médico
         public async Task<bool> Apagar(int id)
         {
             bool apagado = await _medicoRepositorio.Apagar(id);
@@ -75,7 +71,9 @@ namespace GerenciadorHospital.Services.Medico
 
             return apagado;
         }
+        #endregion
 
+        #region Service - Atualizar Médico
         public async Task<MedicoModel> Atualizar(MedicoDto medicoDto, int id)
         {
             MedicoModel medicoModel = new MedicoModel(medicoDto);
@@ -94,14 +92,16 @@ namespace GerenciadorHospital.Services.Medico
             else
                 _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_PUT_Medico)}:  {mensagensLog.ExibirMensagem(CodigosLogErro.E_PUT_Medico)}");
 
-            return medico;
+            return medico ?? throw new Exception("Não foi possível atualizar o médico, a response foi nula");
         }
+        #endregion
 
+        #region Service - Buscar Documento do Médico Por ID
         public async Task<FileContentResult> BuscarDocMedicoPorId(int id)
         {
             MedicoModel medico = await _medicoRepositorio.BuscarDocMedicoPorId(id);
 
-            string caminho = medico.CaminhoDoc;
+            string caminho = medico.CaminhoDoc ?? string.Empty;
 
             ValidaMedico imagem = new ValidaMedico(medico);
 
@@ -112,9 +112,12 @@ namespace GerenciadorHospital.Services.Medico
                                         {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Medico)} ->
                                         Busca do documento com ID: {id}, não foi realizada.");
 
-            return imagem.BuscarDocMedico(caminho);
+            return imagem is null ? throw new Exception("Ocorreu um erro ao carregar a imagem") 
+                                  : imagem.BuscarDocMedico(caminho);
         }
+        #endregion
 
+        #region Service - Buscar Medico Por ID
         public async Task<MedicoModel> BuscarPorId(int id)
         {
             MedicoModel medicos = await _medicoRepositorio.BuscarPorId(id);
@@ -126,9 +129,11 @@ namespace GerenciadorHospital.Services.Medico
                                         {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Medico)} ->
                                         Busca do médico com ID: {id} não foi realizada.");
 
-            return medicos;
+            return medicos ?? throw new Exception("Não foi possível buscar o médico por ID, a busca retornou nulo");
         }
+        #endregion
 
+        #region Service - Buscar Todos os Médicos
         public async Task<List<MedicoModel>> BuscarTodosMedicos()
         {
             List<MedicoModel> medicos = await _medicoRepositorio.BuscarTodosMedicos();
@@ -138,7 +143,8 @@ namespace GerenciadorHospital.Services.Medico
             else
                 _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_GET_Medico)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Medico)}");
 
-            return medicos;
+            return medicos ?? throw new Exception("Não foi possível buscar todos médicos, a busca retornou nulo");
         }
+        #endregion
     }
 }

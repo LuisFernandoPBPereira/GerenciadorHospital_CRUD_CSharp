@@ -33,7 +33,7 @@ namespace GerenciadorHospital.Repositorios
         public async Task<bool> Apagar(int id)
         {
             //Pegamos um paciente pelo ID de forma assíncrona
-            PacienteModel pacientePorId = await BuscarPorId(id);
+            PacienteModel? pacientePorId = await BuscarPorId(id);
             if (pacientePorId == null)
             {
                 throw new Exception($"Paciente para o ID: {id} não foi encontrado no banco de dados.");
@@ -51,7 +51,7 @@ namespace GerenciadorHospital.Repositorios
         //Método Atualizar, que aguarda a busca pelo ID para fazer a alteração
         public async Task<PacienteModel> Atualizar(PacienteModel paciente, int id)
         {
-            PacienteModel pacientePorId = await BuscarPorId(id);
+            PacienteModel? pacientePorId = await BuscarPorId(id);
             if (pacientePorId == null)
             {
                 throw new Exception($"Paciente para o ID: {id} não foi encontrado no banco de dados.");
@@ -77,7 +77,7 @@ namespace GerenciadorHospital.Repositorios
 
         #region Repositório - Buscar Paciente Por ID
         //Método BuscarPorId, que através do ID recebido, faz requisição no banco para mostrar a busca
-        public async Task<PacienteModel> BuscarPorId(int id)
+        public async Task<PacienteModel?> BuscarPorId(int id)
         {
             /*
              * Retornamos o primeiro paciente ou o padrão por ID,
@@ -90,7 +90,7 @@ namespace GerenciadorHospital.Repositorios
         #endregion
 
         #region Repositório - Buscar Documento do Convênio Por ID
-        public async Task<PacienteModel> BuscarDocConvenioPorId(int id)
+        public async Task<PacienteModel?> BuscarDocConvenioPorId(int id)
         {
             /*
              * Retornamos o primeiro paciente ou o padrão por ID,
@@ -102,7 +102,7 @@ namespace GerenciadorHospital.Repositorios
         #endregion
 
         #region Repositório - Buscar Documento do Paciente Por ID
-        public async Task<PacienteModel> BuscarDocPorId(int id)
+        public async Task<PacienteModel?> BuscarDocPorId(int id)
         {
             return await _bancoContext.Pacientes
                 .FirstOrDefaultAsync(x => x.Id == id);

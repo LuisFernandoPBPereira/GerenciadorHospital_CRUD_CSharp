@@ -22,12 +22,6 @@ namespace GerenciadorHospital.Utils
             if (_medicamentoModel.DataFabricacao > DateTime.Now)
                 throw new Exception("A data de criação não pode ser no futuro");
 
-            if (_medicamentoModel.DataFabricacao == null)
-                throw new Exception("Informe a data de fabricação");
-
-            if (_medicamentoModel.DataValidade == null)
-                throw new Exception("Informe a data de validade");
-
             if (_medicamentoModel.DataValidade < DateTime.Now)
                 throw new Exception("A data de validade não pode ser uma data passada");
         }

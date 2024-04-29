@@ -7,7 +7,7 @@ namespace GerenciadorHospital.Repositorios.Interfaces
     {
         Task<List<RegistroConsultaModel>> BuscarTodosRegistrosConsultas();
         Task<RegistroConsultaModel> BuscarPorId(int id);
-        Task<RegistroConsultaModel> BuscarPorIdAoAdicionar(int id);
+        Task<RegistroConsultaModel?> BuscarPorIdAoAdicionar(int id);
         Task<List<RegistroConsultaModel>> BuscarConsultaPorPacienteId(int id, StatusConsulta statusConsulta);
         Task<List<RegistroConsultaModel>> BuscarConsultaPorMedicoId(int id, StatusConsulta statusConsulta, string? dataInicial, string? dataFinal);
         Task<RegistroConsultaModel> Adicionar(RegistroConsultaModel registroConsulta);

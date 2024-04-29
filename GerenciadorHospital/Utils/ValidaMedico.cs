@@ -15,7 +15,7 @@ namespace GerenciadorHospital.Utils
 
         public FileContentResult BuscarDocMedico(string caminho)
         {
-            if (caminho != null)
+            if (caminho != null || caminho != string.Empty)
             {
                 if (_medicoModel.CaminhoDoc == null)
                     throw new Exception("Não foi possível carregar a imagem");
@@ -38,6 +38,9 @@ namespace GerenciadorHospital.Utils
 
         public bool ValidaImagem()
         {
+            if (_medicoModel.Doc is null)
+                throw new Exception("Nenhuma imagem foi carregada");
+
             var arquivoDoc = _medicoModel.Doc.OpenReadStream();
             var isValidDoc = FileTypeValidator.IsImage(arquivoDoc);
 

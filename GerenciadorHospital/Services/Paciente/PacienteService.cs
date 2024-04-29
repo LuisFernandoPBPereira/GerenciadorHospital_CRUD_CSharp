@@ -18,6 +18,7 @@ namespace GerenciadorHospital.Services.Paciente
         BCryptPasswordHasher<PacienteModel> senhaComHash = new BCryptPasswordHasher<PacienteModel>();
         MensagensLog mensagensLog = new MensagensLog();
 
+        #region Construtor
         public PacienteService(IPacienteRepositorio pacienteRepositorio,
                                IAuthenticationService authenticationService,
                                ILogger<PacienteController> logger)
@@ -26,7 +27,9 @@ namespace GerenciadorHospital.Services.Paciente
             _authenticationService = authenticationService;
             _logger = logger;
         }
+        #endregion
 
+        #region Service - Adicionar Paciente
         public async Task<PacienteModel> AdicionarPaciente(PacienteDto pacienteDto)
         {
             PacienteModel pacienteModel = new PacienteModel(pacienteDto);
@@ -58,9 +61,11 @@ namespace GerenciadorHospital.Services.Paciente
             else
                 _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_POST_Paciente)}:  {mensagensLog.ExibirMensagem(CodigosLogErro.E_POST_Paciente)}");
 
-            return paciente;
+            return paciente ?? throw new Exception("Não foi possível cadastrar o paciente, a response foi nula");
         }
+        #endregion
 
+        #region Service - Apagar Paciente
         public async Task<bool> Apagar(int id)
         {
             bool apagado = await _pacienteRepositorio.Apagar(id);
@@ -72,7 +77,9 @@ namespace GerenciadorHospital.Services.Paciente
 
             return apagado;
         }
+        #endregion
 
+        #region Service - Atualizar Paciente
         public async Task<PacienteModel> Atualizar(PacienteDto pacienteDto, int id)
         {
             PacienteModel pacienteModel = new PacienteModel(pacienteDto);
@@ -94,9 +101,11 @@ namespace GerenciadorHospital.Services.Paciente
             else
                 _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_PUT_Paciente)}:  {mensagensLog.ExibirMensagem(CodigosLogErro.E_PUT_Paciente)}");
 
-            return paciente;
+            return paciente ?? throw new Exception("Não foi possível atualizar o paciente, a response foi nula");
         }
+        #endregion
 
+        #region Service - Atualizar Documento do Paciente
         public async Task<DocumentoImagemDto> AtualizarDoc(DocumentoImagemDto documentoImagemDto, int id)
         {
             PacienteModel paciente = await _pacienteRepositorio.BuscarPorId(id);
@@ -116,9 +125,10 @@ namespace GerenciadorHospital.Services.Paciente
             _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Paciente)}: Atualização da imagem foi realizada");
 
             return documentoImagemDto;
-
         }
+        #endregion
 
+        #region Service - Buscar Documento do Convênio do Paciente Por ID
         public async Task<FileContentResult> BuscarDocConvenioPorId(int id)
         {
             //Capturamos o paciente pelo ID
@@ -127,7 +137,7 @@ namespace GerenciadorHospital.Services.Paciente
             if (paciente.TemConvenio == false)
                 throw new Exception("Este paciente não possui convênio");
 
-            string caminho = paciente.ImgCarteiraDoConvenio;
+            string caminho = paciente.ImgCarteiraDoConvenio ?? string.Empty;
 
             var imagem = new BuscaImagem(paciente);
 
@@ -138,14 +148,17 @@ namespace GerenciadorHospital.Services.Paciente
                                         {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Paciente)} ->
                                         Busca do documento do convênio com ID: {id}, não foi realizada.");
 
-            return imagem.BuscarImagem(caminho);
+            return imagem is null ? throw new Exception("Ocorreu um erro ao carregar a imagem") 
+                                  : imagem.BuscarImagem(caminho);
         }
+        #endregion
 
+        #region Service - Buscar Documento do Paciente Por ID
         public async Task<FileContentResult> BuscarDocPorId(int id)
         {
             PacienteModel paciente = await _pacienteRepositorio.BuscarDocPorId(id);
 
-            string caminho = paciente.ImgDocumento;
+            string caminho = paciente.ImgDocumento ?? string.Empty;
 
             var imagem = new BuscaImagem(paciente);
 
@@ -156,9 +169,12 @@ namespace GerenciadorHospital.Services.Paciente
                                         {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Paciente)} ->
                                         Busca do documento com ID: {id}, não foi realizada.");
 
-            return imagem.BuscarImagem(caminho);
+            return imagem is null ? throw new Exception("Ocorreu um erro ao carregar a imagem") 
+                                  : imagem.BuscarImagem(caminho);
         }
+        #endregion
 
+        #region Service - Buscar Paciente Por ID
         public async Task<PacienteModel> BuscarPorId(int id)
         {
             PacienteModel paciente = await _pacienteRepositorio.BuscarPorId(id);
@@ -170,9 +186,11 @@ namespace GerenciadorHospital.Services.Paciente
                                         {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Paciente)} ->
                                         Busca do paciente com ID: {id}, não foi realizada.");
 
-            return paciente;
+            return paciente ?? throw new Exception("Não foi possível buscar o paciente por ID, a busca retornou nulo");
         }
+        #endregion
 
+        #region Service - Buscar Todos os Pacientes
         public async Task<List<PacienteModel>> BuscarTodosPacientes()
         {
             List<PacienteModel> pacientes = await _pacienteRepositorio.BuscarTodosPacientes();
@@ -182,7 +200,8 @@ namespace GerenciadorHospital.Services.Paciente
             else
                 _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_GET_Paciente)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Paciente)}");
 
-            return pacientes;
+            return pacientes ?? throw new Exception("Não foi possível buscar todos os paciente, a busca retornou nulo");
         }
+        #endregion
     }
 }

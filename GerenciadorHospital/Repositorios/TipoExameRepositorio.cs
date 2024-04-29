@@ -32,7 +32,7 @@ namespace GerenciadorHospital.Repositorios
         public async Task<bool> Apagar(int id)
         {
             //Pegamos o exame pelo ID de fomra assíncrona
-            TipoExameModel tipoExamePorId = await BuscarPorId(id);
+            TipoExameModel? tipoExamePorId = await BuscarPorId(id);
             if (tipoExamePorId == null)
             {
                 throw new Exception($"Tipo de Exame para o ID: {id} não foi encontrado no banco de dados.");
@@ -50,7 +50,7 @@ namespace GerenciadorHospital.Repositorios
         public async Task<TipoExameModel> Atualizar(TipoExameModel tipoExame, int id)
         {
             //Pegamos o exame pelo ID de forma assíncrona
-            TipoExameModel tipoExamePorId = await BuscarPorId(id);
+            TipoExameModel? tipoExamePorId = await BuscarPorId(id);
             if (tipoExamePorId == null)
             {
                 throw new Exception($"Tipo de Exame para o ID: {id} não foi encontrado no banco de dados.");
@@ -70,7 +70,7 @@ namespace GerenciadorHospital.Repositorios
         #endregion
 
         #region Repositório - Buscar Exame Por ID
-        public async Task<TipoExameModel> BuscarPorId(int id)
+        public async Task<TipoExameModel?> BuscarPorId(int id)
         {
             //Retornamos o primeiro exame ou o padrão pelo ID
             return await _bancoContext.TiposExames.FirstOrDefaultAsync(x => x.Id == id);

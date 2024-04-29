@@ -34,7 +34,7 @@ namespace GerenciadorHospital.Repositorios
         public async Task<bool> Apagar(int id)
         {
             //Pegamos um laudo por ID de forma assíncrona
-            LaudoModel laudoPorId = await BuscarPorId(id);
+            LaudoModel? laudoPorId = await BuscarPorId(id);
             if (laudoPorId == null)
             {
                 throw new Exception($"Laudo para o ID: {id} não foi encontrado no banco de dados.");
@@ -50,7 +50,7 @@ namespace GerenciadorHospital.Repositorios
         #region Repositório - Atualizar Laudo
         public async Task<LaudoModel> Atualizar(LaudoModel laudo, int id)
         {
-            LaudoModel laudoPorId = await BuscarPorId(id);
+            LaudoModel? laudoPorId = await BuscarPorId(id);
             if (laudoPorId == null)
             {
                 throw new Exception($"Laudo para o ID: {id} não foi encontrado no banco de dados.");
@@ -82,7 +82,7 @@ namespace GerenciadorHospital.Repositorios
             if (pacienteId == 0) query = query.Where(x => x.MedicoId == medicoId);
             if (medicoId == 0 && pacienteId == 0) query = _bancoContext.Laudos;
             
-            if (dataInicial != string.Empty)
+            if (dataInicial != string.Empty && dataInicial != null && dataFinal != null)
             {
                 dataInicialConvertida = DateTime.Parse(dataInicial);
                 dataFinalConvertida = DateTime.Parse(dataFinal);
@@ -98,7 +98,7 @@ namespace GerenciadorHospital.Repositorios
         #endregion
 
         #region Repositório - Buscar Laudo Por ID
-        public async Task<LaudoModel> BuscarPorId(int id)
+        public async Task<LaudoModel?> BuscarPorId(int id)
         {
             return await _bancoContext.Laudos
                 //.Include(x => x.Paciente)
@@ -116,7 +116,7 @@ namespace GerenciadorHospital.Repositorios
         #endregion
 
         #region Repositório - Buscar Imagem do Laudo Por ID
-        public async Task<LaudoModel> BuscarImagemLaudoPorId(int id)
+        public async Task<LaudoModel?> BuscarImagemLaudoPorId(int id)
         {
             return await _bancoContext.Laudos
                 .FirstOrDefaultAsync(x => x.Id == id);

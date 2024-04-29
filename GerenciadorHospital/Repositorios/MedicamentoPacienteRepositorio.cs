@@ -32,7 +32,7 @@ namespace GerenciadorHospital.Repositorios
         public async Task<bool> Apagar(int id)
         {
             //Pegamos um medicamento por ID de forma assíncrona
-            MedicamentoPacienteModel medicamentoPorId = await BuscarPorId(id);
+            MedicamentoPacienteModel? medicamentoPorId = await BuscarPorId(id);
             if (medicamentoPorId == null)
             {
                 throw new Exception($"Medicamento para o ID: {id} não foi encontrado no banco de dados.");
@@ -50,7 +50,7 @@ namespace GerenciadorHospital.Repositorios
         public async Task<MedicamentoPacienteModel> Atualizar(MedicamentoPacienteModel medicamento, int id)
         {
             //Pegamos um medicamento por ID de forma assíncrona
-            MedicamentoPacienteModel medicamentoPorId = await BuscarPorId(id);
+            MedicamentoPacienteModel? medicamentoPorId = await BuscarPorId(id);
             if (medicamentoPorId == null)
             {
                 throw new Exception($"Medicamento para o ID: {id} não foi encontrado no banco de dados.");
@@ -71,7 +71,7 @@ namespace GerenciadorHospital.Repositorios
         #endregion
 
         #region Repositório - Buscar Medicamento Por ID
-        public async Task<MedicamentoPacienteModel> BuscarPorId(int id)
+        public async Task<MedicamentoPacienteModel?> BuscarPorId(int id)
         {
             //Retornamos o primeiro medicamento ou o padrão pelo ID
             return await _bancoContext.MedicamentosPaciente.FirstOrDefaultAsync(x => x.Id == id);

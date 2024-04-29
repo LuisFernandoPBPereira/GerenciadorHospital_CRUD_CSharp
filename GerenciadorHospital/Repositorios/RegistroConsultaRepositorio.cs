@@ -95,7 +95,7 @@ namespace GerenciadorHospital.Repositorios
                 .Where(x => statusConsulta == 0 ? x.MedicoId == id : x.MedicoId == id && x.EstadoConsulta == statusConsulta);
 
 
-            if (dataInicial != string.Empty)
+            if (dataInicial != string.Empty && dataInicial != null && dataFinal != null)
             {
                 dataInicialConvertida = DateTime.Parse(dataInicial);
                 dataFinalConvertida = DateTime.Parse(dataFinal);
@@ -131,7 +131,7 @@ namespace GerenciadorHospital.Repositorios
         #endregion
 
         #region Repositório - Buscar Consulta Por ID ao Adicionar uma Consulta
-        public async Task<RegistroConsultaModel> BuscarPorIdAoAdicionar(int id)
+        public async Task<RegistroConsultaModel?> BuscarPorIdAoAdicionar(int id)
         {
             var consulta = await _bancoContext.RegistrosConsultas
                 .Include(x => x.Medico)

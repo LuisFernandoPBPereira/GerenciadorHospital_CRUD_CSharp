@@ -37,7 +37,7 @@ namespace GerenciadorHospital.Services.Exame
             else
                 _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_POST_Exame)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_POST_Exame)}");
 
-            return exame ?? throw new Exception("Não foi possível cadastrar o exame");
+            return exame ?? throw new Exception("Não foi possível cadastrar o exame, a response foi nula");
         }
         #endregion
 
@@ -69,7 +69,7 @@ namespace GerenciadorHospital.Services.Exame
             else
                 _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_PUT_Exame)}:  {mensagensLog.ExibirMensagem(CodigosLogErro.E_PUT_Exame)}");
 
-            return exame ?? throw new Exception("Não foi possível atualizar o exame");
+            return exame ?? throw new Exception("Não foi possível atualizar o exame, a response foi nula");
         }
         #endregion
 
@@ -85,7 +85,7 @@ namespace GerenciadorHospital.Services.Exame
                                         {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Exame)} ->
                                         Busca de exme com ID: {id} não foi realizada");
 
-            return exames ?? throw new Exception("Não foi possível buscar o exame por ID");
+            return exames ?? throw new Exception("Não foi possível buscar o exame por ID, a busca retornou nulo");
         }
         #endregion
 
@@ -99,7 +99,7 @@ namespace GerenciadorHospital.Services.Exame
             else
                 _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_GET_Exame)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Exame)}");
 
-            return exames ?? throw new Exception("Não foi possível buscar todos exames");
+            return exames ?? throw new Exception("Não foi possível buscar todos exames, a busca retornou nulo");
         }
         #endregion
     }

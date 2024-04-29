@@ -51,7 +51,7 @@ namespace GerenciadorHospital.Services.Consulta
                                   {mensagensLog.ExibirMensagem(CodigosLogErro.E_POST_Consulta)} ->
                                   Não foi possível agendar uma consulta");
 
-            return consulta ?? throw new Exception("Não foi possível agendar uma consulta");
+            return consulta ?? throw new Exception("Não foi possível agendar uma consulta, reponse foi nulo");
         }
         #endregion
 
@@ -95,7 +95,7 @@ namespace GerenciadorHospital.Services.Consulta
                                         {mensagensLog.ExibirMensagem(CodigosLogErro.E_PUT_Consulta)} ->
                                         Atualização de consulta com o ID: {id} não foi concluída.");
 
-            return consulta ?? throw new Exception("Não foi possível atualizar a consulta");
+            return consulta ?? throw new Exception("Não foi possível atualizar a consulta, response foi nulo");
         }
         #endregion
 
@@ -113,7 +113,7 @@ namespace GerenciadorHospital.Services.Consulta
                                         {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Consulta)} ->
                                         Busca de consultas por Médico com ID: {id} e Status Consulta {statusConsulta} realizada, porém sem conteúdo.");
 
-            return consultas ?? throw new Exception("Não foi possível buscar a consulta com o ID do médico");
+            return consultas ?? throw new Exception("Não foi possível buscar a consulta com o ID do médico, a busca retornou nulo");
         }
         #endregion
 
@@ -129,7 +129,7 @@ namespace GerenciadorHospital.Services.Consulta
                                         {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Consulta)} ->
                                         Busca de consultas por Paciente com ID: {id} e Status Consulta {statusConsulta} realizada, porém sem conteúdo.");
 
-            return consultas ?? throw new Exception("Não foi possível buscar consulta por ID do paciente");
+            return consultas ?? throw new Exception("Não foi possível buscar consulta por ID do paciente, a busca retornou nulo");
         }
         #endregion
 
@@ -145,7 +145,7 @@ namespace GerenciadorHospital.Services.Consulta
                                         {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Consulta)} ->
                                         Busca de consulta com ID: {id} porém sem conteúdo.");
 
-            return consultas ?? throw new Exception("Não foi possível buscar a consulta por ID");
+            return consultas ?? throw new Exception("Não foi possível buscar a consulta por ID, a busca retornou nulo");
         }
         #endregion
 
@@ -159,7 +159,7 @@ namespace GerenciadorHospital.Services.Consulta
                 _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_GET_Consulta)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Consulta)}");
 
 
-            return consultas ?? throw new Exception("Não foi possível buscar todas as consultas");
+            return consultas ?? throw new Exception("Resultado da busca foi nulo");
         }
         #endregion
     }
