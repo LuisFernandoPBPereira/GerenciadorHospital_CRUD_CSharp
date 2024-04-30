@@ -1,9 +1,8 @@
 ﻿using GerenciadorHospital.Data;
 using GerenciadorHospital.Models;
-using GerenciadorHospital.Repositorios.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace GerenciadorHospital.Repositorios
+namespace GerenciadorHospital.Repositorios.Exame
 {
     public class TipoExameRepositorio : ITipoExameRepositorio
     {
@@ -32,7 +31,7 @@ namespace GerenciadorHospital.Repositorios
 
             if (tipoExamePorId == null)
                 throw new Exception($"Tipo de Exame para o ID: {id} não foi encontrado no banco de dados.");
-            
+
             _bancoContext.TiposExames.Remove(tipoExamePorId);
             await _bancoContext.SaveChangesAsync();
 
@@ -44,10 +43,10 @@ namespace GerenciadorHospital.Repositorios
         public async Task<TipoExameModel> Atualizar(TipoExameModel tipoExame, int id)
         {
             TipoExameModel? tipoExamePorId = await BuscarPorId(id);
-            
+
             if (tipoExamePorId == null)
                 throw new Exception($"Tipo de Exame para o ID: {id} não foi encontrado no banco de dados.");
-            
+
             tipoExamePorId.Nome = tipoExame.Nome;
             tipoExamePorId.PacienteId = tipoExame.PacienteId;
             tipoExamePorId.MedicoId = tipoExame.MedicoId;

@@ -1,5 +1,5 @@
 ﻿using FluentResults;
-using GerenciadorHospital.Dto;
+using GerenciadorHospital.Dto.Requests;
 
 namespace GerenciadorHospital.Services
 {

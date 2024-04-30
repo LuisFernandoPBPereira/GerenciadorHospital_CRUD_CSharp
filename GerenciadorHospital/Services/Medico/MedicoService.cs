@@ -1,10 +1,10 @@
 ﻿using GerenciadorHospital.Controllers;
-using GerenciadorHospital.Dto;
+using GerenciadorHospital.Dto.Requests;
 using GerenciadorHospital.Entities;
 using GerenciadorHospital.Enums;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios;
-using GerenciadorHospital.Repositorios.Interfaces;
+using GerenciadorHospital.Repositorios.Medico;
 using GerenciadorHospital.Utils;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,7 +1,8 @@
 ﻿using GerenciadorHospital.Dto.Responses;
 using GerenciadorHospital.Enums;
 using GerenciadorHospital.Models;
-using GerenciadorHospital.Repositorios.Interfaces;
+using GerenciadorHospital.Repositorios.Consulta;
+using GerenciadorHospital.Repositorios.Paciente;
 
 namespace GerenciadorHospital.Utils
 {

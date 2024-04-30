@@ -1,9 +1,8 @@
 ﻿using GerenciadorHospital.Data;
 using GerenciadorHospital.Models;
-using GerenciadorHospital.Repositorios.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace GerenciadorHospital.Repositorios
+namespace GerenciadorHospital.Repositorios.Convenio
 {
     public class ConvenioRepositorio : IConvenioRepositorio
     {
@@ -32,7 +31,7 @@ namespace GerenciadorHospital.Repositorios
             ConvenioModel? convenioPorId = await BuscarPorId(id);
             if (convenioPorId == null)
                 throw new Exception($"Convênio para o ID: {id} não foi encontrado no banco de dados.");
-            
+
             _bancoContext.Convenios.Remove(convenioPorId);
             await _bancoContext.SaveChangesAsync();
 
@@ -50,7 +49,7 @@ namespace GerenciadorHospital.Repositorios
 
             convenioPorId.Nome = convenio.Nome;
             convenioPorId.Preco = convenio.Preco;
-            
+
             _bancoContext.Convenios.Update(convenioPorId);
             await _bancoContext.SaveChangesAsync();
 

@@ -1,4 +1,4 @@
-﻿using GerenciadorHospital.Dto;
+﻿using GerenciadorHospital.Dto.Requests;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Services.Convenio;
 using Microsoft.AspNetCore.Authorization;

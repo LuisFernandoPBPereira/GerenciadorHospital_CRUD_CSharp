@@ -1,9 +1,8 @@
 ﻿using GerenciadorHospital.Data;
 using GerenciadorHospital.Models;
-using GerenciadorHospital.Repositorios.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace GerenciadorHospital.Repositorios
+namespace GerenciadorHospital.Repositorios.Paciente
 {
     public class PacienteRepositorio : IPacienteRepositorio
     {
@@ -29,7 +28,7 @@ namespace GerenciadorHospital.Repositorios
         public async Task<bool> Apagar(int id)
         {
             PacienteModel? pacientePorId = await BuscarPorId(id);
-            
+
             if (pacientePorId == null)
                 throw new Exception($"Paciente para o ID: {id} não foi encontrado no banco de dados.");
 

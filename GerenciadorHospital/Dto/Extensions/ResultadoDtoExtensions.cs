@@ -2,7 +2,7 @@
 using GerenciadorHospital.Dto;
 using System.Runtime.CompilerServices;
 
-namespace GerenciadorHospital.Extensions
+namespace GerenciadorHospital.Dto.Extensions
 {
     public static class ResultadoDtoExtensions
     {

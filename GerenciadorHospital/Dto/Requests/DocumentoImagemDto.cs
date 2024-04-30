@@ -1,6 +1,6 @@
 ﻿using GerenciadorHospital.Models;
 
-namespace GerenciadorHospital.Dto
+namespace GerenciadorHospital.Dto.Requests
 {
     public class DocumentoImagemDto
     {
@@ -8,9 +8,9 @@ namespace GerenciadorHospital.Dto
         public IFormFile? DocConvenio { get; set; }
 
         // Doc: O campo não anulável precisa conter um valor não nulo ao sair do construtor. Considere declará-lo como anulável.
-        #pragma warning disable CS8618 
-        
-        public DocumentoImagemDto() {   }
+#pragma warning disable CS8618
+
+        public DocumentoImagemDto() { }
 
         public DocumentoImagemDto(PacienteModel pacienteModel)
         {

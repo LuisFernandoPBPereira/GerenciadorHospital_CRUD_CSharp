@@ -1,9 +1,10 @@
 ﻿using GerenciadorHospital.Controllers;
-using GerenciadorHospital.Dto;
+using GerenciadorHospital.Dto.Requests;
 using GerenciadorHospital.Dto.Responses;
 using GerenciadorHospital.Enums;
 using GerenciadorHospital.Models;
-using GerenciadorHospital.Repositorios.Interfaces;
+using GerenciadorHospital.Repositorios.Consulta;
+using GerenciadorHospital.Repositorios.Paciente;
 using GerenciadorHospital.Utils;
 
 namespace GerenciadorHospital.Services.Consulta

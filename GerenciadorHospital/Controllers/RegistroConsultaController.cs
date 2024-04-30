@@ -1,4 +1,4 @@
-﻿using GerenciadorHospital.Dto;
+﻿using GerenciadorHospital.Dto.Requests;
 using GerenciadorHospital.Dto.Responses;
 using GerenciadorHospital.Enums;
 using GerenciadorHospital.Models;

@@ -1,6 +1,6 @@
 ﻿using GerenciadorHospital.Enums;
 
-namespace GerenciadorHospital.Dto
+namespace GerenciadorHospital.Dto.Requests
 {
     public class RegistroConsultaDto
     {

@@ -1,10 +1,9 @@
 ﻿using GerenciadorHospital.Data;
 using GerenciadorHospital.Models;
-using GerenciadorHospital.Repositorios.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace GerenciadorHospital.Repositorios
+namespace GerenciadorHospital.Repositorios.Medico
 {
     public class MedicoRepositorio : IMedicoRepositorio
     {
@@ -45,7 +44,7 @@ namespace GerenciadorHospital.Repositorios
         public async Task<MedicoModel> Atualizar(MedicoModel medico, int id)
         {
             MedicoModel? medicoPorId = await BuscarPorId(id);
-            
+
             if (medicoPorId == null)
                 throw new Exception($"Médico para o ID: {id} não foi encontrado no banco de dados.");
 

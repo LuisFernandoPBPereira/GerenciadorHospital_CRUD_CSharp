@@ -1,7 +1,7 @@
 ﻿using GerenciadorHospital.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace GerenciadorHospital.Repositorios.Interfaces
+namespace GerenciadorHospital.Repositorios.Medico
 {
     public interface IMedicoRepositorio
     {

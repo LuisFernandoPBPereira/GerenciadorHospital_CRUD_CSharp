@@ -1,8 +1,8 @@
 ﻿using GerenciadorHospital.Controllers;
-using GerenciadorHospital.Dto;
+using GerenciadorHospital.Dto.Extensions;
+using GerenciadorHospital.Dto.Requests;
 using GerenciadorHospital.Entities;
 using GerenciadorHospital.Enums;
-using GerenciadorHospital.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GerenciadorHospital.Services.Usuario

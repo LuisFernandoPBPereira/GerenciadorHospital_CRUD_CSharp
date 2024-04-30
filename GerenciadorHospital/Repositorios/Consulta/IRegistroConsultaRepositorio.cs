@@ -2,7 +2,7 @@
 using GerenciadorHospital.Enums;
 using GerenciadorHospital.Models;
 
-namespace GerenciadorHospital.Repositorios.Interfaces
+namespace GerenciadorHospital.Repositorios.Consulta
 {
     public interface IRegistroConsultaRepositorio
     {

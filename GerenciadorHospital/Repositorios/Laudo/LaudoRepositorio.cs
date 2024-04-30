@@ -1,10 +1,9 @@
 ﻿using GerenciadorHospital.Data;
 using GerenciadorHospital.Models;
-using GerenciadorHospital.Repositorios.Interfaces;
 using GerenciadorHospital.Utils;
 using Microsoft.EntityFrameworkCore;
 
-namespace GerenciadorHospital.Repositorios
+namespace GerenciadorHospital.Repositorios.Laudo
 {
     public class LaudoRepositorio : ILaudoRepositorio
     {
@@ -34,7 +33,7 @@ namespace GerenciadorHospital.Repositorios
 
             if (laudoPorId == null)
                 throw new Exception($"Laudo para o ID: {id} não foi encontrado no banco de dados.");
-            
+
             _bancoContext.Laudos.Remove(laudoPorId);
             await _bancoContext.SaveChangesAsync();
 
@@ -46,7 +45,7 @@ namespace GerenciadorHospital.Repositorios
         public async Task<LaudoModel> Atualizar(LaudoModel laudo, int id)
         {
             LaudoModel? laudoPorId = await BuscarPorId(id);
-            
+
             if (laudoPorId == null)
                 throw new Exception($"Laudo para o ID: {id} não foi encontrado no banco de dados.");
 
@@ -75,7 +74,7 @@ namespace GerenciadorHospital.Repositorios
             if (medicoId == 0) query = query.Where(x => x.PacienteId == pacienteId);
             if (pacienteId == 0) query = query.Where(x => x.MedicoId == medicoId);
             if (medicoId == 0 && pacienteId == 0) query = _bancoContext.Laudos;
-            
+
             if (dataInicial != string.Empty && dataInicial != null && dataFinal != null)
             {
                 dataInicialConvertida = DateTime.Parse(dataInicial);
@@ -83,7 +82,7 @@ namespace GerenciadorHospital.Repositorios
                 query = query.Where(x => x.DataCriacao > dataInicialConvertida && x.DataCriacao < dataFinalConvertida);
 
             }
-            return await query 
+            return await query
                 //.Include(x => x.Paciente)
                 //.Include(x => x.Medico)
                 .Include(x => x.Medicamento)

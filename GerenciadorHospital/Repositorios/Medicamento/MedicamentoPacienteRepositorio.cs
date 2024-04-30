@@ -1,9 +1,8 @@
 ﻿using GerenciadorHospital.Data;
 using GerenciadorHospital.Models;
-using GerenciadorHospital.Repositorios.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace GerenciadorHospital.Repositorios
+namespace GerenciadorHospital.Repositorios.Medicamento
 {
     public class MedicamentoPacienteRepositorio : IMedicamentosPacienteRepositorio
     {
@@ -29,10 +28,10 @@ namespace GerenciadorHospital.Repositorios
         public async Task<bool> Apagar(int id)
         {
             MedicamentoPacienteModel? medicamentoPorId = await BuscarPorId(id);
-            
+
             if (medicamentoPorId == null)
                 throw new Exception($"Medicamento para o ID: {id} não foi encontrado no banco de dados.");
-            
+
             _bancoContext.MedicamentosPaciente.Remove(medicamentoPorId);
             await _bancoContext.SaveChangesAsync();
 
@@ -44,7 +43,7 @@ namespace GerenciadorHospital.Repositorios
         public async Task<MedicamentoPacienteModel> Atualizar(MedicamentoPacienteModel medicamento, int id)
         {
             MedicamentoPacienteModel? medicamentoPorId = await BuscarPorId(id);
-            
+
             if (medicamentoPorId == null)
                 throw new Exception($"Medicamento para o ID: {id} não foi encontrado no banco de dados.");
 

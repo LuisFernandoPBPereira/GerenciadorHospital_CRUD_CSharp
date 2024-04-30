@@ -2,8 +2,6 @@
 using GerenciadorHospital.Data;
 using GerenciadorHospital.Entities;
 using GerenciadorHospital.Models;
-using GerenciadorHospital.Repositorios;
-using GerenciadorHospital.Repositorios.Interfaces;
 using GerenciadorHospital.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -23,6 +21,13 @@ using GerenciadorHospital.Services.Medicamento;
 using GerenciadorHospital.Services.Medico;
 using GerenciadorHospital.Services.Paciente;
 using GerenciadorHospital.Services.Usuario;
+using GerenciadorHospital.Repositorios.Convenio;
+using GerenciadorHospital.Repositorios.Laudo;
+using GerenciadorHospital.Repositorios.Medicamento;
+using GerenciadorHospital.Repositorios.Medico;
+using GerenciadorHospital.Repositorios.Paciente;
+using GerenciadorHospital.Repositorios.Consulta;
+using GerenciadorHospital.Repositorios.Exame;
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 logger.Debug("INICIANDO APLICAÇÃO");

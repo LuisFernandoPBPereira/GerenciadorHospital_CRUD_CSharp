@@ -1,7 +1,7 @@
 ﻿using GerenciadorHospital.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace GerenciadorHospital.Dto
+namespace GerenciadorHospital.Dto.Requests
 {
     public class CadastroRequestDto
     {
@@ -25,7 +25,7 @@ namespace GerenciadorHospital.Dto
         [Required]
         public string Role { get; set; } = string.Empty;
 
-        public CadastroRequestDto() {   }
+        public CadastroRequestDto() { }
 
         public CadastroRequestDto(PacienteModel pacienteModel)
         {
@@ -37,7 +37,7 @@ namespace GerenciadorHospital.Dto
             Endereco = pacienteModel.Endereco;
             Role = Entities.Role.Paciente;
         }
-        
+
         public CadastroRequestDto(MedicoModel medicoModel)
         {
             Nome = medicoModel.Nome;

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace GerenciadorHospital.Dto
+namespace GerenciadorHospital.Dto.Requests
 {
     public class LoginRequestDto
     {

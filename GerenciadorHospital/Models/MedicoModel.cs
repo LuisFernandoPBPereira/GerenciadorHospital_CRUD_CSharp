@@ -1,4 +1,4 @@
-﻿using GerenciadorHospital.Dto;
+﻿using GerenciadorHospital.Dto.Requests;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GerenciadorHospital.Models

@@ -1,6 +1,6 @@
 ﻿using GerenciadorHospital.Models;
 
-namespace GerenciadorHospital.Repositorios.Interfaces
+namespace GerenciadorHospital.Repositorios.Exame
 {
     public interface ITipoExameRepositorio
     {

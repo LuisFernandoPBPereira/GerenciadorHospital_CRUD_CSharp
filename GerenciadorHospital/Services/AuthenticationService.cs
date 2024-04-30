@@ -1,8 +1,6 @@
 ﻿using FluentResults;
-using GerenciadorHospital.Dto;
-using GerenciadorHospital.Entities;
+using GerenciadorHospital.Dto.Requests;
 using GerenciadorHospital.Models;
-using GerenciadorHospital.Repositorios.Interfaces;
 using GerenciadorHospital.Utils;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
