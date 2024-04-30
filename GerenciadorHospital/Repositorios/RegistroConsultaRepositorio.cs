@@ -1,9 +1,11 @@
 ﻿using GerenciadorHospital.Data;
+using GerenciadorHospital.Dto.Responses;
 using GerenciadorHospital.Enums;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace GerenciadorHospital.Repositorios
@@ -107,12 +109,23 @@ namespace GerenciadorHospital.Repositorios
         #endregion
 
         #region Repositório - Buscar Consulta Por ID
-        public async Task<RegistroConsultaModel> BuscarPorId(int id)
+        public async Task<ConsultaResponseDto> BuscarPorIdDto(int id)
         {
             var consulta =  await _bancoContext.RegistrosConsultas
                 .Include(x => x.Medico)
                 .Include(x => x.Paciente)
                 .Include(x => x.Laudo)
+                .Select(x => new ConsultaResponseDto(
+                        x.Id,
+                        x.DataConsulta,
+                        x.DataRetorno,
+                        x.Valor,
+                        x.EstadoConsulta,
+                        x.Laudo!.Select(y => y.Descricao).ToList(),
+                        x.Exame == null ? "Não há exame" : x.Exame.Nome,
+                        new PacienteResponseDto(x.Paciente!),
+                        new MedicoResponseDto(x.Medico!)
+                    ))
                 .Include(x => x.Exame)
                 .FirstOrDefaultAsync(x => x.Id == id);
 
@@ -124,8 +137,8 @@ namespace GerenciadorHospital.Repositorios
         }
         #endregion
 
-        #region Repositório - Buscar Consulta Por ID ao Adicionar uma Consulta
-        public async Task<RegistroConsultaModel?> BuscarPorIdAoAdicionar(int id)
+        #region Repositório - Buscar Consulta Por ID
+        public async Task<RegistroConsultaModel> BuscarPorId(int id)
         {
             var consulta = await _bancoContext.RegistrosConsultas
                 .Include(x => x.Medico)
@@ -134,19 +147,33 @@ namespace GerenciadorHospital.Repositorios
                 .Include(x => x.Exame)
                 .FirstOrDefaultAsync(x => x.Id == id);
 
+            if (consulta is null)
+                throw new Exception("Nenhuma consulta foi encontrada");
+
             return consulta;
 
         }
         #endregion
 
         #region Repositório - Buscar Todas Consultas
-        public async Task<List<RegistroConsultaModel>> BuscarTodosRegistrosConsultas()
+        public async Task<List<ConsultaResponseDto>> BuscarTodosRegistrosConsultas()
         {
             var consultas = await _bancoContext.RegistrosConsultas
                 .Include(x => x.Medico)
                 .Include(x => x.Paciente)
                 .Include(x => x.Exame)
                 .Include(x => x.Laudo)
+                .Select(x => new ConsultaResponseDto(
+                        x.Id,
+                        x.DataConsulta,
+                        x.DataRetorno,
+                        x.Valor,
+                        x.EstadoConsulta,
+                        x.Laudo!.Select(y => y.Descricao).ToList(),
+                        x.Exame == null ? "Não há exame" : x.Exame.Nome,
+                        new PacienteResponseDto(x.Paciente!),
+                        new MedicoResponseDto(x.Medico!)
+                    ))
                 .ToListAsync();
 
             return consultas;

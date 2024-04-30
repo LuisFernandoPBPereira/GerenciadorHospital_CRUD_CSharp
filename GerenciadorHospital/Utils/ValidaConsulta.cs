@@ -1,4 +1,5 @@
-﻿using GerenciadorHospital.Enums;
+﻿using GerenciadorHospital.Dto.Responses;
+using GerenciadorHospital.Enums;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Interfaces;
 
@@ -22,15 +23,15 @@ namespace GerenciadorHospital.Utils
         public async Task<bool> ValidacaoConsulta()
         {
             int consultaId = 0;
-            List<RegistroConsultaModel> listaConsultas =  await _consultaRepositorio.BuscarTodosRegistrosConsultas();
+            List<ConsultaResponseDto> listaConsultas =  await _consultaRepositorio.BuscarTodosRegistrosConsultas();
 
             foreach (var itemConsulta in listaConsultas)
             {
-                if (_consultaModel.PacienteId == itemConsulta.PacienteId)
+                if (_consultaModel.PacienteId == itemConsulta.Paciente?.Id)
                     consultaId = itemConsulta.Id;
             }
 
-            RegistroConsultaModel? consultaPorId = await _consultaRepositorio.BuscarPorIdAoAdicionar(consultaId);
+            RegistroConsultaModel? consultaPorId = await _consultaRepositorio.BuscarPorId(consultaId);
 
             var paciente = _consultaModel.PacienteId;
             PacienteModel? pacientePorId = await _pacienteRepositorio.BuscarPorId(paciente);

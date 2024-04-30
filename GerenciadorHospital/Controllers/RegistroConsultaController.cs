@@ -33,7 +33,7 @@ namespace GerenciadorHospital.Controllers
         /// <response code="200">Consultas Retornadas com SUCESSO</response>
         [HttpGet]
         [Authorize(Policy = "AdminAndDoctorRights")]
-        public async Task<ActionResult<List<RegistroConsultaModel>>> BuscarTodosRegistrosConsultas()
+        public async Task<ActionResult<List<ConsultaResponseDto>>> BuscarTodosRegistrosConsultas()
         {
             try
             {                
@@ -62,7 +62,17 @@ namespace GerenciadorHospital.Controllers
             try
             {
                 var response = await _registroConsultaService.BuscarPorId(id);
-                ConsultaResponseDto consultaResponse = new ConsultaResponseDto(response);
+                ConsultaResponseDto consultaResponse = new ConsultaResponseDto(
+                    response.Id,
+                    response.DataConsulta,
+                    response.DataRetorno,
+                    response.Valor,
+                    response.EstadoConsulta,
+                    response.Laudo?.Select(x => x.Descricao).ToList(),
+                    response.Exame?.Nome,
+                    new PacienteResponseDto(response.Paciente!),
+                    new MedicoResponseDto(response.Medico!));
+
                 return Ok(consultaResponse);
             }
             catch (Exception erro)

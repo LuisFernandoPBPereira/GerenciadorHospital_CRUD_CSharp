@@ -151,9 +151,9 @@ namespace GerenciadorHospital.Services.Consulta
         #endregion
 
         #region Service - Buscar Todas Consultas
-        public async Task<List<RegistroConsultaModel>> BuscarTodosRegistrosConsultas()
+        public async Task<List<ConsultaResponseDto>> BuscarTodosRegistrosConsultas()
         {
-            List<RegistroConsultaModel> consultas = await _consultaRepositorio.BuscarTodosRegistrosConsultas();
+            List<ConsultaResponseDto> consultas = await _consultaRepositorio.BuscarTodosRegistrosConsultas();
             if(consultas is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Consulta)}: Busca de todas as consultas realizada.");
             else
