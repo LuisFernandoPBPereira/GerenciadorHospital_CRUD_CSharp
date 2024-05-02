@@ -1,6 +1,8 @@
-﻿using GerenciadorHospital.Models;
-using GerenciadorHospital.Repositorios.Interfaces;
-using Microsoft.AspNetCore.Mvc;
+﻿using GerenciadorHospital.Dto.Responses;
+using GerenciadorHospital.Enums;
+using GerenciadorHospital.Models;
+using GerenciadorHospital.Repositorios.Consulta;
+using GerenciadorHospital.Repositorios.Paciente;
 
 namespace GerenciadorHospital.Utils
 {
@@ -21,49 +23,64 @@ namespace GerenciadorHospital.Utils
         }
         public async Task<bool> ValidacaoConsulta()
         {
-            //Criamos uma lista de pacientes e uma lista de consultas
-            List<RegistroConsultaModel> listaConsultas =  await _consultaRepositorio.BuscarTodosRegistrosConsultas();
             int consultaId = 0;
+            List<ConsultaResponseDto> listaConsultas =  await _consultaRepositorio.BuscarTodosRegistrosConsultas();
 
-            //Para cada paciente e para cada consulta, procuramos uma consulta que exista para este paciente
             foreach (var itemConsulta in listaConsultas)
             {
-                if (_consultaModel.PacienteId == itemConsulta.PacienteId)
-                {
+                if (_consultaModel.PacienteId == itemConsulta.Paciente?.Id)
                     consultaId = itemConsulta.Id;
-                }
             }
-            //Buscamos a consulta e o paciente pelos IDs adquiridos 
-            RegistroConsultaModel consultaPorId = await _consultaRepositorio.BuscarPorId(consultaId);
+
+            RegistroConsultaModel? consultaPorId = await _consultaRepositorio.BuscarPorId(consultaId);
+
             var paciente = _consultaModel.PacienteId;
-            PacienteModel pacientePorId = await _pacienteRepositorio.BuscarPorId(paciente);
+            PacienteModel? pacientePorId = await _pacienteRepositorio.BuscarPorId(paciente);
 
-            //Se foi encontrada uma consulta
-            if (consultaPorId != null)
+            if(_consultaModel.DataConsulta < DateTime.Now && _consultaModel.Retorno == false)
+                throw new Exception("A consulta não pode ser marcada para uma data passada");
+
+            if(_consultaModel.EstadoConsulta is < StatusConsulta.Agendada or > StatusConsulta.Expirada)
+                throw new Exception("Estado da consulta incorreto.");
+
+            if (_consultaModel.PacienteId is < 1)
+                throw new Exception("Informe um ID para o paciente corretamente");
+            
+            if (_consultaModel.MedicoId is < 1)
+                throw new Exception("Informe um ID para o médico corretamente");
+
+            if (_consultaModel.ExameId is < 1) 
+                throw new Exception("Informe um ID para o exame corretamente");
+
+            if (_consultaModel.EstadoConsulta == Enums.StatusConsulta.Atendida)
+                _consultaModel.DataRetorno = DateTime.Now.AddDays(30);
+
+            if (consultaPorId is not null && pacientePorId is not null)
             {
-                //A consulta possui um valor padrão para quem não tem convênio
                 _consultaModel.Valor = 100;
-                _consultaModel.EstadoConsulta = Enums.StatusConsulta.Agendada;
+                
                 if (pacientePorId.TemConvenio)
-                {
                     _consultaModel.Valor = 0;
 
-                }
-                //Se o paciente tem convênio e a consulta não foi realizada, será cobrado um valor padrão da consulta
                 if (consultaPorId.EstadoConsulta == Enums.StatusConsulta.Expirada && pacientePorId.TemConvenio)
-                {
                     _consultaModel.Valor = 100;
-                }
-                //Caso contrário, a consulta não será cobrada
-                if (consultaPorId.EstadoConsulta == Enums.StatusConsulta.Atendida && pacientePorId.TemConvenio)
-                {
-                    _consultaModel.Valor = 0;
-                }
 
-                //E se o estado desta consulta for Agendada, será mostrado o código 400 com a seguinte mensagem
-                if (consultaPorId.EstadoConsulta == Enums.StatusConsulta.Agendada)
+                if (_consultaModel.EstadoConsulta == Enums.StatusConsulta.Atendida)
                 {
-                    return false;
+                    RegistroConsultaModel novaConsulta = new RegistroConsultaModel();
+                    novaConsulta.ExameId = _consultaModel.ExameId;
+                    novaConsulta.MedicoId = _consultaModel.MedicoId;
+                    novaConsulta.PacienteId = _consultaModel.PacienteId;
+                    novaConsulta.Valor = 0;
+                    novaConsulta.Retorno = true;
+                    novaConsulta.EstadoConsulta = StatusConsulta.Agendada;
+                    novaConsulta.DataConsulta = DateTime.Now.AddDays(30);
+                    novaConsulta.DataRetorno = novaConsulta.DataConsulta;
+
+                    var novoRetorno = await _consultaRepositorio.Adicionar(novaConsulta);
+
+                    if (novoRetorno is null)
+                        throw new Exception("Não foi possível atualizar a consulta");
                 }
             }
             return true;

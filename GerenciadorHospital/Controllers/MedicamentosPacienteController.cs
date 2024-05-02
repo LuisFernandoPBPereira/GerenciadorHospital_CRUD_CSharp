@@ -1,23 +1,23 @@
-﻿using GerenciadorHospital.Models;
-using GerenciadorHospital.Repositorios.Interfaces;
+﻿using GerenciadorHospital.Dto.Requests;
+using GerenciadorHospital.Models;
 using GerenciadorHospital.Services.Medicamento;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GerenciadorHospital.Controllers
 {
+    [Tags("Medicamento")]
     [Route("api/[controller]")]
     [ApiController]
     public class MedicamentosPacienteController : ControllerBase
     {
-        private readonly IMedicamentosPacienteRepositorio _medicamentosPacienteRepositorio;
+        private readonly IMedicamentosService _medicamentosService;
         private readonly ILogger<MedicamentosPacienteController> _logger;
         #region Construtor
-        public MedicamentosPacienteController(IMedicamentosPacienteRepositorio medicamentoRepositorio,
+        public MedicamentosPacienteController(IMedicamentosService medicamentosService,
                                               ILogger<MedicamentosPacienteController> logger)
         {
-            _medicamentosPacienteRepositorio = medicamentoRepositorio;
+            _medicamentosService = medicamentosService;
             _logger = logger;
             _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Medicamento)}: Os valores foram atribuídos no construtor na Controller");
         }
@@ -35,8 +35,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                MedicamentosService medicamentosService = new MedicamentosService(_medicamentosPacienteRepositorio, _logger);
-                var response = await medicamentosService.BuscarTodosMedicamentosPaciente();
+                var response = await _medicamentosService.BuscarTodosMedicamentosPaciente();
 
                 return Ok(response);
             }
@@ -61,9 +60,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                MedicamentosService medicamentosService = new MedicamentosService(_medicamentosPacienteRepositorio, _logger);
-                var response = await medicamentosService.BuscarPorId(id);
-
+                var response = await _medicamentosService.BuscarPorId(id);
                 return Ok(response);
             }
             catch (Exception erro)
@@ -78,18 +75,16 @@ namespace GerenciadorHospital.Controllers
         /// <summary>
         /// Cadastrar Medicamento
         /// </summary>
-        /// <param name="medicamentoModel">Dados do Medicamento</param>
+        /// <param name="medicamentoDto">Dados do Medicamento</param>
         /// <returns>Medicamento Cadastrado</returns>
         /// <response code="200">Medicamento Cadastrado com SUCESSO</response>
         [HttpPost]
         [Authorize(Policy = "ElevatedRights")]
-        public async Task<ActionResult<MedicamentoPacienteModel>> Adicionar([FromBody] MedicamentoPacienteModel medicamentoModel)
+        public async Task<ActionResult<MedicamentoPacienteModel>> Adicionar([FromBody] MedicamentoDto medicamentoDto)
         {
             try
             {
-                MedicamentosService medicamentosService = new MedicamentosService(_medicamentosPacienteRepositorio, _logger);
-                var response = await medicamentosService.Adicionar(medicamentoModel);
-
+                var response = await _medicamentosService.Adicionar(medicamentoDto);
                 return Ok(response);
             }
             catch (Exception erro)
@@ -105,18 +100,16 @@ namespace GerenciadorHospital.Controllers
         /// Atualizar Medicamento
         /// </summary>
         /// <param name="id">ID do Medicamento</param>
-        /// <param name="medicamentoModel">Dados do Medicamento</param>
+        /// <param name="medicamentoDto">Dados do Medicamento</param>
         /// <returns>Medicamento Atualizado</returns>
         /// <response code="200">Medicamento Atualizado com SUCESSO</response>
         [HttpPut("{id}")]
         [Authorize(Policy = "ElevatedRights")]
-        public async Task<ActionResult<MedicamentoPacienteModel>> Atualizar([FromBody] MedicamentoPacienteModel medicamentoModel, int id)
+        public async Task<ActionResult<MedicamentoPacienteModel>> Atualizar([FromBody] MedicamentoDto medicamentoDto, int id)
         {
             try
             {
-                MedicamentosService medicamentosService = new MedicamentosService(_medicamentosPacienteRepositorio, _logger);
-                var response = await medicamentosService.Atualizar(medicamentoModel, id);
-
+                var response = await _medicamentosService.Atualizar(medicamentoDto, id);
                 return Ok(response);
             }
             catch (Exception erro)
@@ -140,8 +133,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                MedicamentosService medicamentosService = new MedicamentosService(_medicamentosPacienteRepositorio, _logger);
-                var response = await medicamentosService.Apagar(id);
+                var response = await _medicamentosService.Apagar(id);
 
                 return Ok(response);
             }

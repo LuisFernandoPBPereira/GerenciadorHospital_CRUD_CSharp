@@ -1,23 +1,23 @@
-﻿using GerenciadorHospital.Models;
-using GerenciadorHospital.Repositorios.Interfaces;
+﻿using GerenciadorHospital.Dto.Requests;
+using GerenciadorHospital.Models;
 using GerenciadorHospital.Services.Exame;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GerenciadorHospital.Controllers
 {
+    [Tags("Exame")]
     [Route("api/[controller]")]
     [ApiController]
     public class TipoExameController : ControllerBase
     {
-        private readonly ITipoExameRepositorio _tipoExameRepositorio;
+        private readonly ITipoExameService _tipoExameService;
         private readonly ILogger<TipoExameController> _logger;
         #region Construtor
-        public TipoExameController(ITipoExameRepositorio tipoExameRepositorio, 
-                                   ILogger<TipoExameController> logger)
+        public TipoExameController(ILogger<TipoExameController> logger,
+                                   ITipoExameService tipoExameService)
         {
-            _tipoExameRepositorio = tipoExameRepositorio;
+            _tipoExameService = tipoExameService;
             _logger = logger;
         }
         #endregion
@@ -34,9 +34,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                TipoExameService tipoExameService = new TipoExameService(_tipoExameRepositorio, _logger);
-                var response = await tipoExameService.BuscarTodosExames();
-
+                var response = await _tipoExameService.BuscarTodosExames();
                 return Ok(response);
             }
             catch (Exception erro)
@@ -60,9 +58,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                TipoExameService tipoExameService = new TipoExameService(_tipoExameRepositorio, _logger);
-                var response = await tipoExameService.BuscarPorId(id);
-
+                var response = await _tipoExameService.BuscarPorId(id);
                 return Ok(response);
             }
             catch(Exception erro)
@@ -77,18 +73,16 @@ namespace GerenciadorHospital.Controllers
         /// <summary>
         /// Cadastrar Exame
         /// </summary>
-        /// <param name="tipoExameModel">Dados do Exame</param>
+        /// <param name="exameDto">Dados do Exame</param>
         /// <returns>Exame Cadastrado</returns>
         /// <response code="200">Exame Cadastrado com SUCESSO</response>
         [HttpPost]
         [Authorize(Policy = "AdminAndDoctorRights")]
-        public async Task<ActionResult<TipoExameModel>> Adicionar([FromBody] TipoExameModel tipoExameModel)
+        public async Task<ActionResult<TipoExameModel>> Adicionar([FromBody] TipoExameDto exameDto)
         {
             try
             {
-                TipoExameService tipoExameService = new TipoExameService(_tipoExameRepositorio, _logger);
-                var response = await tipoExameService.Adicionar(tipoExameModel);
-
+                var response = await _tipoExameService.Adicionar(exameDto);
                 return Ok(response);
             }
             catch (Exception erro)
@@ -104,18 +98,16 @@ namespace GerenciadorHospital.Controllers
         /// Atualizar Exame
         /// </summary>
         /// <param name="id">ID do Exame</param>
-        /// <param name="tipoExameModel">Dados do Exame</param>
+        /// <param name="exameDto">Dados do Exame</param>
         /// <returns>Exame Atualizado</returns>
         /// <response code="200">Exame Atualizado com SUCESSO</response>
         [HttpPut("{id}")]
         [Authorize(Policy = "AdminAndDoctorRights")]
-        public async Task<ActionResult<TipoExameModel>> Atualizar([FromBody] TipoExameModel tipoExameModel, int id)
+        public async Task<ActionResult<TipoExameModel>> Atualizar([FromBody] TipoExameDto exameDto, int id)
         {
             try
             {
-                TipoExameService tipoExameService = new TipoExameService(_tipoExameRepositorio, _logger);
-                var response = await tipoExameService.Atualizar(tipoExameModel, id);
-
+                var response = await _tipoExameService.Atualizar(exameDto, id);
                 return Ok(response);
             }
             catch (Exception erro)
@@ -139,9 +131,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                TipoExameService tipoExameService = new TipoExameService(_tipoExameRepositorio, _logger);
-                var response = await tipoExameService.Apagar(id);
-
+                var response = await _tipoExameService.Apagar(id);
                 return Ok(response);
             }
             catch (Exception erro)

@@ -1,29 +1,23 @@
-﻿using GerenciadorHospital.Dto;
-using GerenciadorHospital.Entities;
+﻿using GerenciadorHospital.Dto.Requests;
 using GerenciadorHospital.Models;
-using GerenciadorHospital.Repositorios.Interfaces;
-using GerenciadorHospital.Services;
 using GerenciadorHospital.Services.Medico;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GerenciadorHospital.Controllers
 {
+    [Tags("Médico")]
     [Route("api/[controller]")]
     [ApiController]
     public class MedicoController : ControllerBase
     {
-        private readonly IMedicoRepositorio _medicoRepositorio;
-        private readonly IAuthenticationService _authenticationService;
+        private readonly IMedicoService _medicoService;
         private readonly ILogger<MedicoController> _logger;
         #region Construtor
-        public MedicoController(IMedicoRepositorio medicoRepositorio,
-                                IAuthenticationService authenticationService,
-                                ILogger<MedicoController> logger)
+        public MedicoController(ILogger<MedicoController> logger,
+                                IMedicoService medicoService)
         {
-            _medicoRepositorio = medicoRepositorio;
-            _authenticationService = authenticationService;
+            _medicoService = medicoService;
             _logger = logger;
         }
         #endregion
@@ -40,8 +34,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                MedicoService medicoService = new MedicoService(_authenticationService, _medicoRepositorio, _logger);
-                var response = await medicoService.BuscarTodosMedicos();
+                var response = await _medicoService.BuscarTodosMedicos();
 
                 return Ok(response);
             }
@@ -66,9 +59,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                MedicoService medicoService = new MedicoService(_authenticationService, _medicoRepositorio, _logger);
-                var response = await medicoService.BuscarPorId(id);
-
+                var response = await _medicoService.BuscarPorId(id);
                 return Ok(response);
             }
             catch (Exception erro)
@@ -79,22 +70,45 @@ namespace GerenciadorHospital.Controllers
         }
         #endregion
 
+        #region GET Buscar Documento do Médico Por ID
+        /// <summary>
+        /// Busca Médico por ID
+        /// </summary>
+        /// <param name="id">ID do Médico</param>
+        /// <returns>Médicos</returns>
+        /// <response code="200">Médico Retornado com SUCESSO</response>
+        [HttpGet("BuscarDocMedico/{id}")]
+        [Authorize(Policy = "ElevatedRights")]
+        public async Task<ActionResult<List<MedicoModel>>> BuscarDocMedicoPorId(int id)
+        {
+            try
+            {
+                var response = await _medicoService.BuscarDocMedicoPorId(id);
+
+                return response;
+            }
+            catch (Exception erro)
+            {
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_GET_Medico)}: Não foi possível buscar documento do médico com ID: {id}. Erro: {erro.Message}");
+                return BadRequest($"Não foi possível buscar documento do médico com ID: {id}. Erro: {erro.Message}");
+            }
+        }
+        #endregion
+
         #region POST Cadastrar Médico
         /// <summary>
         /// Cadastrar Médico
         /// </summary>
-        /// <param name="medicoModel">Dados do Médico</param>
+        /// <param name="medicoDto">Dados do Médico</param>
         /// <returns>Médico Cadastrado</returns>
         /// <response code="200">Médico Cadastrado com SUCESSO</response>
         [HttpPost]
         [Authorize(Policy = "ElevatedRights")]
-        public async Task<ActionResult<MedicoModel>> Adicionar([FromBody] MedicoModel medicoModel)
+        public async Task<ActionResult<MedicoModel>> Adicionar(MedicoDto medicoDto)
         {
             try
             {
-                MedicoService medicoService = new MedicoService(_authenticationService, _medicoRepositorio, _logger);
-                var response = await medicoService.Adicionar(medicoModel);
-
+                var response = await _medicoService.Adicionar(medicoDto);
                 return Ok(response);
             }
             catch (Exception erro)
@@ -110,18 +124,16 @@ namespace GerenciadorHospital.Controllers
         /// Atualizar Médico
         /// </summary>
         /// <param name="id">ID do Médico</param>
-        /// <param name="medicoModel">Dados do Médico</param>
+        /// <param name="medicoDto">Dados do Médico</param>
         /// <returns>Médico Atualizado</returns>
         /// <response code="200">Médico Atualizado com SUCESSO</response>
         [HttpPut("{id}")]
         [Authorize(Policy = "ElevatedRights")]
-        public async Task<ActionResult<MedicoModel>> Atualizar([FromBody] MedicoModel medicoModel, int id)
+        public async Task<ActionResult<MedicoModel>> Atualizar(MedicoDto medicoDto, int id)
         {
             try
             {
-                MedicoService medicoService = new MedicoService(_authenticationService, _medicoRepositorio, _logger);
-                var response = await medicoService.Atualizar(medicoModel, id);
-
+                var response = await _medicoService.Atualizar(medicoDto, id);
                 return Ok(response);
             }
             catch (Exception erro)
@@ -145,9 +157,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                MedicoService medicoService = new MedicoService(_authenticationService, _medicoRepositorio, _logger);
-                var response = await medicoService.Apagar(id);
-
+                var response = await _medicoService.Apagar(id);
                 return Ok(response);
             }
             catch (Exception erro)

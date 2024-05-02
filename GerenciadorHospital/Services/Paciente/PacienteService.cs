@@ -1,9 +1,9 @@
 ﻿using GerenciadorHospital.Controllers;
-using GerenciadorHospital.Dto;
+using GerenciadorHospital.Dto.Requests;
 using GerenciadorHospital.Entities;
 using GerenciadorHospital.Enums;
 using GerenciadorHospital.Models;
-using GerenciadorHospital.Repositorios.Interfaces;
+using GerenciadorHospital.Repositorios.Paciente;
 using GerenciadorHospital.Utils;
 using Microsoft.AspNetCore.Mvc;
 using static System.Net.Mime.MediaTypeNames;
@@ -15,8 +15,10 @@ namespace GerenciadorHospital.Services.Paciente
         private readonly IPacienteRepositorio _pacienteRepositorio;
         private readonly IAuthenticationService _authenticationService;
         private readonly ILogger<PacienteController> _logger;
+        BCryptPasswordHasher<PacienteModel> senhaComHash = new BCryptPasswordHasher<PacienteModel>();
         MensagensLog mensagensLog = new MensagensLog();
 
+        #region Construtor
         public PacienteService(IPacienteRepositorio pacienteRepositorio,
                                IAuthenticationService authenticationService,
                                ILogger<PacienteController> logger)
@@ -25,19 +27,18 @@ namespace GerenciadorHospital.Services.Paciente
             _authenticationService = authenticationService;
             _logger = logger;
         }
+        #endregion
 
-        public async Task<PacienteModel> AdicionarPaciente(PacienteModel pacienteModel)
+        #region Service - Adicionar Paciente
+        public async Task<PacienteModel> AdicionarPaciente(PacienteDto pacienteDto)
         {
-            if (pacienteModel.TemConvenio == false && pacienteModel.DocConvenio?.Length != null)
-            {
-                throw new Exception("Não é possível adicionar uma carteira de convênio, caso o campo TemConvenio seja falso");
-            }
+            PacienteModel pacienteModel = new PacienteModel(pacienteDto);
+            ValidaPaciente validaPaciente = new ValidaPaciente(pacienteModel);
+            validaPaciente.ValidacaoPaciente();
 
-            DocumentoImagemDto imagem = new DocumentoImagemDto();
-            imagem.Doc = pacienteModel.Doc;
-            imagem.DocConvenio = pacienteModel.DocConvenio;
-
+            DocumentoImagemDto imagem = new DocumentoImagemDto(pacienteModel);
             ValidaImagem validaImagem = new ValidaImagem(imagem, pacienteModel);
+
             var requestDtoValidado = validaImagem.ValidacaoImagem();
 
             if (!requestDtoValidado)
@@ -46,27 +47,25 @@ namespace GerenciadorHospital.Services.Paciente
                 throw new Exception("Imagem inválida.");
             }
 
-            PacienteModel paciente = await _pacienteRepositorio.Adicionar(pacienteModel);
-            CadastroRequestDto novoPaciente = new CadastroRequestDto();
-
-            novoPaciente.Nome = pacienteModel.Nome;
-            novoPaciente.UserName = pacienteModel.Cpf;
-            novoPaciente.Cpf = pacienteModel.Cpf;
-            novoPaciente.Senha = pacienteModel.Senha;
-            novoPaciente.DataNasc = pacienteModel.DataNasc;
-            novoPaciente.Endereco = pacienteModel.Endereco;
-            novoPaciente.Role = Role.Paciente;
+            CadastroRequestDto novoPaciente = new CadastroRequestDto(pacienteModel);
 
             var pacienteCadastrado = await _authenticationService.Register(novoPaciente);
+
+            var senhaUsuario = senhaComHash.HashPassword(pacienteModel, pacienteModel.Senha);
+            pacienteModel.Senha = senhaUsuario;
+
+            PacienteModel paciente = await _pacienteRepositorio.Adicionar(pacienteModel);
 
             if (paciente is not null && pacienteCadastrado is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Paciente)}: Cadastro do paciente foi realizado.");
             else
                 _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_POST_Paciente)}:  {mensagensLog.ExibirMensagem(CodigosLogErro.E_POST_Paciente)}");
 
-            return paciente;
+            return paciente ?? throw new Exception("Não foi possível cadastrar o paciente, a response foi nula");
         }
+        #endregion
 
+        #region Service - Apagar Paciente
         public async Task<bool> Apagar(int id)
         {
             bool apagado = await _pacienteRepositorio.Apagar(id);
@@ -78,9 +77,23 @@ namespace GerenciadorHospital.Services.Paciente
 
             return apagado;
         }
+        #endregion
 
-        public async Task<PacienteModel> Atualizar(PacienteModel pacienteModel, int id)
+        #region Service - Atualizar Paciente
+        public async Task<PacienteModel> Atualizar(PacienteDto pacienteDto, int id)
         {
+            PacienteModel pacienteModel = new PacienteModel(pacienteDto);
+            ValidaPaciente validaPaciente = new ValidaPaciente(pacienteModel);
+            validaPaciente.ValidacaoPaciente();
+
+            DocumentoImagemDto documentoImagemDto = new DocumentoImagemDto(); 
+            ValidaImagem validaImagem = new ValidaImagem(documentoImagemDto, pacienteModel);
+
+            var pacienteValidado = validaImagem.ValidacaoImagem();
+
+            if (pacienteValidado == false)
+                throw new Exception("Não foi possível carregar a imagem");
+
             PacienteModel paciente = await _pacienteRepositorio.Atualizar(pacienteModel, id);
 
             if (paciente is not null)
@@ -88,13 +101,15 @@ namespace GerenciadorHospital.Services.Paciente
             else
                 _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_PUT_Paciente)}:  {mensagensLog.ExibirMensagem(CodigosLogErro.E_PUT_Paciente)}");
 
-            return paciente;
+            return paciente ?? throw new Exception("Não foi possível atualizar o paciente, a response foi nula");
         }
+        #endregion
 
+        #region Service - Atualizar Documento do Paciente
         public async Task<DocumentoImagemDto> AtualizarDoc(DocumentoImagemDto documentoImagemDto, int id)
         {
-            PacienteModel paciente = await _pacienteRepositorio.BuscarPorId(id);
-            ValidaImagem validaImagem = new ValidaImagem(documentoImagemDto, paciente);
+            PacienteModel? paciente = await _pacienteRepositorio.BuscarPorId(id);
+            ValidaImagem validaImagem = new ValidaImagem(documentoImagemDto, paciente!);
 
             var requestDtoValidado = validaImagem.ValidacaoImagem();
 
@@ -105,23 +120,23 @@ namespace GerenciadorHospital.Services.Paciente
                 throw new Exception("Não foi possível atualizar a imagem");
             }
 
-            await _pacienteRepositorio.Atualizar(paciente, id);
+            await _pacienteRepositorio.Atualizar(paciente!, id);
 
             _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Paciente)}: Atualização da imagem foi realizada");
 
             return documentoImagemDto;
-
         }
+        #endregion
 
+        #region Service - Buscar Documento do Convênio do Paciente Por ID
         public async Task<FileContentResult> BuscarDocConvenioPorId(int id)
         {
-            //Capturamos o paciente pelo ID
-            PacienteModel paciente = await _pacienteRepositorio.BuscarDocConvenioPorId(id);
+            PacienteModel? paciente = await _pacienteRepositorio.BuscarDocConvenioPorId(id);
 
-            if (paciente.TemConvenio == false)
+            if (paciente is not null && paciente.TemConvenio == false)
                 throw new Exception("Este paciente não possui convênio");
 
-            string caminho = paciente.ImgCarteiraDoConvenio;
+            string caminho = paciente!.ImgCarteiraDoConvenio ?? string.Empty;
 
             var imagem = new BuscaImagem(paciente);
 
@@ -132,14 +147,17 @@ namespace GerenciadorHospital.Services.Paciente
                                         {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Paciente)} ->
                                         Busca do documento do convênio com ID: {id}, não foi realizada.");
 
-            return imagem.BuscarImagem(caminho);
+            return imagem is null ? throw new Exception("Ocorreu um erro ao carregar a imagem") 
+                                  : imagem.BuscarImagem(caminho);
         }
+        #endregion
 
+        #region Service - Buscar Documento do Paciente Por ID
         public async Task<FileContentResult> BuscarDocPorId(int id)
         {
-            PacienteModel paciente = await _pacienteRepositorio.BuscarDocPorId(id);
+            PacienteModel? paciente = await _pacienteRepositorio.BuscarDocPorId(id);
 
-            string caminho = paciente.ImgDocumento;
+            string caminho = paciente!.ImgDocumento ?? string.Empty;
 
             var imagem = new BuscaImagem(paciente);
 
@@ -150,12 +168,15 @@ namespace GerenciadorHospital.Services.Paciente
                                         {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Paciente)} ->
                                         Busca do documento com ID: {id}, não foi realizada.");
 
-            return imagem.BuscarImagem(caminho);
+            return imagem is null ? throw new Exception("Ocorreu um erro ao carregar a imagem") 
+                                  : imagem.BuscarImagem(caminho);
         }
+        #endregion
 
+        #region Service - Buscar Paciente Por ID
         public async Task<PacienteModel> BuscarPorId(int id)
         {
-            PacienteModel paciente = await _pacienteRepositorio.BuscarPorId(id);
+            PacienteModel? paciente = await _pacienteRepositorio.BuscarPorId(id);
 
             if (paciente is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Paciente)}: Busca do paciente com ID: {id}, foi realizada.");
@@ -164,9 +185,11 @@ namespace GerenciadorHospital.Services.Paciente
                                         {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Paciente)} ->
                                         Busca do paciente com ID: {id}, não foi realizada.");
 
-            return paciente;
+            return paciente ?? throw new Exception("Não foi possível buscar o paciente por ID, a busca retornou nulo");
         }
+        #endregion
 
+        #region Service - Buscar Todos os Pacientes
         public async Task<List<PacienteModel>> BuscarTodosPacientes()
         {
             List<PacienteModel> pacientes = await _pacienteRepositorio.BuscarTodosPacientes();
@@ -176,7 +199,8 @@ namespace GerenciadorHospital.Services.Paciente
             else
                 _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_GET_Paciente)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Paciente)}");
 
-            return pacientes;
+            return pacientes ?? throw new Exception("Não foi possível buscar todos os paciente, a busca retornou nulo");
         }
+        #endregion
     }
 }

@@ -1,23 +1,23 @@
-﻿using GerenciadorHospital.Models;
-using GerenciadorHospital.Repositorios.Interfaces;
+﻿using GerenciadorHospital.Dto.Requests;
+using GerenciadorHospital.Models;
 using GerenciadorHospital.Services.Laudo;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GerenciadorHospital.Controllers
 {
+    [Tags("Laudo")]
     [Route("api/[controller]")]
     [ApiController]
     public class LaudoController : ControllerBase
     {
-        private readonly ILaudoRepositorio _laudoRepositorio;
+        private readonly ILaudoService _laudoService;
         private readonly ILogger<LaudoController> _logger;
         #region Construtor
-        public LaudoController(ILaudoRepositorio laudoRepositorio, 
-                               ILogger<LaudoController> logger)
+        public LaudoController(ILogger<LaudoController> logger,
+                               ILaudoService laudoService)
         {
-            _laudoRepositorio = laudoRepositorio;
+            _laudoService = laudoService;
             _logger = logger;
         }
         #endregion
@@ -34,9 +34,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                LaudoService laudoService = new LaudoService(_laudoRepositorio, _logger);
-                var response = await laudoService.BuscarTodosLaudos();
-                
+                var response = await _laudoService.BuscarTodosLaudos();   
                 return Ok(response);
             }
             catch (Exception erro)
@@ -60,10 +58,33 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                LaudoService laudoService = new LaudoService(_laudoRepositorio, _logger);
-                var response = await laudoService.BuscarPorId(id);
+                var response = await _laudoService.BuscarPorId(id);
 
                 return Ok(response);
+            }
+            catch (Exception erro)
+            {
+                _logger.LogError($"{nameof(Enums.CodigosLogErro.E_GET_Laudo)}: Não foi possível buscar o laudo com ID: {id}. Erro:{erro.Message}");
+                return BadRequest($"Não foi possível buscar o laudo com ID: {id}. Erro:{erro.Message}");
+            }
+        }
+        #endregion
+
+        #region GET Buscar Imagem do Laudo Por ID
+        /// <summary>
+        /// Busca Laudos por ID
+        /// </summary>
+        /// <param name="id">ID do Laudo</param>
+        /// <returns>Laudo</returns>
+        /// <response code="200">Laudo Retornado com SUCESSO</response>
+        [HttpGet("BuscarImagemLaudo/{id}")]
+        [Authorize(Policy = "StandardRights")]
+        public async Task<ActionResult<LaudoModel>> BuscarImagemLaudoPorId(int id)
+        {
+            try
+            {
+                var response = await _laudoService.BuscarImagemLaudoPorId(id);
+                return response;
             }
             catch (Exception erro)
             {
@@ -89,9 +110,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                LaudoService laudoService = new LaudoService(_laudoRepositorio, _logger);
-                var response = await laudoService.BuscarLaudo(dataInicial, dataFinal, medicoId, pacienteId);
-
+                var response = await _laudoService.BuscarLaudo(dataInicial, dataFinal, medicoId, pacienteId);
                 return Ok(response);
             }
             catch (Exception erro)
@@ -106,18 +125,16 @@ namespace GerenciadorHospital.Controllers
         /// <summary>
         /// Cadastrar Laudo
         /// </summary>
-        /// <param name="laudoModel">Dados do Laudo</param>
+        /// <param name="laudoDto">Dados do Laudo</param>
         /// <returns>Laudo Cadastrado</returns>
         /// <response code="200">Laudo Cadastrado com SUCESSO</response>
         [HttpPost]
         [Authorize(Policy = "AdminAndDoctorRights")]
-        public async Task<ActionResult<LaudoModel>> Adicionar([FromBody] LaudoModel laudoModel)
+        public async Task<ActionResult<LaudoModel>> Adicionar(LaudoDto laudoDto)
         {
             try
             {
-                LaudoService laudoService = new LaudoService(_laudoRepositorio, _logger);
-                var response = await laudoService.Adicionar(laudoModel);
-
+                var response = await _laudoService.Adicionar(laudoDto);
                 return Ok(response);
             }
             catch (Exception erro)
@@ -133,18 +150,16 @@ namespace GerenciadorHospital.Controllers
         /// Atualizar Laudo
         /// </summary>
         /// <param name="id">ID do Laudo</param>
-        /// <param name="laudoModel">Dados do Laudo</param>
+        /// <param name="laudoDto">Dados do Laudo</param>
         /// <returns>Laudo atualizado</returns>
         /// <response code="200">Laudo Atualizado com SUCESSO</response>
         [HttpPut("{id}")]
         [Authorize(Policy = "AdminAndDoctorRights")]
-        public async Task<ActionResult<LaudoModel>> Atualizar([FromBody] LaudoModel laudoModel, int id)
+        public async Task<ActionResult<LaudoModel>> Atualizar(LaudoDto laudoDto, int id)
         {
             try
             {
-                LaudoService laudoService = new LaudoService(_laudoRepositorio, _logger);
-                var response = await laudoService.Atualizar(laudoModel, id);
-
+                var response = await _laudoService.Atualizar(laudoDto, id);
                 return Ok(response);
             }
             catch (Exception erro)
@@ -168,9 +183,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                LaudoService laudoService = new LaudoService(_laudoRepositorio, _logger);
-                var response = await laudoService.Apagar(id);
-
+                var response = await _laudoService.Apagar(id);
                 return Ok(response);
             }
             catch (Exception erro)

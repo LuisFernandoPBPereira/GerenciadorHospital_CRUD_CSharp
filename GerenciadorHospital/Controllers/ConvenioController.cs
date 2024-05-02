@@ -1,24 +1,23 @@
-﻿using GerenciadorHospital.Models;
-using GerenciadorHospital.Repositorios;
-using GerenciadorHospital.Repositorios.Interfaces;
+﻿using GerenciadorHospital.Dto.Requests;
+using GerenciadorHospital.Models;
 using GerenciadorHospital.Services.Convenio;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GerenciadorHospital.Controllers
 {
+    [Tags("Convênio")]
     [Route("api/[controller]")]
     [ApiController]
     public class ConvenioController : ControllerBase
     {
-        private readonly IConvenioRepositorio _convenioRepositorio;
+        private readonly IConvenioService _convenioService;
         private readonly ILogger<ConvenioController> _logger;
         #region Construtor
-        public ConvenioController(IConvenioRepositorio convenioRepositorio, 
-                                  ILogger<ConvenioController> logger)
+        public ConvenioController(ILogger<ConvenioController> logger,
+                                  IConvenioService convenioService)
         {
-            _convenioRepositorio = convenioRepositorio;
+            _convenioService = convenioService;
             _logger = logger;
             _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Convenio)}: Os valores foram atribuídos no construtor da Controller");
         }
@@ -36,9 +35,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                ConvenioService convenioService = new ConvenioService(_convenioRepositorio, _logger);
-                var response  = await convenioService.BuscarTodosConvenios();
-
+                var response  = await _convenioService.BuscarTodosConvenios();
                 return Ok(response);
             }
             catch (Exception erro)
@@ -62,9 +59,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                ConvenioService convenioService = new ConvenioService(_convenioRepositorio, _logger);
-                var response = await convenioService.BuscarPorId(id);
-
+                var response = await _convenioService.BuscarPorId(id);
                 return Ok(response);
             }
             catch (Exception erro)
@@ -79,17 +74,15 @@ namespace GerenciadorHospital.Controllers
         /// <summary>
         /// Cadastrar Convênio
         /// </summary>
-        /// <param name="convenioModel">Dados do convênio</param>
+        /// <param name="convenioDto">Dados do convênio</param>
         /// <response code="200">Convênio Cadastrado com SUCESSO</response>
         [HttpPost]
         [Authorize(Policy = "ElevatedRights")]
-        public async Task<ActionResult<ConvenioModel>> Adicionar([FromBody] ConvenioModel convenioModel)
+        public async Task<ActionResult<ConvenioModel>> Adicionar([FromBody] ConvenioDto convenioDto)
         {
             try
             {
-                ConvenioService convenioService = new ConvenioService(_convenioRepositorio, _logger);
-                var response = await convenioService.Adicionar(convenioModel);
-
+                var response = await _convenioService.Adicionar(convenioDto);
                 return Ok(response);
             }
             catch (Exception erro)
@@ -104,19 +97,17 @@ namespace GerenciadorHospital.Controllers
         /// <summary>
         /// Atualizar Convênio
         /// </summary>
-        /// <param name="convenioModel">Dados do Convênio</param>
+        /// <param name="convenioDto">Dados do Convênio</param>
         /// <param name="id">ID do Convênio</param>
         /// <returns>Os dados atualizados</returns>
         /// <response code="200">Convênio Atualizado com SUCESSO</response>
         [HttpPut("{id}")]
         [Authorize(Policy = "ElevatedRights")]
-        public async Task<ActionResult<ConvenioModel>> Atualizar([FromBody] ConvenioModel convenioModel, int id)
+        public async Task<ActionResult<ConvenioModel>> Atualizar([FromBody] ConvenioDto convenioDto, int id)
         {
             try
             {
-                ConvenioService convenioService = new ConvenioService(_convenioRepositorio, _logger);
-                var response = await convenioService.Atualizar(convenioModel, id);
-
+                var response = await _convenioService.Atualizar(convenioDto, id);
                 return Ok(response);
             }
             catch (Exception erro)
@@ -140,9 +131,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                ConvenioService convenioService = new ConvenioService(_convenioRepositorio, _logger);
-                var response = await convenioService.Apagar(id);
-
+                var response = await _convenioService.Apagar(id);
                 return Ok(response);
             }
             catch (Exception erro)

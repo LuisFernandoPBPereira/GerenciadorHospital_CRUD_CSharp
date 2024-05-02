@@ -1,13 +1,11 @@
 ﻿using GerenciadorHospital.Controllers;
-using GerenciadorHospital.Dto;
-using GerenciadorHospital.Entities;
+using GerenciadorHospital.Dto.Requests;
+using GerenciadorHospital.Dto.Responses;
 using GerenciadorHospital.Enums;
 using GerenciadorHospital.Models;
-using GerenciadorHospital.Repositorios;
-using GerenciadorHospital.Repositorios.Interfaces;
+using GerenciadorHospital.Repositorios.Consulta;
+using GerenciadorHospital.Repositorios.Paciente;
 using GerenciadorHospital.Utils;
-using System.Globalization;
-using System.Runtime.Intrinsics.X86;
 
 namespace GerenciadorHospital.Services.Consulta
 {
@@ -18,6 +16,7 @@ namespace GerenciadorHospital.Services.Consulta
         private readonly ILogger<RegistroConsultaController> _logger;
         MensagensLog mensagensLog = new MensagensLog();
 
+        #region Construtor
         public RegistroConsultaService(IRegistroConsultaRepositorio consultaRepositorio,
                                        IPacienteRepositorio pacienteRepositorio,
                                        ILogger<RegistroConsultaController> logger)
@@ -27,10 +26,13 @@ namespace GerenciadorHospital.Services.Consulta
             _logger = logger;
             _logger.LogInformation($"{Enums.CodigosLogSucesso.S_Consulta}: Os valores foram atribuídos no construtor da Service.");
         }
+        #endregion
 
-
-        public async Task<RegistroConsultaModel> Adicionar(RegistroConsultaModel consultaModel)
+        #region Service - Adicionar Consulta
+        public async Task<RegistroConsultaModel> Adicionar(RegistroConsultaDto consultaDto)
         {
+            RegistroConsultaModel consultaModel = new RegistroConsultaModel(consultaDto);
+
             ValidaConsulta validaConsulta = new ValidaConsulta(_consultaRepositorio, consultaModel, _pacienteRepositorio);
             var consultaValidada = validaConsulta.ValidacaoConsulta();
 
@@ -51,9 +53,11 @@ namespace GerenciadorHospital.Services.Consulta
                                   {mensagensLog.ExibirMensagem(CodigosLogErro.E_POST_Consulta)} ->
                                   Não foi possível agendar uma consulta");
 
-            return consulta ?? throw new Exception("Não foi possível agendar uma consulta");
+            return consulta ?? throw new Exception("Não foi possível agendar uma consulta, reponse foi nulo");
         }
+        #endregion
 
+        #region Service - Apagar Consulta
         public async Task<bool> Apagar(int id)
         {
             bool apagado = await _consultaRepositorio.Apagar(id);
@@ -67,9 +71,18 @@ namespace GerenciadorHospital.Services.Consulta
 
             return apagado;
         }
+        #endregion
 
-        public async Task<RegistroConsultaModel> Atualizar(RegistroConsultaModel consultaModel, int id)
+        #region Service - Atualizar Consulta
+        public async Task<RegistroConsultaModel> Atualizar(RegistroConsultaDto consultaDto, int id)
         {
+            RegistroConsultaModel consultaModel = new RegistroConsultaModel(consultaDto);
+            ValidaConsulta validaConsulta = new ValidaConsulta(_consultaRepositorio, consultaModel, _pacienteRepositorio);
+            var consultaValidada = await validaConsulta.ValidacaoConsulta();
+
+            if (consultaValidada == false)
+                throw new Exception("Não foi possível atualizar a consulta.");
+
             if (consultaModel.EstadoConsulta == Enums.StatusConsulta.Atendida)
             {
                 consultaModel.DataRetorno = DateTime.Now.AddDays(30);
@@ -84,9 +97,11 @@ namespace GerenciadorHospital.Services.Consulta
                                         {mensagensLog.ExibirMensagem(CodigosLogErro.E_PUT_Consulta)} ->
                                         Atualização de consulta com o ID: {id} não foi concluída.");
 
-            return consulta;
+            return consulta ?? throw new Exception("Não foi possível atualizar a consulta, response foi nulo");
         }
+        #endregion
 
+        #region Service - Buscar Consulta Por ID do Médico
         public async Task<List<RegistroConsultaModel>> BuscarConsultaPorMedicoId(int id, StatusConsulta statusConsulta, string? dataInicial, string? dataFinal)
         {
             if (dataInicial == null) dataInicial = string.Empty;
@@ -100,9 +115,11 @@ namespace GerenciadorHospital.Services.Consulta
                                         {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Consulta)} ->
                                         Busca de consultas por Médico com ID: {id} e Status Consulta {statusConsulta} realizada, porém sem conteúdo.");
 
-            return consultas;
+            return consultas ?? throw new Exception("Não foi possível buscar a consulta com o ID do médico, a busca retornou nulo");
         }
+        #endregion
 
+        #region Service - Buscar Consulta Por ID do Paciente
         public async Task<List<RegistroConsultaModel>> BuscarConsultaPorPacienteId(int id, StatusConsulta statusConsulta)
         {
             List<RegistroConsultaModel> consultas = await _consultaRepositorio.BuscarConsultaPorPacienteId(id, statusConsulta);
@@ -114,10 +131,11 @@ namespace GerenciadorHospital.Services.Consulta
                                         {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Consulta)} ->
                                         Busca de consultas por Paciente com ID: {id} e Status Consulta {statusConsulta} realizada, porém sem conteúdo.");
 
-            return consultas;
-
+            return consultas ?? throw new Exception("Não foi possível buscar consulta por ID do paciente, a busca retornou nulo");
         }
+        #endregion
 
+        #region Service - Buscar Consulta Por ID
         public async Task<RegistroConsultaModel> BuscarPorId(int id)
         {
             RegistroConsultaModel consultas = await _consultaRepositorio.BuscarPorId(id);
@@ -129,19 +147,22 @@ namespace GerenciadorHospital.Services.Consulta
                                         {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Consulta)} ->
                                         Busca de consulta com ID: {id} porém sem conteúdo.");
 
-            return consultas;
+            return consultas ?? throw new Exception("Não foi possível buscar a consulta por ID, a busca retornou nulo");
         }
+        #endregion
 
-        public async Task<List<RegistroConsultaModel>> BuscarTodosRegistrosConsultas()
+        #region Service - Buscar Todas Consultas
+        public async Task<List<ConsultaResponseDto>> BuscarTodosRegistrosConsultas()
         {
-            List<RegistroConsultaModel> consultas = await _consultaRepositorio.BuscarTodosRegistrosConsultas();
+            List<ConsultaResponseDto> consultas = await _consultaRepositorio.BuscarTodosRegistrosConsultas();
             if(consultas is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Consulta)}: Busca de todas as consultas realizada.");
             else
                 _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_GET_Consulta)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Consulta)}");
 
 
-            return consultas;
+            return consultas ?? throw new Exception("Resultado da busca foi nulo");
         }
+        #endregion
     }
 }

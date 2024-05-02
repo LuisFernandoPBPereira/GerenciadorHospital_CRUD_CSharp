@@ -1,4 +1,5 @@
-﻿using GerenciadorHospital.Models;
+﻿using GerenciadorHospital.Dto.Requests;
+using GerenciadorHospital.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GerenciadorHospital.Services.Medico
@@ -7,8 +8,9 @@ namespace GerenciadorHospital.Services.Medico
     {
         public Task<List<MedicoModel>> BuscarTodosMedicos();
         public Task<MedicoModel> BuscarPorId(int id);
-        public Task<MedicoModel> Adicionar(MedicoModel medicoModel);
-        public Task<MedicoModel> Atualizar(MedicoModel medicoModel, int id);
+        public Task<FileContentResult> BuscarDocMedicoPorId(int id);
+        public Task<MedicoModel> Adicionar(MedicoDto medicoDto);
+        public Task<MedicoModel> Atualizar(MedicoDto medicoDto, int id);
         public Task<bool> Apagar(int id);
     }
 }

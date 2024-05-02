@@ -1,34 +1,25 @@
-﻿using FileTypeChecker;
-using FileTypeChecker.Abstracts;
-using GerenciadorHospital.Dto;
-using GerenciadorHospital.Entities;
+﻿using GerenciadorHospital.Dto.Requests;
 using GerenciadorHospital.Models;
-using GerenciadorHospital.Repositorios.Interfaces;
-using GerenciadorHospital.Services;
 using GerenciadorHospital.Services.Paciente;
-using GerenciadorHospital.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace GerenciadorHospital.Controllers;
 
+[Tags("Paciente")]
 [Route("api/[controller]")]
 [ApiController]
 public class PacienteController : ControllerBase
 {
-    private readonly IPacienteRepositorio _pacienteRepositorio;
-    private readonly IAuthenticationService _authenticationService;
+    private readonly IPacienteService _pacienteService;
     private readonly ILogger<PacienteController> _logger;
 
     #region Construtor
-    public PacienteController(IPacienteRepositorio pacienteRepositorio,
-                              IAuthenticationService authenticationService,
-                              ILogger<PacienteController> logger)
+    public PacienteController(ILogger<PacienteController> logger,
+                              IPacienteService pacienteService)
     {
-        _pacienteRepositorio = pacienteRepositorio;
-        _authenticationService = authenticationService;
         _logger = logger;
+        _pacienteService = pacienteService;
     }
     #endregion
 
@@ -44,9 +35,7 @@ public class PacienteController : ControllerBase
     {
         try
         {
-            PacienteService pacienteService = new PacienteService(_pacienteRepositorio, _authenticationService, _logger);
-            var response = await pacienteService.BuscarTodosPacientes();
-
+            var response = await _pacienteService.BuscarTodosPacientes();
             return Ok(response);
         }
         catch(Exception erro)
@@ -70,9 +59,7 @@ public class PacienteController : ControllerBase
     {
         try
         {
-            PacienteService pacienteService = new PacienteService(_pacienteRepositorio, _authenticationService, _logger);
-            var response = await pacienteService.BuscarPorId(id);
-
+            var response = await _pacienteService.BuscarPorId(id);
             return Ok(response);
         }
         catch (Exception erro)
@@ -96,9 +83,7 @@ public class PacienteController : ControllerBase
     {
         try
         {
-            PacienteService pacienteService = new PacienteService(_pacienteRepositorio, _authenticationService, _logger);
-            var response = await pacienteService.BuscarDocConvenioPorId(id);
-
+            var response = await _pacienteService.BuscarDocConvenioPorId(id);
             return Ok(response);
         }
         catch (Exception erro)
@@ -118,14 +103,12 @@ public class PacienteController : ControllerBase
     /// <response code="200">Imagem retornada com sucesso</response>
     [HttpGet("MostrarDoc/{id}")]
     [Authorize(Policy = "AdminAndDoctorRights")]
-    public async Task<ActionResult<List<PacienteModel>>> BuscarDocPorId(int id)
+    public async Task<ActionResult<MedicoModel>> BuscarDocPorId(int id)
     {
         try
         {
-            PacienteService pacienteService = new PacienteService(_pacienteRepositorio, _authenticationService, _logger);
-            var response = await pacienteService.BuscarDocPorId(id);
-
-            return Ok(response);
+            var response = await _pacienteService.BuscarDocPorId(id);
+            return response;
         }
         catch (Exception erro)
         {
@@ -139,17 +122,16 @@ public class PacienteController : ControllerBase
     /// <summary>
     /// Cadastrar um Paciente
     /// </summary>
-    /// <param name="pacienteModel">Dados do Paciente</param>
+    /// <param name="pacienteDto">Dados do Paciente</param>
     /// <returns>Paciente Cadastrado</returns>
     /// <response code="200">Paciente cadastrado com SUCESSO</response>
     [HttpPost]
     [Authorize(Policy = "AdminAndDoctorRights")]
-    public async Task<ActionResult<PacienteModel>> Adicionar(PacienteModel pacienteModel)
+    public async Task<ActionResult<PacienteModel>> Adicionar(PacienteDto pacienteDto)
     {
         try 
         {
-            PacienteService retornoService = new PacienteService(_pacienteRepositorio, _authenticationService, _logger);
-            var response = await retornoService.AdicionarPaciente(pacienteModel);
+            var response = await _pacienteService.AdicionarPaciente(pacienteDto);
             
             return Ok(response);
         }
@@ -165,19 +147,16 @@ public class PacienteController : ControllerBase
     /// <summary>
     /// Atualizar um Paciente
     /// </summary>
-    /// <param name="pacienteModel">Dados do Paciente</param>
+    /// <param name="pacienteDto">Dados do Paciente</param>
     /// <param name="id">ID do Paciente</param>
     /// <returns>O paciente atualizado</returns>
     /// <response code="200">Paciente atualizado com SUCESSO</response>
     [HttpPut("{id}")]
     [Authorize(Policy = "StandardRights")]
-    public async Task<ActionResult<PacienteModel>> Atualizar([FromBody] PacienteModel pacienteModel, int id)
-    {
+    public async Task<ActionResult<PacienteModel>> Atualizar(PacienteDto pacienteDto, int id)    {
         try
         {
-            PacienteService pacienteService = new PacienteService(_pacienteRepositorio, _authenticationService, _logger);
-            var response = await pacienteService.Atualizar(pacienteModel, id);
-
+            var response = await _pacienteService.Atualizar(pacienteDto, id);
             return Ok(response);
         }
         catch (Exception erro)
@@ -202,9 +181,7 @@ public class PacienteController : ControllerBase
     {
         try
         {
-            PacienteService pacienteService = new PacienteService(_pacienteRepositorio, _authenticationService, _logger);
-            var response = await pacienteService.AtualizarDoc(documentoImagemDto, id);
-
+            var response = await _pacienteService.AtualizarDoc(documentoImagemDto, id);
             return Ok(response);
         }
         catch (Exception erro)
@@ -229,8 +206,7 @@ public class PacienteController : ControllerBase
     {
         try
         {
-            PacienteService pacienteService = new PacienteService(_pacienteRepositorio, _authenticationService, _logger);
-            var response = await pacienteService.Apagar(id);
+            var response = await _pacienteService.Apagar(id);
 
             return Ok(response);
         }

@@ -1,7 +1,10 @@
 ﻿using GerenciadorHospital.Controllers;
+using GerenciadorHospital.Dto.Requests;
 using GerenciadorHospital.Enums;
 using GerenciadorHospital.Models;
-using GerenciadorHospital.Repositorios.Interfaces;
+using GerenciadorHospital.Repositorios.Laudo;
+using GerenciadorHospital.Utils;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GerenciadorHospital.Services.Laudo
 {
@@ -10,6 +13,8 @@ namespace GerenciadorHospital.Services.Laudo
         private readonly ILaudoRepositorio _laudoRepositorio;
         private readonly ILogger<LaudoController> _logger;
         MensagensLog mensagensLog = new MensagensLog();
+
+        #region Construtor
         public LaudoService(ILaudoRepositorio laudoRepositorio,
                             ILogger<LaudoController> logger)
         {
@@ -17,18 +22,33 @@ namespace GerenciadorHospital.Services.Laudo
             _logger = logger;
             _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Laudo)}: Os valores foram atribuídos no construtor da Service");
         }
-        public async Task<LaudoModel> Adicionar(LaudoModel laudoModel)
+        #endregion
+
+        #region Service - Adicionar Laudo
+        public async Task<LaudoModel> Adicionar(LaudoDto laudoDto)
         {
-            LaudoModel laudo = await _laudoRepositorio.Adicionar(laudoModel);
+            LaudoModel laudoModel = new LaudoModel(laudoDto);
+            ValidaLaudo validaLaudo = new ValidaLaudo(laudoModel);
+            validaLaudo.ValidacaoLaudo();
 
-            if (laudo is not null)
-                _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Laudo)}: Cadastro do laudo foi realizado.");
-            else
-                _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_POST_Laudo)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_POST_Laudo)}");
+            if (validaLaudo.ValidaImagem())
+            {
+                LaudoModel laudo = await _laudoRepositorio.Adicionar(laudoModel);
 
-            return laudo;
+                if (laudo is not null)
+                    _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Laudo)}: Cadastro do laudo foi realizado.");
+                else
+                    _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_POST_Laudo)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_POST_Laudo)}");
+
+                return laudo ?? throw new Exception("Não foi possível cadastrar o laudo, a response foi nula");
+            }
+
+            throw new Exception("Não foi possível validar o laudo, a imagem não é válida");
+
         }
+        #endregion
 
+        #region Service - Apagar Laudo
         public async Task<bool> Apagar(int id)
         {
             bool apagado = await _laudoRepositorio.Apagar(id);
@@ -40,9 +60,20 @@ namespace GerenciadorHospital.Services.Laudo
 
             return apagado;
         }
+        #endregion
 
-        public async Task<LaudoModel> Atualizar(LaudoModel laudoModel, int id)
+        #region Service - Atualizar Laudo
+        public async Task<LaudoModel> Atualizar(LaudoDto laudoDto, int id)
         {
+            LaudoModel laudoModel = new LaudoModel(laudoDto);
+            ValidaLaudo validaLaudo = new ValidaLaudo(laudoModel);
+
+            validaLaudo.ValidacaoLaudo();
+            var laudoValidado = validaLaudo.ValidaImagem();
+
+            if (laudoValidado == false)
+                throw new Exception("Não foi possível carregar a imagem");
+
             LaudoModel laudo = await _laudoRepositorio.Atualizar(laudoModel, id);
 
             if (laudo is not null)
@@ -50,9 +81,31 @@ namespace GerenciadorHospital.Services.Laudo
             else
                 _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_PUT_Laudo)}:  {mensagensLog.ExibirMensagem(CodigosLogErro.E_PUT_Laudo)}");
 
-            return laudo;
+            return laudo ?? throw new Exception("Não foi possível atualizar o laudo, a response foi nula");
         }
+        #endregion
 
+        #region Service - Buscar Imagem do Laudo Por ID
+        public async Task<FileContentResult> BuscarImagemLaudoPorId(int id)
+        {
+            LaudoModel? laudo = await _laudoRepositorio.BuscarImagemLaudoPorId(id);
+            ValidaLaudo validaLaudo = new ValidaLaudo(laudo!);
+
+            string caminho = laudo!.CaminhoImagemLaudo ?? string.Empty;
+            var imagem = validaLaudo.BuscarImagemLaudo(caminho);
+
+            if (imagem is not null)
+                _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Laudo)}: Busca do documento do convênio com ID: {id}, foi realizada.");
+            else
+                _logger.LogInformation(@$"{nameof(Enums.CodigosLogErro.E_GET_Laudo)}: 
+                                        {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Laudo)} ->
+                                        Busca da imagem do laudo com ID: {id}, não foi realizada.");
+
+            return validaLaudo.BuscarImagemLaudo(caminho);
+        }
+        #endregion
+
+        #region Service - Buscar Laudo com Filtro
         public async Task<List<LaudoModel>> BuscarLaudo(string? dataInicial, string? dataFinal, int medicoId, int pacienteId)
         {
             dataInicial = dataInicial ?? string.Empty;
@@ -64,12 +117,14 @@ namespace GerenciadorHospital.Services.Laudo
             else
                 _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_GET_Laudo)}:  {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Laudo)}");
 
-            return laudos;
+            return laudos ?? throw new Exception("Não foi possível buscar o laudo, a busca retornou nulo");
         }
+        #endregion
 
+        #region Service - Buscar Laudo Por ID
         public async Task<LaudoModel> BuscarPorId(int id)
         {
-            LaudoModel laudo = await _laudoRepositorio.BuscarPorId(id);
+            LaudoModel? laudo = await _laudoRepositorio.BuscarPorId(id);
 
             if (laudo is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Laudo)}: Busca do laudo com o ID: {id} foi realizada.");
@@ -78,9 +133,11 @@ namespace GerenciadorHospital.Services.Laudo
                                         {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Laudo)} ->
                                         Busca do laudo com o ID: {id} não foi realizada.");
 
-            return laudo;
+            return laudo ?? throw new Exception("Não foi possível buscar o laudo, a buscar retornou nulo");
         }
+        #endregion
 
+        #region Service - Buscar Todos os Laudos
         public async Task<List<LaudoModel>> BuscarTodosLaudos()
         {
             List<LaudoModel> laudos = await _laudoRepositorio.BuscarTodosLaudos();
@@ -90,7 +147,8 @@ namespace GerenciadorHospital.Services.Laudo
             else
                 _logger.LogInformation($"{nameof(Enums.CodigosLogErro.E_GET_Laudo)}: {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Laudo)}");
 
-            return laudos;
+            return laudos ?? throw new Exception("Não foi possível buscar todos os laudos, a busca retornou nulo");
         }
+        #endregion
     }
 }

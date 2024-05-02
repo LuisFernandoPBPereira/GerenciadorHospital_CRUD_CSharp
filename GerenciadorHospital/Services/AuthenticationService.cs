@@ -1,8 +1,6 @@
 ﻿using FluentResults;
-using GerenciadorHospital.Dto;
-using GerenciadorHospital.Entities;
+using GerenciadorHospital.Dto.Requests;
 using GerenciadorHospital.Models;
-using GerenciadorHospital.Repositorios.Interfaces;
 using GerenciadorHospital.Utils;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -35,8 +33,6 @@ namespace GerenciadorHospital.Services
 
             if (usuarioPorUsername is not null) return Result.Fail(new Error($"Usuário com o nome {request.Nome} já existe."));
 
-
-
             UsuarioModel user = new()
             {
                 UserName = request.UserName,
@@ -67,38 +63,38 @@ namespace GerenciadorHospital.Services
         public async Task<Result<string>> Login(LoginRequestDto request)
         {
             var user = await _usuarioRepositorio.FindByNameAsync(request.UserName);
-            var isValidSenha = senhaComHash.VerifyHashedPassword(user, user.Senha, request.Senha);
 
-            if(isValidSenha == PasswordVerificationResult.Success)
+            if (user is null)
+                throw new Exception("Usuário e/ou senha incorretos, tente novamente");
+
+            var isValidSenha = senhaComHash.VerifyHashedPassword(user, user.Senha!, request.Senha!);
+
+            if(isValidSenha == PasswordVerificationResult.Failed)
             {
-                if (user is null || !await _usuarioRepositorio.CheckPasswordAsync(user, user.Senha))
-                    return Result.Fail(new Error($"Não foi possível autenticar o usuário {request.UserName}"));
-
-                var authClaims = new List<Claim>
-                {
-                    new(ClaimTypes.Name, user.UserName),
-                    new(ClaimTypes.Role, user.Role),
-                    new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                };
-
-                var userRoles = await _usuarioRepositorio.GetRolesAsync(user);
-
-                authClaims.AddRange(userRoles.Select(userRole => new Claim(ClaimTypes.Role, userRole)));
-
-                var token = GetToken(authClaims);
-
-                return Result.Ok(new JwtSecurityTokenHandler().WriteToken(token));
+                return Result.Fail(new Error($"Usuário e/ou senha incorretos, tente novamente"));
             }
 
-            return Result.Fail(new Error($"Não foi possível autenticar o usuário {request.UserName}"));
+            var authClaims = new List<Claim>
+            {
+                new(ClaimTypes.Name, user.UserName!),
+                new(ClaimTypes.Role, user.Role!),
+                new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            };
 
+            var userRoles = await _usuarioRepositorio.GetRolesAsync(user);
+
+            authClaims.AddRange(userRoles.Select(userRole => new Claim(ClaimTypes.Role, userRole)));
+
+            var token = GetToken(authClaims);
+
+            return Result.Ok(new JwtSecurityTokenHandler().WriteToken(token));
         }
         #endregion
 
         #region Service - Geração do Token JWT
         private JwtSecurityToken GetToken(IEnumerable<Claim> authClaims)
         {
-            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]!));
 
             var token = new JwtSecurityToken(
                 issuer: _configuration["JWT:ValidIssuer"],

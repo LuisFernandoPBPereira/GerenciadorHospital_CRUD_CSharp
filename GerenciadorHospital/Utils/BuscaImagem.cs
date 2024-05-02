@@ -1,5 +1,4 @@
 ﻿using GerenciadorHospital.Models;
-using GerenciadorHospital.Repositorios.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GerenciadorHospital.Utils;
@@ -15,7 +14,7 @@ public class BuscaImagem : ControllerBase
     {
         if (caminho != null)
         {
-            if (_pacienteModel.ImgCarteiraDoConvenio == null || _pacienteModel.ImgDocumento == null)
+            if ((_pacienteModel.TemConvenio && _pacienteModel.ImgCarteiraDoConvenio == null) || _pacienteModel.ImgDocumento == null)
                 throw new Exception("Não foi possível carregar a imagem");
 
             Byte[] b = System.IO.File.ReadAllBytes($"{caminho}");

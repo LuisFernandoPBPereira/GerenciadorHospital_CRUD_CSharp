@@ -1,32 +1,27 @@
-﻿using GerenciadorHospital.Enums;
+﻿using GerenciadorHospital.Dto.Requests;
+using GerenciadorHospital.Dto.Responses;
+using GerenciadorHospital.Enums;
 using GerenciadorHospital.Models;
-using GerenciadorHospital.Repositorios;
-using GerenciadorHospital.Repositorios.Interfaces;
 using GerenciadorHospital.Services.Consulta;
-using GerenciadorHospital.Utils;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
 
 namespace GerenciadorHospital.Controllers
 {
+    [Tags("Consulta")]
     [Route("api/[controller]")]
     [ApiController]
     public class RegistroConsultaController : ControllerBase
     {
-        private readonly IRegistroConsultaRepositorio _consultaRepositorio;
-        private readonly IPacienteRepositorio _pacienteRepositorio;
+        private readonly IRegistroConsultaService _registroConsultaService;
         private readonly ILogger<RegistroConsultaController> _logger;
         #region Construtor
-        public RegistroConsultaController(IRegistroConsultaRepositorio consultaRepositorio, 
-                                          IPacienteRepositorio pacienteRepositorio,
-                                          ILogger<RegistroConsultaController> logger)
+        public RegistroConsultaController(ILogger<RegistroConsultaController> logger,
+                                          IRegistroConsultaService registroConsultaService)
         {
-            _consultaRepositorio = consultaRepositorio;
-            _pacienteRepositorio = pacienteRepositorio;
             _logger = logger;
             _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Consulta)}: Os valores foram atribuídos no construtor da Controller.");
+            _registroConsultaService = registroConsultaService;
         }
         #endregion
 
@@ -38,13 +33,11 @@ namespace GerenciadorHospital.Controllers
         /// <response code="200">Consultas Retornadas com SUCESSO</response>
         [HttpGet]
         [Authorize(Policy = "AdminAndDoctorRights")]
-        public async Task<ActionResult<List<RegistroConsultaModel>>> BuscarTodosRegistrosConsultas()
+        public async Task<ActionResult<List<ConsultaResponseDto>>> BuscarTodosRegistrosConsultas()
         {
             try
-            {
-                RegistroConsultaService registroConsultaService = new RegistroConsultaService(_consultaRepositorio, _pacienteRepositorio, _logger);
-                var response = await registroConsultaService.BuscarTodosRegistrosConsultas();
-
+            {                
+                var response = await _registroConsultaService.BuscarTodosRegistrosConsultas();
                 return Ok(response);
             }
             catch (Exception erro)
@@ -64,14 +57,23 @@ namespace GerenciadorHospital.Controllers
         /// <response code="200">Consulta Retornada com SUCESSO</response>
         [HttpGet("{id}")]
         [Authorize(Policy = "AdminAndDoctorRights")]
-        public async Task<ActionResult<List<RegistroConsultaModel>>> BuscarPorId(int id)
+        public async Task<ActionResult<List<ConsultaResponseDto>>> BuscarPorId(int id)
         {
             try
             {
-                RegistroConsultaService registroConsultaService = new RegistroConsultaService(_consultaRepositorio, _pacienteRepositorio, _logger);
-                var response = await registroConsultaService.BuscarPorId(id);
+                var response = await _registroConsultaService.BuscarPorId(id);
+                ConsultaResponseDto consultaResponse = new ConsultaResponseDto(
+                    response.Id,
+                    response.DataConsulta,
+                    response.DataRetorno,
+                    response.Valor,
+                    response.EstadoConsulta,
+                    response.Laudo?.Select(x => x.Descricao).ToList(),
+                    response.Exame?.Nome,
+                    new PacienteResponseDto(response.Paciente!),
+                    new MedicoResponseDto(response.Medico!));
 
-                return Ok(response);
+                return Ok(consultaResponse);
             }
             catch (Exception erro)
             {
@@ -95,9 +97,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                RegistroConsultaService registroConsultaService = new RegistroConsultaService(_consultaRepositorio, _pacienteRepositorio, _logger);
-                var response = await registroConsultaService.BuscarConsultaPorPacienteId(id, statusConsulta);
-
+                var response = await _registroConsultaService.BuscarConsultaPorPacienteId(id, statusConsulta);
                 return Ok(response);
             }
             catch (Exception erro)
@@ -124,9 +124,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                RegistroConsultaService registroConsultaService = new RegistroConsultaService(_consultaRepositorio, _pacienteRepositorio, _logger);
-                var response = await registroConsultaService.BuscarConsultaPorMedicoId(id, statusConsulta, dataInicial, dataFinal);
-
+                var response = await _registroConsultaService.BuscarConsultaPorMedicoId(id, statusConsulta, dataInicial, dataFinal);
                 return Ok(response);
             }
             catch (Exception erro)
@@ -141,18 +139,16 @@ namespace GerenciadorHospital.Controllers
         /// <summary>
         /// Cadastrar Consulta
         /// </summary>
-        /// <param name="consultaModel">Dados da Consulta</param>
+        /// <param name="consultaDto">Dados da Consulta</param>
         /// <returns>Consulta Cadastrada</returns>
         /// <response code="200">Consulta Cadastrada com SUCESSO</response>
         [HttpPost]
         [Authorize(Policy = "AdminAndDoctorRights")]
-        public async Task<ActionResult<RegistroConsultaModel>> Adicionar([FromBody] RegistroConsultaModel consultaModel)
+        public async Task<ActionResult<RegistroConsultaModel>> Adicionar([FromBody] RegistroConsultaDto consultaDto)
         {
             try
             {
-                RegistroConsultaService registroConsultaService = new RegistroConsultaService(_consultaRepositorio, _pacienteRepositorio, _logger);
-                var response = await registroConsultaService.Adicionar(consultaModel);
-
+                var response = await _registroConsultaService.Adicionar(consultaDto);
                 return Ok(response);
             }
             catch (Exception erro)
@@ -168,18 +164,16 @@ namespace GerenciadorHospital.Controllers
         /// Atualizar Consulta
         /// </summary>
         /// <param name="id">ID da Consulta</param>
-        /// <param name="consultaModel">Dados da Consulta</param>
+        /// <param name="consultaDto">Dados da Consulta</param>
         /// <returns>Consulta Atualizada</returns>
         /// <response code="200">Consulta Atualizada com SUCESSO</response>
         [HttpPut("{id}")]
         [Authorize(Policy = "AdminAndDoctorRights")]
-        public async Task<ActionResult<RegistroConsultaModel>> Atualizar([FromBody] RegistroConsultaModel consultaModel, int id)
+        public async Task<ActionResult<RegistroConsultaModel>> Atualizar([FromBody] RegistroConsultaDto consultaDto, int id)
         {
             try
             {
-                RegistroConsultaService registroConsultaService = new RegistroConsultaService(_consultaRepositorio, _pacienteRepositorio, _logger);
-                var response = await registroConsultaService.Atualizar(consultaModel, id);
-
+                var response = await _registroConsultaService.Atualizar(consultaDto, id);
                 return Ok(response);
             }
             catch (Exception erro)
@@ -203,9 +197,7 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                RegistroConsultaService registroConsultaService = new RegistroConsultaService(_consultaRepositorio, _pacienteRepositorio, _logger);
-                var response = await registroConsultaService.Apagar(id);
-
+                var response = await _registroConsultaService.Apagar(id);
                 return Ok(response);
             }
             catch (Exception erro)

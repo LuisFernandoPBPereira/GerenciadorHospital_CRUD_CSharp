@@ -2,8 +2,6 @@
 using GerenciadorHospital.Data;
 using GerenciadorHospital.Entities;
 using GerenciadorHospital.Models;
-using GerenciadorHospital.Repositorios;
-using GerenciadorHospital.Repositorios.Interfaces;
 using GerenciadorHospital.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -15,24 +13,39 @@ using System.Text;
 using NLog;
 using NLog.Web;
 using GerenciadorHospital.Utils;
+using GerenciadorHospital.Services.Consulta;
+using GerenciadorHospital.Services.Convenio;
+using GerenciadorHospital.Services.Exame;
+using GerenciadorHospital.Services.Laudo;
+using GerenciadorHospital.Services.Medicamento;
+using GerenciadorHospital.Services.Medico;
+using GerenciadorHospital.Services.Paciente;
+using GerenciadorHospital.Services.Usuario;
+using GerenciadorHospital.Repositorios.Convenio;
+using GerenciadorHospital.Repositorios.Laudo;
+using GerenciadorHospital.Repositorios.Medicamento;
+using GerenciadorHospital.Repositorios.Medico;
+using GerenciadorHospital.Repositorios.Paciente;
+using GerenciadorHospital.Repositorios.Consulta;
+using GerenciadorHospital.Repositorios.Exame;
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
-logger.Debug("init main");
+logger.Debug("INICIANDO APLICAÇÃO");
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
 // Contexto do Banco (SQLite para testes no banco)
-builder.Services.AddDbContext<BancoContext>(options => options.UseSqlite(configuration.GetConnectionString("DataBase")));
+//builder.Services.AddDbContext<BancoContext>(options => options.UseSqlite(configuration.GetConnectionString("DataBase")));
 
 #region Configuração do SQL Server
 // Configuramos o EntityFramework
-/*
+
 builder.Services.AddEntityFrameworkSqlServer().
     AddDbContext<BancoContext>(
-        options => options.UseSqlServer(builder.Configuration.GetConnectionString("DataBase"))
+        options => options.UseSqlServer(builder.Configuration.GetConnectionString("DataBaseMS"))
 );
-*/
+
 #endregion
 
 #region Configuração do Identity
@@ -66,7 +79,7 @@ builder.Services.AddAuthentication(options =>
             ValidateAudience = true,
             ValidAudience = configuration["JWT:ValidAudience"],
             ValidIssuer = configuration["JWT:ValidIssuer"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"])),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]!)),
             ClockSkew = TimeSpan.Zero
         };
     });
@@ -126,6 +139,14 @@ builder.Services.AddSwaggerGen(c =>
 #region Configuração das Injeções de Dependência (adição do escopo)
 //Configuramos as injeções de dependências para podermos acessar a controller
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<IRegistroConsultaService, RegistroConsultaService>();
+builder.Services.AddScoped<IConvenioService, ConvenioService>();
+builder.Services.AddScoped<ITipoExameService, TipoExameService>();
+builder.Services.AddScoped<ILaudoService, LaudoService>();
+builder.Services.AddScoped<IMedicamentosService, MedicamentosService>();
+builder.Services.AddScoped<IMedicoService, MedicoService>();
+builder.Services.AddScoped<IPacienteService, PacienteService>();
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IPacienteRepositorio, PacienteRepositorio>();
 builder.Services.AddScoped<IConvenioRepositorio, ConvenioRepositorio>();
 builder.Services.AddScoped<IMedicoRepositorio, MedicoRepositorio>();

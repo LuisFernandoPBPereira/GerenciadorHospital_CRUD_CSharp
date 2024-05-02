@@ -1,4 +1,4 @@
-﻿using GerenciadorHospital.Dto;
+﻿using GerenciadorHospital.Dto.Requests;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GerenciadorHospital.Services.Usuario

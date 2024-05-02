@@ -1,14 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using GerenciadorHospital.Dto.Requests;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GerenciadorHospital.Models
 {
     public class PacienteModel
     {
+        // Doc: O campo não anulável precisa conter um valor não nulo ao sair do construtor. Considere declará-lo como anulável.
+        #pragma warning disable CS8618
         public int Id { get; set; }
-        public string Nome { get; set; }
-        public string Cpf { get; set; }
-        public string Senha { get; set; }
-        public string Endereco { get; set; }
+        public string Nome { get; set; } = string.Empty;
+        public string Cpf { get; set; } = string.Empty;
+        public string Senha { get; set; } = string.Empty;
+        public string Endereco { get; set; } = string.Empty;
         public DateTime DataNasc { get; set; }
         public bool TemConvenio { get; set; }
         public string? ImgCarteiraDoConvenio { get; set; }
@@ -17,11 +20,22 @@ namespace GerenciadorHospital.Models
         public IFormFile Doc { get; set; }
         [NotMapped]
         public IFormFile? DocConvenio { get; set; }
-        /*
-         * Pegamos o ID do convenio e do medicamento,
-         * além de pegarmos os objetos convenio e medicamento
-        */
         public int? ConvenioId { get; set; }
         public virtual ConvenioModel? Convenio {  get; set; }
+
+        public PacienteModel() {   }
+
+        public PacienteModel(PacienteDto pacienteDto)
+        {
+            Nome = pacienteDto.Nome;
+            Cpf = pacienteDto.Cpf;
+            Senha = pacienteDto.Senha;
+            Endereco = pacienteDto.Endereco;
+            DataNasc = pacienteDto.DataNasc;
+            TemConvenio = pacienteDto.TemConvenio;
+            Doc = pacienteDto.Doc;
+            DocConvenio = pacienteDto?.DocConvenio;
+            ConvenioId = pacienteDto?.ConvenioId;
+        }
     }
 }

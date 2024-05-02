@@ -1,7 +1,6 @@
 ﻿using FileTypeChecker;
-using GerenciadorHospital.Dto;
+using GerenciadorHospital.Dto.Requests;
 using GerenciadorHospital.Models;
-using GerenciadorHospital.Repositorios.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GerenciadorHospital.Utils
@@ -19,6 +18,11 @@ namespace GerenciadorHospital.Utils
 
         public bool ValidacaoImagem()
         {
+            if(_documentoImagem.Doc == null)
+            {
+                _documentoImagem.Doc = _pacienteModel.Doc;
+            }
+
             if(_pacienteModel.TemConvenio && _documentoImagem.DocConvenio != null)
             {
                 var arquivoDocConvenio = _documentoImagem.DocConvenio.OpenReadStream();
