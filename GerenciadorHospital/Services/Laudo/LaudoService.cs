@@ -1,5 +1,6 @@
 ﻿using GerenciadorHospital.Controllers;
 using GerenciadorHospital.Dto.Requests;
+using GerenciadorHospital.Dto.Responses;
 using GerenciadorHospital.Enums;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Repositorios.Laudo;
@@ -106,11 +107,11 @@ namespace GerenciadorHospital.Services.Laudo
         #endregion
 
         #region Service - Buscar Laudo com Filtro
-        public async Task<List<LaudoModel>> BuscarLaudo(string? dataInicial, string? dataFinal, int medicoId, int pacienteId)
+        public async Task<List<LaudoResponseDto>> BuscarLaudo(string? dataInicial, string? dataFinal, int medicoId, int pacienteId)
         {
             dataInicial = dataInicial ?? string.Empty;
             dataFinal = dataFinal ?? string.Empty;
-            List<LaudoModel> laudos = await _laudoRepositorio.BuscarLaudo(dataInicial, dataFinal, medicoId, pacienteId);
+            List<LaudoResponseDto> laudos = await _laudoRepositorio.BuscarLaudo(dataInicial, dataFinal, medicoId, pacienteId);
 
             if (laudos is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Laudo)}: Busca do laudo foi realizada.");
@@ -121,8 +122,24 @@ namespace GerenciadorHospital.Services.Laudo
         }
         #endregion
 
+        #region Service - Buscar Laudo Por ID DTO
+        public async Task<LaudoResponseDto?> BuscarPorIdDto(int id)
+        {
+            LaudoResponseDto? laudo = await _laudoRepositorio.BuscarPorIdDto(id);
+
+            if (laudo is not null)
+                _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Laudo)}: Busca do laudo com o ID: {id} foi realizada.");
+            else
+                _logger.LogInformation(@$"{nameof(Enums.CodigosLogErro.E_GET_Laudo)}: 
+                                        {mensagensLog.ExibirMensagem(CodigosLogErro.E_GET_Laudo)} ->
+                                        Busca do laudo com o ID: {id} não foi realizada.");
+
+            return laudo ?? throw new Exception("Não foi possível buscar o laudo, a buscar retornou nulo");
+        }
+        #endregion
+        
         #region Service - Buscar Laudo Por ID
-        public async Task<LaudoModel> BuscarPorId(int id)
+        public async Task<LaudoModel?> BuscarPorId(int id)
         {
             LaudoModel? laudo = await _laudoRepositorio.BuscarPorId(id);
 
@@ -138,9 +155,9 @@ namespace GerenciadorHospital.Services.Laudo
         #endregion
 
         #region Service - Buscar Todos os Laudos
-        public async Task<List<LaudoModel>> BuscarTodosLaudos()
+        public async Task<List<LaudoResponseDto>> BuscarTodosLaudos()
         {
-            List<LaudoModel> laudos = await _laudoRepositorio.BuscarTodosLaudos();
+            List<LaudoResponseDto> laudos = await _laudoRepositorio.BuscarTodosLaudos();
 
             if (laudos is not null)
                 _logger.LogInformation($"{nameof(Enums.CodigosLogSucesso.S_Laudo)}: Busca de todos os laudos foi realizada.");
