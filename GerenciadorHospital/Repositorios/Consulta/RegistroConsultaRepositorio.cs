@@ -68,7 +68,7 @@ namespace GerenciadorHospital.Repositorios.Consulta
         #endregion
 
         #region Repositório - Buscar Consulta Por ID do Paciente
-        public async Task<List<RegistroConsultaModel>> BuscarConsultaPorPacienteId(int id, StatusConsulta statusConsulta)
+        public async Task<List<ConsultaResponseDto>> BuscarConsultaPorPacienteId(int id, StatusConsulta statusConsulta)
         {
             return await _bancoContext.RegistrosConsultas
                 .Where(x => statusConsulta == 0 ? x.PacienteId == id : x.PacienteId == id && x.EstadoConsulta == statusConsulta)
@@ -76,12 +76,23 @@ namespace GerenciadorHospital.Repositorios.Consulta
                 .Include(x => x.Paciente)
                 .Include(x => x.Laudo)
                 .Include(x => x.Exame)
+                .Select(x => new ConsultaResponseDto(
+                        x.Id,
+                        x.DataConsulta,
+                        x.DataRetorno,
+                        x.Valor,
+                        x.EstadoConsulta,
+                        x.Laudo!.Select(y => y.Descricao).ToList(),
+                        x.Exame == null ? "Não há exame" : x.Exame.Nome,
+                        new PacienteResponseDto(x.Paciente!),
+                        new MedicoResponseDto(x.Medico!)
+                    ))
                 .ToListAsync();
         }
         #endregion
 
         #region Repositório - Buscar Consulta Por ID do Médico
-        public async Task<List<RegistroConsultaModel>> BuscarConsultaPorMedicoId(int id, StatusConsulta statusConsulta, string? dataInicial, string? dataFinal)
+        public async Task<List<ConsultaResponseDto>> BuscarConsultaPorMedicoId(int id, StatusConsulta statusConsulta, string? dataInicial, string? dataFinal)
         {
             DateTime dataInicialConvertida = DateTime.Now;
             DateTime dataFinalConvertida = DateTime.Now;
@@ -103,6 +114,17 @@ namespace GerenciadorHospital.Repositorios.Consulta
                 .Include(x => x.Paciente)
                 .Include(x => x.Laudo)
                 .Include(x => x.Exame)
+                .Select(x => new ConsultaResponseDto(
+                        x.Id,
+                        x.DataConsulta,
+                        x.DataRetorno,
+                        x.Valor,
+                        x.EstadoConsulta,
+                        x.Laudo!.Select(y => y.Descricao).ToList(),
+                        x.Exame == null ? "Não há exame" : x.Exame.Nome,
+                        new PacienteResponseDto(x.Paciente!),
+                        new MedicoResponseDto(x.Medico!)
+                    ))
                 .ToListAsync();
         }
         #endregion

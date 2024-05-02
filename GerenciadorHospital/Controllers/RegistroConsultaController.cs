@@ -61,19 +61,8 @@ namespace GerenciadorHospital.Controllers
         {
             try
             {
-                var response = await _registroConsultaService.BuscarPorId(id);
-                ConsultaResponseDto consultaResponse = new ConsultaResponseDto(
-                    response.Id,
-                    response.DataConsulta,
-                    response.DataRetorno,
-                    response.Valor,
-                    response.EstadoConsulta,
-                    response.Laudo?.Select(x => x.Descricao).ToList(),
-                    response.Exame?.Nome,
-                    new PacienteResponseDto(response.Paciente!),
-                    new MedicoResponseDto(response.Medico!));
-
-                return Ok(consultaResponse);
+                var response = await _registroConsultaService.BuscarPorIdDto(id);
+                return Ok(response);
             }
             catch (Exception erro)
             {
@@ -93,7 +82,7 @@ namespace GerenciadorHospital.Controllers
         /// <response code="200">Consulta Retornada com SUCESSO</response>
         [HttpGet("BuscarConsultaPorPaciente/{id}")]
         [Authorize(Policy = "StandardRights")]
-        public async Task<ActionResult<List<RegistroConsultaModel>>> BuscarConsultaPorPacienteId(int id, StatusConsulta statusConsulta)
+        public async Task<ActionResult<List<ConsultaResponseDto>>> BuscarConsultaPorPacienteId(int id, StatusConsulta statusConsulta)
         {
             try
             {
@@ -120,7 +109,7 @@ namespace GerenciadorHospital.Controllers
         /// <response code="200">Consulta Retornada com SUCESSO</response>
         [HttpGet("BuscarConsultaPorMedico/{id}")]
         [Authorize(Policy = "StandardRights")]
-        public async Task<ActionResult<List<RegistroConsultaModel>>> BuscarConsultaPorMedicoId(int id, StatusConsulta statusConsulta, string? dataInicial, string? dataFinal)
+        public async Task<ActionResult<List<ConsultaResponseDto>>> BuscarConsultaPorMedicoId(int id, StatusConsulta statusConsulta, string? dataInicial, string? dataFinal)
         {
             try
             {
