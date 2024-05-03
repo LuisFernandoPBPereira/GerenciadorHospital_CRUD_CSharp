@@ -72,15 +72,17 @@ namespace GerenciadorHospital.Repositorios.Laudo
 
             var query = _bancoContext.Laudos.Where(x => x.PacienteId == pacienteId && x.MedicoId == medicoId);
 
-            if (medicoId == 0) query = query.Where(x => x.PacienteId == pacienteId);
-            if (pacienteId == 0) query = query.Where(x => x.MedicoId == medicoId);
-            if (medicoId == 0 && pacienteId == 0) query = _bancoContext.Laudos;
+            if (pacienteId == 0)
+                query = _bancoContext.Laudos.Where(x => x.MedicoId == medicoId);
+            
+            if(medicoId == 0)
+                query = _bancoContext.Laudos.Where(x => x.PacienteId == pacienteId);
 
             if (dataInicial != string.Empty && dataInicial != null && dataFinal != null)
             {
                 dataInicialConvertida = DateTime.Parse(dataInicial);
                 dataFinalConvertida = DateTime.Parse(dataFinal);
-                query = query.Where(x => x.DataCriacao > dataInicialConvertida && x.DataCriacao < dataFinalConvertida);
+                query = _bancoContext.Laudos.Where(x => x.DataCriacao > dataInicialConvertida && x.DataCriacao < dataFinalConvertida);
 
             }
             return await query
@@ -99,21 +101,19 @@ namespace GerenciadorHospital.Repositorios.Laudo
         #region Repositório - Buscar Laudo Por ID
         public async Task<LaudoResponseDto?> BuscarPorIdDto(int id)
         {
-            // A CONSULTA ESTÁ VINDO NULA
-            var laudo = _bancoContext.Laudos
-                .Include(x => x.Paciente)
-                .Select(x => new LaudoResponseDto(
-                        x.Id,
-                        x.Descricao,
-                        x.DataCriacao,
-                        x.PacienteId,
-                        x.MedicoId,
-                        x.MedicamentoId
-                    ))
-                .FirstOrDefaultAsync(x => x.Id == id);
+            var laudoModel = await _bancoContext.Laudos
+                            .Where(x => x.Id == id)
+                            .Select(x => new LaudoResponseDto(
+                                x.Id,
+                                x.Descricao,
+                                x.DataCriacao,
+                                x.PacienteId,
+                                x.MedicoId,
+                                x.MedicamentoId
+                            ))
+                            .FirstOrDefaultAsync();
 
-
-            return await laudo;
+            return laudoModel;
         }
         #endregion
         
