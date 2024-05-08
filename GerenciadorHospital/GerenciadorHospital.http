@@ -1,6 +1,22 @@
-@GerenciadorHospital_HostAddress = http://localhost:5242
+@GerenciadorHospital_HostAddress = https://localhost:7021
+@TokenJWT = Bearer SEU_TOKEN_JWT
 
-GET {{GerenciadorHospital_HostAddress}}/weatherforecast/
-Accept: application/json
+GET {{GerenciadorHospital_HostAddress}}/api/RegistroConsulta
+Authorization: {{TokenJWT}}
+Content-Type: application/json
 
 ###
+
+GET {{GerenciadorHospital_HostAddress}}/api/Paciente/MostrarDoc/1
+Authorization: {{TokenJWT}}
+Content-Type: application/json
+
+###
+
+POST {{GerenciadorHospital_HostAddress}}/api/Usuario/login
+Content-Type: application/json
+
+{
+    "username": "string",
+    "senha": "string"
+}
