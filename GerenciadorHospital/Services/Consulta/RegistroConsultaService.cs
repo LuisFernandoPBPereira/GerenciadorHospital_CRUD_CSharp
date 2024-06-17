@@ -78,7 +78,7 @@ namespace GerenciadorHospital.Services.Consulta
         {
             RegistroConsultaModel consultaModel = new RegistroConsultaModel(consultaDto);
             ValidaConsulta validaConsulta = new ValidaConsulta(_consultaRepositorio, consultaModel, _pacienteRepositorio);
-            var consultaValidada = await validaConsulta.ValidacaoConsulta();
+            var consultaValidada = await validaConsulta.ValidacaoConsulta(id);
 
             if (consultaValidada == false)
                 throw new Exception("Não foi possível atualizar a consulta.");

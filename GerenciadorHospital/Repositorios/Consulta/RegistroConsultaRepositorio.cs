@@ -136,6 +136,8 @@ namespace GerenciadorHospital.Repositorios.Consulta
                 .Include(x => x.Medico)
                 .Include(x => x.Paciente)
                 .Include(x => x.Laudo)
+                .Include(x => x.Exame)
+                .Where(x => x.Id == id)
                 .Select(x => new ConsultaResponseDto(
                         x.Id,
                         x.DataConsulta,
@@ -147,8 +149,7 @@ namespace GerenciadorHospital.Repositorios.Consulta
                         new PacienteResponseDto(x.Paciente!),
                         new MedicoResponseDto(x.Medico!)
                     ))
-                .Include(x => x.Exame)
-                .FirstOrDefaultAsync(x => x.Id == id);
+                .FirstOrDefaultAsync();
 
             if (consulta is null)
                 throw new Exception("Nenhuma consulta foi encontrada");
