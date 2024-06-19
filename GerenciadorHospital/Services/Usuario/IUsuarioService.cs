@@ -1,5 +1,4 @@
 ﻿using GerenciadorHospital.Dto.Requests;
-using Microsoft.AspNetCore.Mvc;
 
 namespace GerenciadorHospital.Services.Usuario
 {

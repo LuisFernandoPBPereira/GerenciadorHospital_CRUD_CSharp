@@ -29,7 +29,7 @@ namespace GerenciadorHospital.Controllers
         /// <param name="usuarioModel">Dados do Paciente</param>
         /// <returns>Paciente Cadastrado</returns>
         /// <response code="200">Paciente cadastrado com SUCESSO</response>
-        [AllowAnonymous]
+        [Authorize(Policy = "ElevatedRights")]
         [HttpPost("cadastro")]
         public async Task<IActionResult> Cadastrar([FromBody] CadastroRequestDto usuarioModel)
         {

@@ -1,4 +1,5 @@
 ﻿using GerenciadorHospital.Data;
+using GerenciadorHospital.Data.ORM;
 using GerenciadorHospital.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,18 +8,20 @@ namespace GerenciadorHospital.Repositorios.Exame
     public class TipoExameRepositorio : ITipoExameRepositorio
     {
         private readonly BancoContext _bancoContext;
+        private readonly IRepositorioORM<TipoExameModel> _ormRepo;
         #region Construtor
-        public TipoExameRepositorio(BancoContext bancoContext)
+        public TipoExameRepositorio(BancoContext bancoContext, IRepositorioORM<TipoExameModel> entityFramework)
         {
             _bancoContext = bancoContext;
+            _ormRepo = entityFramework;
         }
         #endregion
 
         #region Repositório - Adicionar Exame
         public async Task<TipoExameModel> Adicionar(TipoExameModel tipoExame)
         {
-            await _bancoContext.TiposExames.AddAsync(tipoExame);
-            await _bancoContext.SaveChangesAsync();
+            await _ormRepo.AddAsync(tipoExame);
+            await _ormRepo.SaveChangesAsync();
 
             return tipoExame;
         }
@@ -32,8 +35,8 @@ namespace GerenciadorHospital.Repositorios.Exame
             if (tipoExamePorId == null)
                 throw new Exception($"Tipo de Exame para o ID: {id} não foi encontrado no banco de dados.");
 
-            _bancoContext.TiposExames.Remove(tipoExamePorId);
-            await _bancoContext.SaveChangesAsync();
+            _ormRepo.Delete(tipoExamePorId);
+            await _ormRepo.SaveChangesAsync();
 
             return true;
         }
@@ -51,8 +54,8 @@ namespace GerenciadorHospital.Repositorios.Exame
             tipoExamePorId.PacienteId = tipoExame.PacienteId;
             tipoExamePorId.MedicoId = tipoExame.MedicoId;
 
-            _bancoContext.TiposExames.Update(tipoExamePorId);
-            await _bancoContext.SaveChangesAsync();
+            _ormRepo.Update(tipoExamePorId);
+            await _ormRepo.SaveChangesAsync();
 
             return tipoExamePorId;
         }

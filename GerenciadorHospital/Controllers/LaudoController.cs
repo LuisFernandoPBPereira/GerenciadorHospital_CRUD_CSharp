@@ -1,4 +1,5 @@
 ﻿using GerenciadorHospital.Dto.Requests;
+using GerenciadorHospital.Dto.Responses;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Services.Laudo;
 using Microsoft.AspNetCore.Authorization;
@@ -30,7 +31,7 @@ namespace GerenciadorHospital.Controllers
         /// <response code="200">Laudos Retornados com SUCESSO</response>
         [HttpGet]
         [Authorize(Policy = "StandardRights")]
-        public async Task<ActionResult<List<LaudoModel>>> BuscarTodosLaudos()
+        public async Task<ActionResult<List<LaudoResponseDto>>> BuscarTodosLaudos()
         {
             try
             {
@@ -54,11 +55,11 @@ namespace GerenciadorHospital.Controllers
         /// <response code="200">Laudo Retornado com SUCESSO</response>
         [HttpGet("{id}")]
         [Authorize(Policy = "StandardRights")]
-        public async Task<ActionResult<List<LaudoModel>>> BuscarPorId(int id)
+        public async Task<ActionResult<LaudoResponseDto>> BuscarPorId(int id)
         {
             try
             {
-                var response = await _laudoService.BuscarPorId(id);
+                var response = await _laudoService.BuscarPorIdDto(id);
 
                 return Ok(response);
             }
@@ -106,7 +107,7 @@ namespace GerenciadorHospital.Controllers
         /// <response code="200">Laudo Retornado com SUCESSO</response>
         [HttpGet("BuscarLaudo")]
         [Authorize(Policy = "StandardRights")]
-        public async Task<ActionResult<List<LaudoModel>>> BuscarLaudo(string? dataInicial, string? dataFinal, int medicoId, int pacienteId)
+        public async Task<ActionResult<List<LaudoResponseDto>>> BuscarLaudo(string? dataInicial, string? dataFinal, int medicoId, int pacienteId)
         {
             try
             {

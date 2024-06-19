@@ -5,7 +5,6 @@ namespace GerenciadorHospital.Dto.Requests
 {
     public class CadastroRequestDto
     {
-        public int Id { get; set; }
         [Required]
         [MinLength(Consts.TamanhoMinimoUserName, ErrorMessage = Consts.ErroDeValidacaoTamanhoUserName)]
         public string UserName { get; set; } = string.Empty;

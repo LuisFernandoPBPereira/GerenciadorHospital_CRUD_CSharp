@@ -1,29 +1,29 @@
 ﻿using GerenciadorHospital.Data;
+using GerenciadorHospital.Data.ORM;
 using GerenciadorHospital.Dto.Responses;
 using GerenciadorHospital.Enums;
 using GerenciadorHospital.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.Linq;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace GerenciadorHospital.Repositorios.Consulta
 {
     public class RegistroConsultaRepositorio : IRegistroConsultaRepositorio
     {
         private readonly BancoContext _bancoContext;
+        private readonly IRepositorioORM<RegistroConsultaModel> _ormRepo;
         #region Construtor
-        public RegistroConsultaRepositorio(BancoContext bancoContext)
+        public RegistroConsultaRepositorio(BancoContext bancoContext, IRepositorioORM<RegistroConsultaModel> entityFramework)
         {
             _bancoContext = bancoContext;
+            _ormRepo = entityFramework;
         }
         #endregion
 
         #region Repositório - Adicionar Consulta
         public async Task<RegistroConsultaModel> Adicionar(RegistroConsultaModel registroConsulta)
         {
-            await _bancoContext.RegistrosConsultas.AddAsync(registroConsulta);
-            await _bancoContext.SaveChangesAsync();
+            await _ormRepo.AddAsync(registroConsulta);
+            await _ormRepo.SaveChangesAsync();
 
             return registroConsulta;
         }
@@ -37,8 +37,8 @@ namespace GerenciadorHospital.Repositorios.Consulta
             if (consultaPorId == null)
                 throw new Exception($"Consulta para o ID: {id} não foi encontrado no banco de dados.");
 
-            _bancoContext.RegistrosConsultas.Remove(consultaPorId);
-            await _bancoContext.SaveChangesAsync();
+            _ormRepo.Delete(consultaPorId);
+            await _ormRepo.SaveChangesAsync();
 
             return true;
         }
@@ -60,7 +60,7 @@ namespace GerenciadorHospital.Repositorios.Consulta
             consultaPorId.PacienteId = registroConsulta.PacienteId;
             consultaPorId.ExameId = registroConsulta.ExameId;
 
-            _bancoContext.RegistrosConsultas.Update(consultaPorId);
+            _ormRepo.Update(consultaPorId);
             await _bancoContext.SaveChangesAsync();
 
             return consultaPorId;
@@ -68,7 +68,7 @@ namespace GerenciadorHospital.Repositorios.Consulta
         #endregion
 
         #region Repositório - Buscar Consulta Por ID do Paciente
-        public async Task<List<RegistroConsultaModel>> BuscarConsultaPorPacienteId(int id, StatusConsulta statusConsulta)
+        public async Task<List<ConsultaResponseDto>> BuscarConsultaPorPacienteId(int id, StatusConsulta statusConsulta)
         {
             return await _bancoContext.RegistrosConsultas
                 .Where(x => statusConsulta == 0 ? x.PacienteId == id : x.PacienteId == id && x.EstadoConsulta == statusConsulta)
@@ -76,12 +76,23 @@ namespace GerenciadorHospital.Repositorios.Consulta
                 .Include(x => x.Paciente)
                 .Include(x => x.Laudo)
                 .Include(x => x.Exame)
+                .Select(x => new ConsultaResponseDto(
+                        x.Id,
+                        x.DataConsulta,
+                        x.DataRetorno,
+                        x.Valor,
+                        x.EstadoConsulta,
+                        x.Laudo!.Select(y => y.Descricao).ToList(),
+                        x.Exame == null ? "Não há exame" : x.Exame.Nome,
+                        new PacienteResponseDto(x.Paciente!),
+                        new MedicoResponseDto(x.Medico!)
+                    ))
                 .ToListAsync();
         }
         #endregion
 
         #region Repositório - Buscar Consulta Por ID do Médico
-        public async Task<List<RegistroConsultaModel>> BuscarConsultaPorMedicoId(int id, StatusConsulta statusConsulta, string? dataInicial, string? dataFinal)
+        public async Task<List<ConsultaResponseDto>> BuscarConsultaPorMedicoId(int id, StatusConsulta statusConsulta, string? dataInicial, string? dataFinal)
         {
             DateTime dataInicialConvertida = DateTime.Now;
             DateTime dataFinalConvertida = DateTime.Now;
@@ -103,17 +114,6 @@ namespace GerenciadorHospital.Repositorios.Consulta
                 .Include(x => x.Paciente)
                 .Include(x => x.Laudo)
                 .Include(x => x.Exame)
-                .ToListAsync();
-        }
-        #endregion
-
-        #region Repositório - Buscar Consulta Por ID
-        public async Task<ConsultaResponseDto> BuscarPorIdDto(int id)
-        {
-            var consulta = await _bancoContext.RegistrosConsultas
-                .Include(x => x.Medico)
-                .Include(x => x.Paciente)
-                .Include(x => x.Laudo)
                 .Select(x => new ConsultaResponseDto(
                         x.Id,
                         x.DataConsulta,
@@ -125,8 +125,31 @@ namespace GerenciadorHospital.Repositorios.Consulta
                         new PacienteResponseDto(x.Paciente!),
                         new MedicoResponseDto(x.Medico!)
                     ))
+                .ToListAsync();
+        }
+        #endregion
+
+        #region Repositório - Buscar Consulta Por ID
+        public async Task<ConsultaResponseDto> BuscarPorIdDto(int id)
+        {
+            var consulta = await _bancoContext.RegistrosConsultas
+                .Include(x => x.Medico)
+                .Include(x => x.Paciente)
+                .Include(x => x.Laudo)
                 .Include(x => x.Exame)
-                .FirstOrDefaultAsync(x => x.Id == id);
+                .Where(x => x.Id == id)
+                .Select(x => new ConsultaResponseDto(
+                        x.Id,
+                        x.DataConsulta,
+                        x.DataRetorno,
+                        x.Valor,
+                        x.EstadoConsulta,
+                        x.Laudo!.Select(y => y.Descricao).ToList(),
+                        x.Exame == null ? "Não há exame" : x.Exame.Nome,
+                        new PacienteResponseDto(x.Paciente!),
+                        new MedicoResponseDto(x.Medico!)
+                    ))
+                .FirstOrDefaultAsync();
 
             if (consulta is null)
                 throw new Exception("Nenhuma consulta foi encontrada");

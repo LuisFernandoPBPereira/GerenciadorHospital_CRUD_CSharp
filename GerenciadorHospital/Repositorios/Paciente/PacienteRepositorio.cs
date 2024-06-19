@@ -1,4 +1,5 @@
 ﻿using GerenciadorHospital.Data;
+using GerenciadorHospital.Data.ORM;
 using GerenciadorHospital.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,18 +8,20 @@ namespace GerenciadorHospital.Repositorios.Paciente
     public class PacienteRepositorio : IPacienteRepositorio
     {
         private readonly BancoContext _bancoContext;
+        private readonly IRepositorioORM<PacienteModel> _ormRepo;
         #region Construtor
-        public PacienteRepositorio(BancoContext bancoContext)
+        public PacienteRepositorio(BancoContext bancoContext, IRepositorioORM<PacienteModel> ormRepo)
         {
             _bancoContext = bancoContext;
+            _ormRepo = ormRepo;
         }
         #endregion
 
         #region Repositório - Adicionar Paciente
         public async Task<PacienteModel> Adicionar(PacienteModel paciente)
         {
-            await _bancoContext.Pacientes.AddAsync(paciente);
-            await _bancoContext.SaveChangesAsync();
+            await _ormRepo.AddAsync(paciente);
+            await _ormRepo.SaveChangesAsync();
 
             return paciente;
         }
@@ -32,8 +35,8 @@ namespace GerenciadorHospital.Repositorios.Paciente
             if (pacientePorId == null)
                 throw new Exception($"Paciente para o ID: {id} não foi encontrado no banco de dados.");
 
-            _bancoContext.Pacientes.Remove(pacientePorId);
-            await _bancoContext.SaveChangesAsync();
+            _ormRepo.Delete(pacientePorId);
+            await _ormRepo.SaveChangesAsync();
 
             return true;
         }
@@ -56,8 +59,8 @@ namespace GerenciadorHospital.Repositorios.Paciente
             pacientePorId.ImgDocumento = paciente.ImgDocumento;
             pacientePorId.ImgCarteiraDoConvenio = paciente.ImgCarteiraDoConvenio;
 
-            _bancoContext.Pacientes.Update(pacientePorId);
-            await _bancoContext.SaveChangesAsync();
+            _ormRepo.Update(pacientePorId);
+            await _ormRepo.SaveChangesAsync();
 
             return pacientePorId;
         }

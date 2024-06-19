@@ -2,6 +2,7 @@
 using GerenciadorHospital.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using System.Text.RegularExpressions;
 
 namespace GerenciadorHospital.Utils
 {
@@ -62,6 +63,9 @@ namespace GerenciadorHospital.Utils
         {
             if (_medicoModel.Nome.IsNullOrEmpty())
                 throw new Exception("Informe um nome para o médico");
+
+            if (Regex.IsMatch(_medicoModel.Nome, "^[0-9]+$"))
+                throw new Exception("Informe o nome para o médico corretamente");
 
             if (_medicoModel.Cpf.IsNullOrEmpty())
                 throw new Exception("Informe um CPF para o médico");
