@@ -3,7 +3,7 @@
 public interface IRepositorioORM<T>
 {
     Task AddAsync(T entity);
-    Task Update(T entity);
-    Task Delete(T entity);
+    void Update(T entity);
+    void Delete(T entity);
     Task SaveChangesAsync();
 }

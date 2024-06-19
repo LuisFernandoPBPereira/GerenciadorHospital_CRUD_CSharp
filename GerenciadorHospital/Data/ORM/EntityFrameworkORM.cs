@@ -10,12 +10,12 @@ public class EntityFrameworkORM<T> : IRepositorioORM<T>
     }
     public async Task AddAsync(T entity)
     {
-        await _bancoContext.AddAsync(entity);
+        await _bancoContext.AddAsync(entity!);
     }
 
-    public async Task Delete(T entity)
+    public void Delete(T entity)
     {
-        _bancoContext.Remove(entity);
+        _bancoContext.Remove(entity!);
     }
 
     public async Task SaveChangesAsync()
@@ -23,8 +23,8 @@ public class EntityFrameworkORM<T> : IRepositorioORM<T>
         await _bancoContext.SaveChangesAsync();
     }
 
-    public async Task Update(T entity)
+    public void Update(T entity)
     {
-        _bancoContext.Update(entity);
+        _bancoContext.Update(entity!);
     }
 }

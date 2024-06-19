@@ -35,7 +35,7 @@ namespace GerenciadorHospital.Repositorios.Medicamento
             if (medicamentoPorId == null)
                 throw new Exception($"Medicamento para o ID: {id} não foi encontrado no banco de dados.");
 
-            await _ormRepo.Delete(medicamentoPorId);
+            _ormRepo.Delete(medicamentoPorId);
             await _ormRepo.SaveChangesAsync();
 
             return true;
@@ -55,7 +55,7 @@ namespace GerenciadorHospital.Repositorios.Medicamento
             medicamentoPorId.DataFabricacao = medicamento.DataFabricacao;
             medicamentoPorId.DataValidade = medicamento.DataValidade;
 
-            await _ormRepo.Update(medicamentoPorId);
+            _ormRepo.Update(medicamentoPorId);
             await _ormRepo.SaveChangesAsync();
 
             return medicamentoPorId;

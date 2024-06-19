@@ -35,7 +35,7 @@ namespace GerenciadorHospital.Repositorios.Convenio
             if (convenioPorId == null)
                 throw new Exception($"Convênio para o ID: {id} não foi encontrado no banco de dados.");
 
-            await _ormRepo.Delete(convenioPorId);
+            _ormRepo.Delete(convenioPorId);
             await _ormRepo.SaveChangesAsync();
 
             return true;
@@ -53,7 +53,7 @@ namespace GerenciadorHospital.Repositorios.Convenio
             convenioPorId.Nome = convenio.Nome;
             convenioPorId.Preco = convenio.Preco;
 
-            await _ormRepo.Update(convenioPorId);
+            _ormRepo.Update(convenioPorId);
             await _ormRepo.SaveChangesAsync();
 
             return convenioPorId;

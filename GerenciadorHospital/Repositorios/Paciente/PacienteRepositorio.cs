@@ -35,7 +35,7 @@ namespace GerenciadorHospital.Repositorios.Paciente
             if (pacientePorId == null)
                 throw new Exception($"Paciente para o ID: {id} não foi encontrado no banco de dados.");
 
-            await _ormRepo.Delete(pacientePorId);
+            _ormRepo.Delete(pacientePorId);
             await _ormRepo.SaveChangesAsync();
 
             return true;
@@ -59,7 +59,7 @@ namespace GerenciadorHospital.Repositorios.Paciente
             pacientePorId.ImgDocumento = paciente.ImgDocumento;
             pacientePorId.ImgCarteiraDoConvenio = paciente.ImgCarteiraDoConvenio;
 
-            await _ormRepo.Update(pacientePorId);
+            _ormRepo.Update(pacientePorId);
             await _ormRepo.SaveChangesAsync();
 
             return pacientePorId;

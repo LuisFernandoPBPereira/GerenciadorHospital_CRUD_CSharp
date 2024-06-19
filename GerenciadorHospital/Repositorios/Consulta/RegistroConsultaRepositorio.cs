@@ -37,7 +37,7 @@ namespace GerenciadorHospital.Repositorios.Consulta
             if (consultaPorId == null)
                 throw new Exception($"Consulta para o ID: {id} não foi encontrado no banco de dados.");
 
-            await _ormRepo.Delete(consultaPorId);
+            _ormRepo.Delete(consultaPorId);
             await _ormRepo.SaveChangesAsync();
 
             return true;
@@ -60,7 +60,7 @@ namespace GerenciadorHospital.Repositorios.Consulta
             consultaPorId.PacienteId = registroConsulta.PacienteId;
             consultaPorId.ExameId = registroConsulta.ExameId;
 
-            await _ormRepo.Update(consultaPorId);
+            _ormRepo.Update(consultaPorId);
             await _bancoContext.SaveChangesAsync();
 
             return consultaPorId;

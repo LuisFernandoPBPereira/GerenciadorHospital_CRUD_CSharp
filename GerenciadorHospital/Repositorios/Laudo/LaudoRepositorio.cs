@@ -38,7 +38,7 @@ namespace GerenciadorHospital.Repositorios.Laudo
             if (laudoPorId == null)
                 throw new Exception($"Laudo para o ID: {id} não foi encontrado no banco de dados.");
 
-            await _ormRepo.Delete(laudoPorId);
+            _ormRepo.Delete(laudoPorId);
             await _ormRepo.SaveChangesAsync();
 
             return true;

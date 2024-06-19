@@ -35,7 +35,7 @@ namespace GerenciadorHospital.Repositorios.Exame
             if (tipoExamePorId == null)
                 throw new Exception($"Tipo de Exame para o ID: {id} não foi encontrado no banco de dados.");
 
-            await _ormRepo.Delete(tipoExamePorId);
+            _ormRepo.Delete(tipoExamePorId);
             await _ormRepo.SaveChangesAsync();
 
             return true;
@@ -54,7 +54,7 @@ namespace GerenciadorHospital.Repositorios.Exame
             tipoExamePorId.PacienteId = tipoExame.PacienteId;
             tipoExamePorId.MedicoId = tipoExame.MedicoId;
 
-            await _ormRepo.Update(tipoExamePorId);
+            _ormRepo.Update(tipoExamePorId);
             await _ormRepo.SaveChangesAsync();
 
             return tipoExamePorId;

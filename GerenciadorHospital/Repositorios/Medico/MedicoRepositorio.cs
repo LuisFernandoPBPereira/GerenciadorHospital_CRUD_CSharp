@@ -35,7 +35,7 @@ namespace GerenciadorHospital.Repositorios.Medico
             if (medicoPorId == null)
                 throw new Exception($"Médico para o ID: {id} não foi encontrado no banco de dados.");
 
-            await _ormRepo.Delete(medicoPorId);
+            _ormRepo.Delete(medicoPorId);
             await _ormRepo.SaveChangesAsync();
 
             return true;
@@ -59,7 +59,7 @@ namespace GerenciadorHospital.Repositorios.Medico
             medicoPorId.Especializacao = medico.Especializacao;
             medicoPorId.CaminhoDoc = medico.CaminhoDoc;
 
-            await _ormRepo.Update(medicoPorId);
+            _ormRepo.Update(medicoPorId);
             await _ormRepo.SaveChangesAsync();
 
             return medicoPorId;
