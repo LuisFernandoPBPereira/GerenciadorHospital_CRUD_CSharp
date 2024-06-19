@@ -1,4 +1,5 @@
 ﻿using GerenciadorHospital.Data;
+using GerenciadorHospital.Data.ORM;
 using GerenciadorHospital.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,18 +8,20 @@ namespace GerenciadorHospital.Repositorios.Convenio
     public class ConvenioRepositorio : IConvenioRepositorio
     {
         private readonly BancoContext _bancoContext;
+        private readonly IRepositorioORM<ConvenioModel> _ormRepo;
         #region Construtor
-        public ConvenioRepositorio(BancoContext bancoContext)
+        public ConvenioRepositorio(BancoContext bancoContext, IRepositorioORM<ConvenioModel> entityFramework)
         {
             _bancoContext = bancoContext;
+            _ormRepo = entityFramework;
         }
         #endregion
 
         #region Repositório - Adicionar Convênio
         public async Task<ConvenioModel> Adicionar(ConvenioModel convenio)
         {
-            await _bancoContext.Convenios.AddAsync(convenio);
-            await _bancoContext.SaveChangesAsync();
+            await _ormRepo.AddAsync(convenio);
+            await _ormRepo.SaveChangesAsync();
 
             return convenio;
 
@@ -32,8 +35,8 @@ namespace GerenciadorHospital.Repositorios.Convenio
             if (convenioPorId == null)
                 throw new Exception($"Convênio para o ID: {id} não foi encontrado no banco de dados.");
 
-            _bancoContext.Convenios.Remove(convenioPorId);
-            await _bancoContext.SaveChangesAsync();
+            await _ormRepo.Delete(convenioPorId);
+            await _ormRepo.SaveChangesAsync();
 
             return true;
         }
@@ -50,8 +53,8 @@ namespace GerenciadorHospital.Repositorios.Convenio
             convenioPorId.Nome = convenio.Nome;
             convenioPorId.Preco = convenio.Preco;
 
-            _bancoContext.Convenios.Update(convenioPorId);
-            await _bancoContext.SaveChangesAsync();
+            await _ormRepo.Update(convenioPorId);
+            await _ormRepo.SaveChangesAsync();
 
             return convenioPorId;
         }

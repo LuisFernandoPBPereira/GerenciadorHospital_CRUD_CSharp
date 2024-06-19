@@ -1,6 +1,6 @@
 ﻿using GerenciadorHospital.Data;
+using GerenciadorHospital.Data.ORM;
 using GerenciadorHospital.Models;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace GerenciadorHospital.Repositorios.Medico
@@ -8,18 +8,20 @@ namespace GerenciadorHospital.Repositorios.Medico
     public class MedicoRepositorio : IMedicoRepositorio
     {
         private readonly BancoContext _bancoContext;
+        private readonly IRepositorioORM<MedicoModel> _ormRepo;
         #region Construtor
-        public MedicoRepositorio(BancoContext bancoContext)
+        public MedicoRepositorio(BancoContext bancoContext, IRepositorioORM<MedicoModel> ormRepo)
         {
             _bancoContext = bancoContext;
+            _ormRepo = ormRepo;
         }
         #endregion
 
         #region Repositório - Adicionar Médico
         public async Task<MedicoModel> Adicionar(MedicoModel medico)
         {
-            await _bancoContext.Medicos.AddAsync(medico);
-            await _bancoContext.SaveChangesAsync();
+            await _ormRepo.AddAsync(medico);
+            await _ormRepo.SaveChangesAsync();
 
             return medico;
         }
@@ -33,8 +35,8 @@ namespace GerenciadorHospital.Repositorios.Medico
             if (medicoPorId == null)
                 throw new Exception($"Médico para o ID: {id} não foi encontrado no banco de dados.");
 
-            _bancoContext.Medicos.Remove(medicoPorId);
-            await _bancoContext.SaveChangesAsync();
+            await _ormRepo.Delete(medicoPorId);
+            await _ormRepo.SaveChangesAsync();
 
             return true;
         }
@@ -57,8 +59,8 @@ namespace GerenciadorHospital.Repositorios.Medico
             medicoPorId.Especializacao = medico.Especializacao;
             medicoPorId.CaminhoDoc = medico.CaminhoDoc;
 
-            _bancoContext.Medicos.Update(medicoPorId);
-            await _bancoContext.SaveChangesAsync();
+            await _ormRepo.Update(medicoPorId);
+            await _ormRepo.SaveChangesAsync();
 
             return medicoPorId;
         }

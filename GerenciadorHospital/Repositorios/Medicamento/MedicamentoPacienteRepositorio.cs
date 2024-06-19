@@ -1,4 +1,5 @@
 ﻿using GerenciadorHospital.Data;
+using GerenciadorHospital.Data.ORM;
 using GerenciadorHospital.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,18 +8,20 @@ namespace GerenciadorHospital.Repositorios.Medicamento
     public class MedicamentoPacienteRepositorio : IMedicamentosPacienteRepositorio
     {
         private readonly BancoContext _bancoContext;
+        private readonly IRepositorioORM<MedicamentoPacienteModel> _ormRepo;
         #region Construtor
-        public MedicamentoPacienteRepositorio(BancoContext bancoContext)
+        public MedicamentoPacienteRepositorio(BancoContext bancoContext, IRepositorioORM<MedicamentoPacienteModel> ormRepo)
         {
             _bancoContext = bancoContext;
+            _ormRepo = ormRepo;
         }
         #endregion
 
         #region Repositório - Adicionar Medicamento
         public async Task<MedicamentoPacienteModel> Adicionar(MedicamentoPacienteModel medicamento)
         {
-            await _bancoContext.MedicamentosPaciente.AddAsync(medicamento);
-            await _bancoContext.SaveChangesAsync();
+            await _ormRepo.AddAsync(medicamento);
+            await _ormRepo.SaveChangesAsync();
 
             return medicamento;
         }
@@ -32,8 +35,8 @@ namespace GerenciadorHospital.Repositorios.Medicamento
             if (medicamentoPorId == null)
                 throw new Exception($"Medicamento para o ID: {id} não foi encontrado no banco de dados.");
 
-            _bancoContext.MedicamentosPaciente.Remove(medicamentoPorId);
-            await _bancoContext.SaveChangesAsync();
+            await _ormRepo.Delete(medicamentoPorId);
+            await _ormRepo.SaveChangesAsync();
 
             return true;
         }
@@ -52,8 +55,8 @@ namespace GerenciadorHospital.Repositorios.Medicamento
             medicamentoPorId.DataFabricacao = medicamento.DataFabricacao;
             medicamentoPorId.DataValidade = medicamento.DataValidade;
 
-            _bancoContext.MedicamentosPaciente.Update(medicamentoPorId);
-            await _bancoContext.SaveChangesAsync();
+            await _ormRepo.Update(medicamentoPorId);
+            await _ormRepo.SaveChangesAsync();
 
             return medicamentoPorId;
         }

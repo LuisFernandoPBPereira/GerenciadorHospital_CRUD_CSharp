@@ -1,4 +1,5 @@
 ﻿using GerenciadorHospital.Data;
+using GerenciadorHospital.Data.ORM;
 using GerenciadorHospital.Dto.Responses;
 using GerenciadorHospital.Models;
 using GerenciadorHospital.Utils;
@@ -9,10 +10,12 @@ namespace GerenciadorHospital.Repositorios.Laudo
     public class LaudoRepositorio : ILaudoRepositorio
     {
         private readonly BancoContext _bancoContext;
+        private readonly IRepositorioORM<LaudoModel> _ormRepo;
         #region Construtor
-        public LaudoRepositorio(BancoContext bancoContext)
+        public LaudoRepositorio(BancoContext bancoContext, IRepositorioORM<LaudoModel> ormRepo)
         {
             _bancoContext = bancoContext;
+            _ormRepo = ormRepo;
         }
         #endregion
 
@@ -20,8 +23,8 @@ namespace GerenciadorHospital.Repositorios.Laudo
         public async Task<LaudoModel> Adicionar(LaudoModel laudo)
         {
             laudo.DataCriacao = DateTime.Now;
-            await _bancoContext.Laudos.AddAsync(laudo);
-            await _bancoContext.SaveChangesAsync();
+            await _ormRepo.AddAsync(laudo);
+            await _ormRepo.SaveChangesAsync();
 
             return laudo;
         }
@@ -35,8 +38,8 @@ namespace GerenciadorHospital.Repositorios.Laudo
             if (laudoPorId == null)
                 throw new Exception($"Laudo para o ID: {id} não foi encontrado no banco de dados.");
 
-            _bancoContext.Laudos.Remove(laudoPorId);
-            await _bancoContext.SaveChangesAsync();
+            await _ormRepo.Delete(laudoPorId);
+            await _ormRepo.SaveChangesAsync();
 
             return true;
         }

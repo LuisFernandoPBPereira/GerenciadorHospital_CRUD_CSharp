@@ -3,7 +3,6 @@ using GerenciadorHospital.Dto.Extensions;
 using GerenciadorHospital.Dto.Requests;
 using GerenciadorHospital.Entities;
 using GerenciadorHospital.Enums;
-using Microsoft.AspNetCore.Mvc;
 
 namespace GerenciadorHospital.Services.Usuario
 {

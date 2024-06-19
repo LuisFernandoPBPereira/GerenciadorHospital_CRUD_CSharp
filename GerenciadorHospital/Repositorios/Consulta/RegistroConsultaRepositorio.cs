@@ -1,29 +1,29 @@
 ﻿using GerenciadorHospital.Data;
+using GerenciadorHospital.Data.ORM;
 using GerenciadorHospital.Dto.Responses;
 using GerenciadorHospital.Enums;
 using GerenciadorHospital.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.Linq;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace GerenciadorHospital.Repositorios.Consulta
 {
     public class RegistroConsultaRepositorio : IRegistroConsultaRepositorio
     {
         private readonly BancoContext _bancoContext;
+        private readonly IRepositorioORM<RegistroConsultaModel> _ormRepo;
         #region Construtor
-        public RegistroConsultaRepositorio(BancoContext bancoContext)
+        public RegistroConsultaRepositorio(BancoContext bancoContext, IRepositorioORM<RegistroConsultaModel> entityFramework)
         {
             _bancoContext = bancoContext;
+            _ormRepo = entityFramework;
         }
         #endregion
 
         #region Repositório - Adicionar Consulta
         public async Task<RegistroConsultaModel> Adicionar(RegistroConsultaModel registroConsulta)
         {
-            await _bancoContext.RegistrosConsultas.AddAsync(registroConsulta);
-            await _bancoContext.SaveChangesAsync();
+            await _ormRepo.AddAsync(registroConsulta);
+            await _ormRepo.SaveChangesAsync();
 
             return registroConsulta;
         }
@@ -37,8 +37,8 @@ namespace GerenciadorHospital.Repositorios.Consulta
             if (consultaPorId == null)
                 throw new Exception($"Consulta para o ID: {id} não foi encontrado no banco de dados.");
 
-            _bancoContext.RegistrosConsultas.Remove(consultaPorId);
-            await _bancoContext.SaveChangesAsync();
+            await _ormRepo.Delete(consultaPorId);
+            await _ormRepo.SaveChangesAsync();
 
             return true;
         }
@@ -60,7 +60,7 @@ namespace GerenciadorHospital.Repositorios.Consulta
             consultaPorId.PacienteId = registroConsulta.PacienteId;
             consultaPorId.ExameId = registroConsulta.ExameId;
 
-            _bancoContext.RegistrosConsultas.Update(consultaPorId);
+            await _ormRepo.Update(consultaPorId);
             await _bancoContext.SaveChangesAsync();
 
             return consultaPorId;
