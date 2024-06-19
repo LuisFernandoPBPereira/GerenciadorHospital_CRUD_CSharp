@@ -38,4 +38,8 @@
     <Folder Include="Logs\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GerenciadorHospital.Application\GerenciadorHospital.Application.csproj" />
+  </ItemGroup>
+
 </Project>
