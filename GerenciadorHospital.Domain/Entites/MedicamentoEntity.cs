@@ -1,6 +1,6 @@
 ﻿using GerenciadorHospital.Domain.Validations;
 
-namespace GerenciadorHospital.Models
+namespace GerenciadorHospital.Domain.Entites
 {
     public class MedicamentoEntity
     {
@@ -10,7 +10,7 @@ namespace GerenciadorHospital.Models
         public DateTime DataFabricacao { get; set; }
         public DateTime DataValidade { get; set; }
 
-        public MedicamentoEntity(){  }
+        public MedicamentoEntity() { }
 
         public MedicamentoEntity(
             int id,

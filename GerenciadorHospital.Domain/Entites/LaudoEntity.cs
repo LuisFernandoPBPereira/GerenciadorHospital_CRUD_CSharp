@@ -1,7 +1,6 @@
 ﻿using GerenciadorHospital.Domain.Validations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GerenciadorHospital.Models
+namespace GerenciadorHospital.Domain.Entites
 {
     public class LaudoEntity
     {

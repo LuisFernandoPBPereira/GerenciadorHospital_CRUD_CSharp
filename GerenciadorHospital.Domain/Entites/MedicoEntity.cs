@@ -1,7 +1,6 @@
 ﻿using GerenciadorHospital.Domain.Validations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GerenciadorHospital.Models
+namespace GerenciadorHospital.Domain.Entites
 {
     public class MedicoEntity
     {
@@ -17,7 +16,7 @@ namespace GerenciadorHospital.Models
         public string Crm { get; set; } = string.Empty;
         public string Especializacao { get; set; } = string.Empty;
 
-        public MedicoEntity() {   }
+        public MedicoEntity() { }
 
         public MedicoEntity(
             int id,

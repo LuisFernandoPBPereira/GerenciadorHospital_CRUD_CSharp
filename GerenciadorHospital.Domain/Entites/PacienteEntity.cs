@@ -1,11 +1,11 @@
 ﻿using GerenciadorHospital.Domain.Validations;
 
-namespace GerenciadorHospital.Models
+namespace GerenciadorHospital.Domain.Entites
 {
     public class PacienteEntity
     {
         // Doc: O campo não anulável precisa conter um valor não nulo ao sair do construtor. Considere declará-lo como anulável.
-        #pragma warning disable CS8618
+#pragma warning disable CS8618
         public int Id { get; set; }
         public string Nome { get; set; } = string.Empty;
         public string Cpf { get; set; } = string.Empty;
@@ -20,9 +20,9 @@ namespace GerenciadorHospital.Models
         //[NotMapped]
         //public IFormFile? DocConvenio { get; set; }
         public int? ConvenioId { get; set; }
-        public virtual ConvenioEntity? Convenio {  get; set; }
+        public virtual ConvenioEntity? Convenio { get; set; }
 
-        public PacienteEntity() {   }
+        public PacienteEntity() { }
 
         public PacienteEntity(int id,
             string nome,

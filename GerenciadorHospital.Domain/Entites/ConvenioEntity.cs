@@ -1,7 +1,6 @@
-﻿
-using GerenciadorHospital.Domain.Validations;
+﻿using GerenciadorHospital.Domain.Validations;
 
-namespace GerenciadorHospital.Models
+namespace GerenciadorHospital.Domain.Entites
 {
     public class ConvenioEntity
     {

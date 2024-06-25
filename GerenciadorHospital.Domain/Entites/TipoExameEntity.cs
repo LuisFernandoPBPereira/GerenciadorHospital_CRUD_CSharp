@@ -1,8 +1,6 @@
-﻿
-using GerenciadorHospital.Domain.Exceptions;
-using GerenciadorHospital.Domain.Validations;
+﻿using GerenciadorHospital.Domain.Validations;
 
-namespace GerenciadorHospital.Models
+namespace GerenciadorHospital.Domain.Entites
 {
     public class TipoExameEntity
     {
@@ -11,7 +9,7 @@ namespace GerenciadorHospital.Models
         public int? PacienteId { get; set; }
         public int? MedicoId { get; set; }
 
-        public TipoExameEntity() {    }
+        public TipoExameEntity() { }
 
         public TipoExameEntity(int id, string nome, int? pacienteId, int? medicoId)
         {

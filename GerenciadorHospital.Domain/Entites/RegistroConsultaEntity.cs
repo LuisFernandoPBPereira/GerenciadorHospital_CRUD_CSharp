@@ -1,11 +1,11 @@
 ﻿using GerenciadorHospital.Domain.Validations;
 
-namespace GerenciadorHospital.Models
+namespace GerenciadorHospital.Domain.Entites
 {
     public class RegistroConsultaEntity
     {
         public int Id { get; set; }
-        public DateTime DataConsulta {  get; set; }
+        public DateTime DataConsulta { get; set; }
         public decimal? Valor { get; set; }
         public DateTime? DataRetorno { get; set; }
         //public StatusConsulta? EstadoConsulta { get; set; }
@@ -14,7 +14,7 @@ namespace GerenciadorHospital.Models
         public int? MedicoId { get; set; }
         public int? ExameId { get; set; }
 
-        public RegistroConsultaEntity() {    }
+        public RegistroConsultaEntity() { }
 
         public RegistroConsultaEntity(
             int id,
