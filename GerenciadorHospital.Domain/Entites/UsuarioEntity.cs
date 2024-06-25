@@ -25,12 +25,11 @@ namespace GerenciadorHospital.Models
 
         public void Validate()
         {
-            DomainValidation.VerifyIsPositiveNumber(Id);
-            DomainValidation.VerifyIsValidString(Nome);
-            DomainValidation.VerifyIsStringWithoutNumbers(Nome);
-            DomainValidation.VerifyIsValidString(Senha);
-            DomainValidation.VerifyIsStringWithoutNumbers(Role);
-            DomainValidation.VerifyIsValidString(Role);
+            DomainValidation domainValidation = new DomainValidation();
+
+            domainValidation.VerificaSeStringNulaVaziaOuComNumero(Nome, nameof(Nome));
+            domainValidation.VerificaSenha(Senha);
+            domainValidation.VerificaErros();
         }
     }
 }

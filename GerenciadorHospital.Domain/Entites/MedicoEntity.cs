@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using GerenciadorHospital.Domain.Validations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GerenciadorHospital.Models
 {
@@ -17,5 +18,40 @@ namespace GerenciadorHospital.Models
         public string Especializacao { get; set; } = string.Empty;
 
         public MedicoEntity() {   }
+
+        public MedicoEntity(
+            int id,
+            string nome,
+            string cpf,
+            string? caminhoDoc,
+            string senha,
+            string endereco,
+            DateTime dataNasc,
+            string crm,
+            string especializacao)
+        {
+            Id = id;
+            Nome = nome;
+            Cpf = cpf;
+            CaminhoDoc = caminhoDoc;
+            Senha = senha;
+            Endereco = endereco;
+            DataNasc = dataNasc;
+            Crm = crm;
+            Especializacao = especializacao;
+
+            Validate();
+        }
+
+        private void Validate()
+        {
+            DomainValidation domainValidation = new DomainValidation();
+
+            domainValidation.VerificaSeStringNulaVaziaOuComNumero(Nome, nameof(Nome));
+            domainValidation.VerificaCpf(Cpf);
+            domainValidation.VerificaSenha(Senha);
+
+            domainValidation.VerificaErros();
+        }
     }
 }

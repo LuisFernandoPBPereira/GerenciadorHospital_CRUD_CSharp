@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using GerenciadorHospital.Domain.Validations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GerenciadorHospital.Models
 {
@@ -14,11 +15,38 @@ namespace GerenciadorHospital.Models
         public int? MedicoId { get; set; }
         public int? MedicamentoId { get; set; }
         public int? RegistroConsultaModelId { get; set; }
-        public virtual PacienteEntity? Paciente { get; set; }
-        public virtual MedicoEntity? Medico { get; set; }
-        public virtual MedicamentoEntity? Medicamento { get; set; }
-
         public LaudoEntity() { }
 
+        public LaudoEntity(
+            int id,
+            string descricao,
+            DateTime? dataCriacao,
+            string? caminhoImagemLaudo,
+            int? pacienteId,
+            int? medicoId,
+            int? medicamentoId,
+            int? registroConsultaModelId)
+        {
+            Id = id;
+            Descricao = descricao;
+            DataCriacao = dataCriacao;
+            CaminhoImagemLaudo = caminhoImagemLaudo;
+            PacienteId = pacienteId;
+            MedicoId = medicoId;
+            MedicamentoId = medicamentoId;
+            RegistroConsultaModelId = registroConsultaModelId;
+
+            Validate();
+        }
+
+        private void Validate()
+        {
+            DomainValidation domainValidation = new DomainValidation();
+
+            domainValidation.VerificaSeStringNulaVaziaOuComNumero(Descricao, nameof(Descricao));
+            domainValidation.VerificaDataNaoPodeSerNoPassado(DataCriacao, nameof(DataCriacao));
+
+            domainValidation.VerificaErros();
+        }
     }
 }

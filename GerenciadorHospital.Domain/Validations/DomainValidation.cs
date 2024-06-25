@@ -1,34 +1,56 @@
-﻿using Microsoft.VisualBasic;
+﻿using GerenciadorHospital.Domain.Exceptions;
+using Microsoft.VisualBasic;
+using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace GerenciadorHospital.Domain.Validations;
 
-public static class DomainValidation
+public class DomainValidation
 {
-    public static void VerifyIsValidString(string field)
+    public List<string> Erros { get; set; } = [];
+
+    public void VerificaSeStringNulaVaziaOuComNumero(string campo, string nomeDoCampo)
     {
-        if (field is null) throw new Exception();
-        if (field.Equals(string.Empty)) throw new Exception();
+        if (campo is null || campo.Equals(string.Empty) || Regex.IsMatch(campo, "[0-9]+")) 
+            Erros.Add($"{nomeDoCampo} inválido");
     }
     
-    public static void VerifyIsStringWithoutNumbers(string field)
+    public void VerificaCpf(string cpf)
     {
-        if (Information.IsNumeric(field)) throw new Exception();
-        if (Regex.IsMatch(field, "^[0-9]+$")) throw new Exception();
+        if (Regex.IsMatch(cpf, "^\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}$") is false)
+            Erros.Add("CPF inválido");
     }
 
-    public static void VerifyIsPositiveNumber(int number)
+    public void VerificaDataDeNascimento(DateTime date)
     {
-        if(number <= 0) throw new Exception();
+        if (date < DateTime.Parse("1900-01-01") || date > DateTime.Now)
+            Erros.Add("Data inválida");            
     }
 
-    public static void VerifyIsValidDate(DateTime date)
+    public void VerificaDataNaoPodeSerNoPassado(DateTime? date, string nomeCampo)
     {
-        if(date < DateTime.Parse("1900-01-01")) throw new Exception();
+        if(date < DateTime.Now)
+            Erros.Add($"{nomeCampo} inválida");
     }
 
-    public static void VerifyDateIsOnFuture(DateTime date)
+    public void VerificaSenha(string senha)
     {
-        if(date > DateTime.Now) throw new Exception();
+        if (Regex.IsMatch(senha, "^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,}$") is false)
+        {
+            Erros.Add(
+                "A senha deve conter no mínimo 6 caracteres, no mínimo 1 letra maiúscula, no mínimo 1 número e no mínimo 1 caractere especial"
+            );
+        }
+    }
+
+    public void VerificaPreco(decimal? preco)
+    {
+        if (preco is null || preco < 0)
+            Erros.Add("Preço não pode ser negativo");
+    }
+
+    public void VerificaErros()
+    {
+        if (Erros.Count != 0) throw new DomainException(Erros);
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace GerenciadorHospital.Models
+﻿using GerenciadorHospital.Domain.Validations;
+
+namespace GerenciadorHospital.Models
 {
     public class PacienteEntity
     {
@@ -45,6 +47,20 @@
             ImgDocumento = imgDocumento;
             ConvenioId = convenioId;
             Convenio = convenio;
+
+            Validate();
+        }
+
+        private void Validate()
+        {
+            DomainValidation domainValidation = new DomainValidation();
+
+            domainValidation.VerificaSeStringNulaVaziaOuComNumero(Nome, nameof(Nome));
+            domainValidation.VerificaCpf(Cpf);
+            domainValidation.VerificaSenha(Senha);
+            domainValidation.VerificaDataDeNascimento(DataNasc);
+
+            domainValidation.VerificaErros();
         }
     }
 }
