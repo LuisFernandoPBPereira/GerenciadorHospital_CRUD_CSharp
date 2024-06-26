@@ -23,6 +23,7 @@ namespace GerenciadorHospital.Domain.Entites
         {
             DomainValidation domainValidation = new DomainValidation();
 
+            domainValidation.VerificaId(Id);
             domainValidation.VerificaSeStringNulaVaziaOuComNumero(Nome, nameof(Nome));
             domainValidation.VerificaPreco(Preco);
 

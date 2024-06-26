@@ -1,22 +1,42 @@
-﻿using GerenciadorHospital.Domain.Entites;
-using GerenciadorHospital.Domain.Exceptions;
+﻿using GerenciadorHospital.Domain.Exceptions;
 using GerenciadorHospital.Domain.Validations;
 
 namespace GerenciadorHospital.Test.DomainTest.DomainValidationTest;
 
 public class DomainValidationThrowsException
 {
-    [Fact]
-    public void QuandoValidacaoNaoPassarLancaExcecao()
+    [Theory]
+    [InlineData("", "teste")]
+    [InlineData(null, "teste")]
+    [InlineData("teste123", "teste")]
+    public void QuandoValidacaoDeStringVaziaNulaOuComNumeroNaoPassarLancaExcecao(string campo, string nomeDoCampo)
     {
-        var user = new UsuarioEntity();
-        var domainValidation = new DomainValidation();
-        domainValidation.VerificaSeStringNulaVaziaOuComNumero(user.Nome, nameof(user.Nome));
+        DomainValidation domainValidation = new DomainValidation();
+        string mensagem = $"{nomeDoCampo} inválido";
 
-        var exception = Record.Exception(() => domainValidation.VerificaErros());
-        var domainException = (DomainException)exception;
+        domainValidation.VerificaSeStringNulaVaziaOuComNumero(campo, nomeDoCampo);
 
-        Assert.NotNull(exception);
-        Assert.Contains($"{nameof(user.Nome)} inválido", domainException.Mensagem);
+        var exception = Assert.Throws<DomainException>(() =>
+        {
+            domainValidation.VerificaErros();
+        });
+        Assert.Contains(mensagem, exception.Mensagem);
+    }
+
+    [Theory]
+    [InlineData("", "teste")]
+    [InlineData(null, "teste")]
+    public void QuandoValidacaoDeStringVaziaoOuNula(string? campo, string nomeDoCampo)
+    {
+        DomainValidation domainValidation = new DomainValidation();
+        string mensagem = $"{nomeDoCampo} inválido";
+
+        domainValidation.VerificaSeStringNulaVazia(campo, nomeDoCampo);
+
+        var exception = Assert.Throws<DomainException>(() =>
+        {
+            domainValidation.VerificaErros();
+        });
+        Assert.Contains(mensagem, exception.Mensagem);
     }
 }

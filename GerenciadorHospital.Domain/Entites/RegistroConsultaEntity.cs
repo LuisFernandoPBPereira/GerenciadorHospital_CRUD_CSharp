@@ -42,7 +42,12 @@ namespace GerenciadorHospital.Domain.Entites
         {
             DomainValidation domainValidation = new DomainValidation();
 
+            domainValidation.VerificaId(Id);
+            domainValidation.VerificaId(PacienteId);
+            domainValidation.VerificaId(MedicoId);
+            domainValidation.VerificaId(ExameId);
             domainValidation.VerificaDataNaoPodeSerNoPassado(DataConsulta, nameof(DataConsulta));
+            domainValidation.VerificaDataNaoPodeSerNoPassado(DataRetorno, nameof(DataRetorno));
             domainValidation.VerificaPreco(Valor);
 
             domainValidation.VerificaErros();

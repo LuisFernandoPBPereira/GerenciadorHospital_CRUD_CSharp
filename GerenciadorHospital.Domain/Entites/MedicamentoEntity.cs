@@ -32,8 +32,13 @@ namespace GerenciadorHospital.Domain.Entites
         {
             DomainValidation domainValidation = new DomainValidation();
 
+            domainValidation.VerificaId(Id);
             domainValidation.VerificaSeStringNulaVaziaOuComNumero(Nome, nameof(Nome));
             domainValidation.VerificaSeStringNulaVaziaOuComNumero(Composicao, nameof(Composicao));
+            domainValidation.VerificaDataNaoPodeSerNoPassado(DataFabricacao, nameof(DataFabricacao));
+            domainValidation.VerificaDataNaoPodeSerNoPassado(DataValidade, nameof(DataValidade));
+
+            domainValidation.VerificaErros();
         }
     }
 }

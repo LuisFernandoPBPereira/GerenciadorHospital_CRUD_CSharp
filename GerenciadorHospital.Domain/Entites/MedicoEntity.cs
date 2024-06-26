@@ -46,7 +46,13 @@ namespace GerenciadorHospital.Domain.Entites
         {
             DomainValidation domainValidation = new DomainValidation();
 
+            domainValidation.VerificaId(Id);
             domainValidation.VerificaSeStringNulaVaziaOuComNumero(Nome, nameof(Nome));
+            domainValidation.VerificaDataDeNascimento(DataNasc);
+            domainValidation.VerificaSeStringNulaVazia(CaminhoDoc, nameof(CaminhoDoc));
+            domainValidation.VerificaEndereco(Endereco);
+            domainValidation.VerificaCrm(Crm);
+            domainValidation.VerificaSeStringNulaVaziaOuComNumero(Especializacao, nameof(Especializacao));
             domainValidation.VerificaCpf(Cpf);
             domainValidation.VerificaSenha(Senha);
 

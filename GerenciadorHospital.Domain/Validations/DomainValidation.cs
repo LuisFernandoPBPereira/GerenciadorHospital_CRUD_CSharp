@@ -1,6 +1,5 @@
 ﻿using GerenciadorHospital.Domain.Exceptions;
 using Microsoft.VisualBasic;
-using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace GerenciadorHospital.Domain.Validations;
@@ -15,16 +14,22 @@ public class DomainValidation
             Erros.Add($"{nomeDoCampo} inválido");
     }
     
+    public void VerificaSeStringNulaVazia(string? campo, string nomeDoCampo)
+    {
+        if (campo is null || campo.Equals(string.Empty)) 
+            Erros.Add($"{nomeDoCampo} inválido");
+    }
+    
     public void VerificaCpf(string cpf)
     {
-        if (Regex.IsMatch(cpf, "^\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}$") is false)
+        if (cpf is null || Regex.IsMatch(cpf, "^\\d{3}\\d{3}\\d{3}\\d{2}$") is false)
             Erros.Add("CPF inválido");
     }
 
     public void VerificaDataDeNascimento(DateTime date)
     {
         if (date < DateTime.Parse("1900-01-01") || date > DateTime.Now)
-            Erros.Add("Data inválida");            
+            Erros.Add("Data de nascimento inválida");            
     }
 
     public void VerificaDataNaoPodeSerNoPassado(DateTime? date, string nomeCampo)
@@ -35,7 +40,7 @@ public class DomainValidation
 
     public void VerificaSenha(string senha)
     {
-        if (Regex.IsMatch(senha, "^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,}$") is false)
+        if (senha is null || senha == string.Empty || Regex.IsMatch(senha, "^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,}$") is false)
         {
             Erros.Add(
                 "A senha deve conter no mínimo 6 caracteres, no mínimo 1 letra maiúscula, no mínimo 1 número e no mínimo 1 caractere especial"
@@ -47,6 +52,36 @@ public class DomainValidation
     {
         if (preco is null || preco < 0)
             Erros.Add("Preço não pode ser negativo");
+    }
+
+    public void VerificaCrm(string crm)
+    {
+        if(crm is null || crm == string.Empty || crm.Length > 10)
+        {
+            Erros.Add("CRM inválido");
+        }
+    }
+
+    public void VerificaId(int? id)
+    {
+        if(id is null || id <= 0)
+        {
+            Erros.Add("Id inválido");
+        }
+    }
+    
+    public void VerificaIdPossivelmenteNulo(int? id)
+    {
+        if(id is not null && id <= 0)
+        {
+            Erros.Add("Id inválido");
+        }
+    }
+
+    public void VerificaEndereco(string endereco)
+    {
+        if (endereco is null || endereco.Equals(string.Empty) || Information.IsNumeric(endereco))
+            Erros.Add($"Endereço inválido");
     }
 
     public void VerificaErros()
