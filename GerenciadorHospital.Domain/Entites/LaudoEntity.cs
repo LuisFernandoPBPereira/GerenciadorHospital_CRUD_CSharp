@@ -5,7 +5,7 @@ namespace GerenciadorHospital.Domain.Entites
     public class LaudoEntity
     {
         public int Id { get; set; }
-        public string Descricao { get; set; } = string.Empty;
+        public string Descricao { get; set; }
         public DateTime? DataCriacao { get; set; }
         //[NotMapped]
         //public IFormFile? ImagemLaudo { get; set; }
@@ -14,7 +14,10 @@ namespace GerenciadorHospital.Domain.Entites
         public int? MedicoId { get; set; }
         public int? MedicamentoId { get; set; }
         public int? RegistroConsultaModelId { get; set; }
-        public LaudoEntity() { }
+        public LaudoEntity() 
+        { 
+            Descricao = string.Empty;
+        }
 
         public LaudoEntity(
             int id,

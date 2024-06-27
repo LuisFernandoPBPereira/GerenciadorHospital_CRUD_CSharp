@@ -4,14 +4,17 @@ namespace GerenciadorHospital.Domain.Entites
 {
     public class UsuarioEntity
     {
-#pragma warning disable CS0114 // O membro oculta o membro herdado; palavra-chave substituta ausente
         public int Id { get; set; }
         public string Nome { get; set; }
         public string Senha { get; set; }
         public string Role { get; set; }
 
         public UsuarioEntity()
-        { }
+        {
+            Nome = string.Empty;
+            Senha = string.Empty;
+            Role = string.Empty;
+        }
 
         public UsuarioEntity(int id, string nome, string senha, string role)
         {

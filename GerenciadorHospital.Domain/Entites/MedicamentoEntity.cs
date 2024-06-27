@@ -5,12 +5,16 @@ namespace GerenciadorHospital.Domain.Entites
     public class MedicamentoEntity
     {
         public int Id { get; set; }
-        public string Nome { get; set; } = string.Empty;
-        public string Composicao { get; set; } = string.Empty;
+        public string Nome { get; set; }
+        public string Composicao { get; set; }
         public DateTime DataFabricacao { get; set; }
         public DateTime DataValidade { get; set; }
 
-        public MedicamentoEntity() { }
+        public MedicamentoEntity() 
+        { 
+            Nome = string.Empty;
+            Composicao = string.Empty;
+        }
 
         public MedicamentoEntity(
             int id,

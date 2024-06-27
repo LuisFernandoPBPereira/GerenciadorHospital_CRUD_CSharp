@@ -5,18 +5,26 @@ namespace GerenciadorHospital.Domain.Entites
     public class MedicoEntity
     {
         public int Id { get; set; }
-        public string Nome { get; set; } = string.Empty;
-        public string Cpf { get; set; } = string.Empty;
+        public string Nome { get; set; }
+        public string Cpf { get; set; }
         //[NotMapped]
         //public IFormFile? Doc { get; set; }
         public string? CaminhoDoc { get; set; }
-        public string Senha { get; set; } = string.Empty;
-        public string Endereco { get; set; } = string.Empty;
+        public string Senha { get; set; }
+        public string Endereco { get; set; }
         public DateTime DataNasc { get; set; }
-        public string Crm { get; set; } = string.Empty;
-        public string Especializacao { get; set; } = string.Empty;
+        public string Crm { get; set; }
+        public string Especializacao { get; set; }
 
-        public MedicoEntity() { }
+        public MedicoEntity() 
+        {
+            Nome = string.Empty;
+            Cpf = string.Empty;
+            Senha = string.Empty;
+            Endereco = string.Empty;
+            Crm = string.Empty;
+            Especializacao = string.Empty;
+        }
 
         public MedicoEntity(
             int id,

@@ -22,6 +22,19 @@ public class MedicoConstructor
 
         Assert.NotNull(medico);
     }
+    
+    [Fact]
+    public void QuandoConstrutorVazioRetornarEntidadeComStringsVazias()
+    {
+        MedicoEntity medico = new MedicoEntity();
+
+        Assert.Equal(string.Empty, medico.Nome);
+        Assert.Equal(string.Empty, medico.Cpf);
+        Assert.Equal(string.Empty, medico.Senha);
+        Assert.Equal(string.Empty, medico.Endereco);
+        Assert.Equal(string.Empty, medico.Crm);
+        Assert.Equal(string.Empty, medico.Especializacao);
+    }
 
     [Theory]
     [InlineData(1, "", "", "", "", "", "1990-01-01", "", "")]
@@ -40,6 +53,28 @@ public class MedicoConstructor
         { 
             MedicoEntity medico = new MedicoEntity(id, nome, cpf, caminhoDoc, senha, endereco, dataNasc, crm, especializacao);
         });
+    }
+
+    [Theory]
+    [InlineData(0, "medico", "00000000000", "caminhoDoc", "*Medico123", "rua tal", "1990-01-01", "000000-sp", "Dermatologista")]
+    public void QuandoIdInvalidoLancarExcecaoComMensagem(
+    int id,
+    string nome,
+    string cpf,
+    string caminhoDoc,
+    string senha,
+    string endereco,
+    DateTime dataNasc,
+    string crm,
+    string especializacao)
+    {
+        string mensagem = "Id inválido";
+
+        var exception = Assert.Throws<DomainException>(() =>
+        {
+            MedicoEntity medico = new MedicoEntity(id, nome, cpf, caminhoDoc, senha, endereco, dataNasc, crm, especializacao);
+        });
+        Assert.Contains(mensagem, exception.Mensagem);
     }
 
     [Theory]

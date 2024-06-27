@@ -5,11 +5,14 @@ namespace GerenciadorHospital.Domain.Entites
     public class TipoExameEntity
     {
         public int Id { get; set; }
-        public string Nome { get; set; } = string.Empty;
+        public string Nome { get; set; }
         public int? PacienteId { get; set; }
         public int? MedicoId { get; set; }
 
-        public TipoExameEntity() { }
+        public TipoExameEntity()
+        {
+            Nome = string.Empty;
+        }
 
         public TipoExameEntity(int id, string nome, int? pacienteId, int? medicoId)
         {

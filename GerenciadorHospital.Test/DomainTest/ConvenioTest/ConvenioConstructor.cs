@@ -14,6 +14,14 @@ public class ConvenioConstructor
         Assert.NotNull(convenio);
     }
     
+    [Fact]
+    public void QuandoConstrutorVazioRetornarEntidadeComStringsVazias()
+    {
+        ConvenioEntity convenio = new ConvenioEntity();
+
+        Assert.Equal(string.Empty, convenio.Nome);
+    }
+    
     [Theory]
     [InlineData(1, "", -100)]
     public void QuandoConstrutorInvalidoLancarExcecao(int id, string nome, decimal preco)

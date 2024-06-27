@@ -17,6 +17,16 @@ public class UsuarioConstructor
 
         Assert.NotNull(usuarioEntity);
     }
+    
+    [Fact]
+    public void QuandoConstrutorVazioRetornarEntidadeComStringsVazias()
+    {
+        UsuarioEntity usuarioEntity = new UsuarioEntity();
+
+        Assert.Equal(string.Empty, usuarioEntity.Nome);
+        Assert.Equal(string.Empty, usuarioEntity.Senha);
+        Assert.Equal(string.Empty, usuarioEntity.Role);
+    }
 
     [Fact]
     public void QuandoConstrutorInvalidoLancarExcecao()

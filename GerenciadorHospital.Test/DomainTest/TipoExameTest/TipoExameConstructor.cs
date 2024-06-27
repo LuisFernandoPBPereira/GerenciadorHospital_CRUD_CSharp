@@ -17,6 +17,14 @@ public class TipoExameConstructor
 
         Assert.NotNull(tipoExameEntity);
     }
+    
+    [Fact]
+    public void QuandoConstrutorVazioRetornaEntidadeComStringsVazias()
+    {
+        TipoExameEntity tipoExameEntity = new TipoExameEntity();
+
+        Assert.Equal(string.Empty, tipoExameEntity.Nome);
+    }
 
     [Fact]
     public void QuandoConstrutorInvalidoLancarExcecao()

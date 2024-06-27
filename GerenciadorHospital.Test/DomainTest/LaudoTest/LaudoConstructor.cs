@@ -6,7 +6,7 @@ namespace GerenciadorHospital.Test.DomainTest.LaudoTest;
 public class LaudoConstructor
 {
     [Theory]
-    [InlineData(1, "descrição", "2024-06-27", "caminho da imagem", 1, 1, 1, 1)]
+    [InlineData(1, "descrição", "2024-06-28", "caminho da imagem", 1, 1, 1, 1)]
     public void QuandoConstrutorValidoRetornarEntidade(
     int id,
     string descricao,
@@ -28,6 +28,14 @@ public class LaudoConstructor
             registroConsultaModelId);
 
         Assert.NotNull(laudo);
+    }
+    
+    [Fact]
+    public void QuandoConstrutorVazioRetornarEntidadeComStringsVazias()
+    {
+        LaudoEntity laudo = new LaudoEntity();
+
+        Assert.Equal(string.Empty, laudo.Descricao);
     }
     
     [Theory]

@@ -25,6 +25,17 @@ public class PacienteConstructor
         Assert.NotNull(paciente);
     }
 
+    [Fact]
+    public void QuandoConstrutorVazioRetornarEntidadeComStringsVazias()
+    {
+        PacienteEntity paciente = new PacienteEntity();
+
+        Assert.Equal(string.Empty, paciente.Nome);
+        Assert.Equal(string.Empty, paciente.Cpf);
+        Assert.Equal(string.Empty, paciente.Senha);
+        Assert.Equal(string.Empty, paciente.Endereco);
+    }
+
     [Theory]
     [InlineData(1, "", "", "", "", "1990-01-01", false, null, "blabla", null)]
     public void QuandoConstrutorInvalidoLancarExcecao(

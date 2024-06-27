@@ -6,12 +6,21 @@ namespace GerenciadorHospital.Test.DomainTest.MedicamentoTest;
 public class MedicamenteConstructor
 {
     [Theory]
-    [InlineData(1, "dipirona", "dipirona", "2024-06-27", "2025-04-04")]
+    [InlineData(1, "dipirona", "dipirona", "2024-06-28", "2025-04-04")]
     public void QuandoConstrutorValidoRetornarEntidade(int id, string nome, string composicao, DateTime dataFabricacao, DateTime dataValidade)
     {
         MedicamentoEntity medicamento = new MedicamentoEntity(id, nome, composicao, dataFabricacao, dataValidade);
 
         Assert.NotNull(medicamento);
+    }
+    
+    [Fact]
+    public void QuandoConstrutorVazioRetornarEntidadeComStringsVazias()
+    {
+        MedicamentoEntity medicamento = new MedicamentoEntity();
+
+        Assert.Equal(string.Empty, medicamento.Nome);
+        Assert.Equal(string.Empty, medicamento.Composicao);
     }
     
     [Theory]
@@ -41,6 +50,21 @@ public class MedicamenteConstructor
     public void QuandoNomeInvalidoLancarExcecaoComMensagem(int id, string nome, string composicao, DateTime dataFabricacao, DateTime dataValidade)
     {
         string mensagem = "Nome inválido";
+
+        var exception = Assert.Throws<DomainException>(() =>
+        {
+            MedicamentoEntity medicamento = new MedicamentoEntity(id, nome, composicao, dataFabricacao, dataValidade);
+        });
+        Assert.Contains(mensagem, exception.Mensagem);
+    }
+
+    [Theory]
+    [InlineData(1, "dipirona", "", "2024-06-28", "2025-04-04")]
+    [InlineData(1, "dipirona", null, "2024-06-28", "2025-04-04")]
+    [InlineData(1, "dipirona", "dipirona4545", "2024-06-28", "2025-04-04")]
+    public void QuandoComposicaoInvalidaLancarExcecaoComMensagem(int id, string nome, string composicao, DateTime dataFabricacao, DateTime dataValidade)
+    {
+        string mensagem = "Composicao inválido";
 
         var exception = Assert.Throws<DomainException>(() =>
         {

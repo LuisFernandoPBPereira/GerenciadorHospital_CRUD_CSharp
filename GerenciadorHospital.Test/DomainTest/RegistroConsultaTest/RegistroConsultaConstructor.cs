@@ -67,8 +67,7 @@ public class RegistroConsultaConstructor
 
     [Theory]
     [InlineData(1, "2023-06-27", 100, "2024-06-27", false, 1, 1, 1)]
-    [InlineData(1, "2024-06-27", 100, "2023-06-27", false, 1, 1, 1)]
-    public void QuandoDataInvalidaLancarExcecaoComMensagem(
+    public void QuandoDataConsultaInvalidaLancarExcecaoComMensagem(
         int id,
         DateTime dataConsulta,
         decimal valor,
@@ -78,7 +77,28 @@ public class RegistroConsultaConstructor
         int medicoId,
         int exameId)
     {
-        string mensagem = "inválida";
+        string mensagem = "DataConsulta inválida";
+
+        var exception = Assert.Throws<DomainException>(() =>
+        {
+            RegistroConsultaEntity consulta = new RegistroConsultaEntity(id, dataConsulta, valor, dataRetorno, retorno, pacienteId, medicoId, exameId);
+        });
+        Assert.Contains(mensagem, exception.Mensagem);
+    }
+    
+    [Theory]
+    [InlineData(1, "2024-06-27", 100, "2023-06-27", false, 1, 1, 1)]
+    public void QuandoDataRetornoInvalidaLancarExcecaoComMensagem(
+        int id,
+        DateTime dataConsulta,
+        decimal valor,
+        DateTime dataRetorno,
+        bool retorno,
+        int pacienteId,
+        int medicoId,
+        int exameId)
+    {
+        string mensagem = "DataRetorno inválida";
 
         var exception = Assert.Throws<DomainException>(() =>
         {

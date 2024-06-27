@@ -5,10 +5,10 @@ namespace GerenciadorHospital.Domain.Entites
     public class PacienteEntity
     {
         public int Id { get; set; }
-        public string Nome { get; set; } = string.Empty;
-        public string Cpf { get; set; } = string.Empty;
-        public string Senha { get; set; } = string.Empty;
-        public string Endereco { get; set; } = string.Empty;
+        public string Nome { get; set; }
+        public string Cpf { get; set; }
+        public string Senha { get; set; }
+        public string Endereco { get; set; }
         public DateTime DataNasc { get; set; }
         public bool TemConvenio { get; set; }
         public string? ImgCarteiraDoConvenio { get; set; }
@@ -19,7 +19,13 @@ namespace GerenciadorHospital.Domain.Entites
         //public IFormFile? DocConvenio { get; set; }
         public int? ConvenioId { get; set; }
 
-        public PacienteEntity() { }
+        public PacienteEntity()
+        {
+            Nome = string.Empty;
+            Cpf = string.Empty;
+            Senha = string.Empty;
+            Endereco = string.Empty;
+        }
 
         public PacienteEntity(int id,
             string nome,
