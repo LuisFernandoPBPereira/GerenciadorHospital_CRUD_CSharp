@@ -13,7 +13,6 @@
   <ItemGroup>
     <Folder Include="Context\" />
     <Folder Include="Mapper\" />
-    <Folder Include="Repository\" />
   </ItemGroup>
 
   <ItemGroup>
