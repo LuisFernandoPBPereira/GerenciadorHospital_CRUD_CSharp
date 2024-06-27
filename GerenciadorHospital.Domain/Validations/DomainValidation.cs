@@ -28,7 +28,7 @@ public class DomainValidation
 
     public void VerificaDataDeNascimento(DateTime date)
     {
-        if (date < DateTime.Parse("1900-01-01") || date > DateTime.Now)
+        if (date <= DateTime.Parse("1900-01-01") || date.Date >= DateTime.Now.Date)
             Erros.Add("Data de nascimento inválida");            
     }
 
@@ -40,7 +40,7 @@ public class DomainValidation
 
     public void VerificaSenha(string senha)
     {
-        if (senha is null || senha == string.Empty || Regex.IsMatch(senha, "^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,}$") is false)
+        if (senha is null || Regex.IsMatch(senha, "^(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,}$") is false)
         {
             Erros.Add(
                 "A senha deve conter no mínimo 6 caracteres, no mínimo 1 letra maiúscula, no mínimo 1 número e no mínimo 1 caractere especial"
@@ -56,7 +56,7 @@ public class DomainValidation
 
     public void VerificaCrm(string crm)
     {
-        if(crm is null || crm == string.Empty || crm.Length > 10)
+        if(crm is null || crm == string.Empty || crm.Length >= 10)
         {
             Erros.Add("CRM inválido");
         }
