@@ -1,21 +1,24 @@
 ﻿using GerenciadorHospital.Domain.Entites;
 using GerenciadorHospital.Domain.Repository;
 using GerenciadorHospital.Infraestructure.Data.ORM;
+using GerenciadorHospital.Infraestructure.Mapper;
+using GerenciadorHospital.Models;
 
 namespace GerenciadorHospital.Infraestructure.Repository;
 
 public class TipoExameRepository : ITipoExame
 {
-    private readonly IRepositorioORM<TipoExameEntity> _repo;
+    private readonly IRepositorioORM<TipoExameModel> _repo;
 
-    public TipoExameRepository(IRepositorioORM<TipoExameEntity> repo)
+    public TipoExameRepository(IRepositorioORM<TipoExameModel> repo)
     {
         _repo = repo;
     }
 
     public async Task<TipoExameEntity> Adicionar(TipoExameEntity exame)
     {
-        await _repo.AddAsync(exame);
+        var exameModel = ExameMapper.ToModel(exame);
+        await _repo.AddAsync(exameModel);
         await _repo.SaveChangesAsync();
 
         return exame;
@@ -31,16 +34,18 @@ public class TipoExameRepository : ITipoExame
 
     public async Task<TipoExameEntity> Atualizar(TipoExameEntity exame)
     {
-        await _repo.UpdateAsync(exame);
+        var exameModel = ExameMapper.ToModel(exame);
+        await _repo.UpdateAsync(exameModel);
         await _repo.SaveChangesAsync();
 
         return exame;
     }
 
-    public Task<TipoExameEntity> BuscarPorId(int id)
+    public async Task<TipoExameEntity> BuscarPorId(int id)
     {
-        var exame = _repo.GetByIdAsync(id);
+        var exame = await _repo.GetByIdAsync(id);
+        var exameEntity = ExameMapper.ToDomain(exame);
 
-        return exame;
+        return exameEntity;
     }
 }

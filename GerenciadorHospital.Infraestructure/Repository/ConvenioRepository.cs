@@ -1,19 +1,22 @@
 ﻿using GerenciadorHospital.Domain.Entites;
 using GerenciadorHospital.Domain.Repository;
 using GerenciadorHospital.Infraestructure.Data.ORM;
+using GerenciadorHospital.Infraestructure.Mapper;
+using GerenciadorHospital.Models;
 
 namespace GerenciadorHospital.Infraestructure.Repository;
 
 public class ConvenioRepository : IConvenio
 {
-    private readonly IRepositorioORM<ConvenioEntity> _repo;
-    public ConvenioRepository(IRepositorioORM<ConvenioEntity> repo)
+    private readonly IRepositorioORM<ConvenioModel> _repo;
+    public ConvenioRepository(IRepositorioORM<ConvenioModel> repo)
     {
         _repo = repo;
     }
     public async Task<ConvenioEntity> Adicionar(ConvenioEntity convenio)
     {
-        await _repo.AddAsync(convenio);
+        var convenioModel = ConvenioMapper.ToModel(convenio);
+        await _repo.AddAsync(convenioModel);
         await _repo.SaveChangesAsync();
 
         return convenio;
@@ -29,7 +32,8 @@ public class ConvenioRepository : IConvenio
 
     public async Task<ConvenioEntity> Atualizar(ConvenioEntity convenio)
     {
-        await _repo.UpdateAsync(convenio);
+        var convenioModel = ConvenioMapper.ToModel(convenio);
+        await _repo.UpdateAsync(convenioModel);
         await _repo.SaveChangesAsync();
 
         return convenio;
@@ -38,7 +42,8 @@ public class ConvenioRepository : IConvenio
     public async Task<ConvenioEntity> BuscarPorId(int id)
     {
         var convenio = await _repo.GetByIdAsync(id);
-        
-        return convenio;
+        var convenioEntity = ConvenioMapper.ToDomain(convenio);
+
+        return convenioEntity;
     }
 }
