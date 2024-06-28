@@ -5,8 +5,6 @@
         public int Id { get; set; }
         public string Descricao { get; set; } = string.Empty;
         public DateTime? DataCriacao { get; set; }
-        //[NotMapped]
-        //public IFormFile? ImagemLaudo { get; set; }
         public string? CaminhoImagemLaudo { get; set; }
         public int? PacienteId { get; set; }
         public int? MedicoId { get; set; }

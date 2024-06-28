@@ -7,8 +7,6 @@ namespace GerenciadorHospital.Domain.Entites
         public int Id { get; set; }
         public string Nome { get; set; }
         public string Cpf { get; set; }
-        //[NotMapped]
-        //public IFormFile? Doc { get; set; }
         public string? CaminhoDoc { get; set; }
         public string Senha { get; set; }
         public string Endereco { get; set; }

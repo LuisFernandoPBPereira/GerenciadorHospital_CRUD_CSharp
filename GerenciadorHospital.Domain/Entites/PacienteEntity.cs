@@ -13,10 +13,6 @@ namespace GerenciadorHospital.Domain.Entites
         public bool TemConvenio { get; set; }
         public string? ImgCarteiraDoConvenio { get; set; }
         public string? ImgDocumento { get; set; }
-        //[NotMapped]
-        //public IFormFile Doc { get; set; }
-        //[NotMapped]
-        //public IFormFile? DocConvenio { get; set; }
         public int? ConvenioId { get; set; }
 
         public PacienteEntity()
