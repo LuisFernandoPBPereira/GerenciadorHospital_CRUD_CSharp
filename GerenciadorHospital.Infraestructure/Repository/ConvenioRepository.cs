@@ -1,27 +1,44 @@
 ﻿using GerenciadorHospital.Domain.Entites;
 using GerenciadorHospital.Domain.Repository;
+using GerenciadorHospital.Infraestructure.Data.ORM;
 
 namespace GerenciadorHospital.Infraestructure.Repository;
 
 public class ConvenioRepository : IConvenio
 {
-    public Task<ConvenioEntity> Adicionar(ConvenioEntity convenio)
+    private readonly IRepositorioORM<ConvenioEntity> _repo;
+    public ConvenioRepository(IRepositorioORM<ConvenioEntity> repo)
     {
-        throw new NotImplementedException();
+        _repo = repo;
+    }
+    public async Task<ConvenioEntity> Adicionar(ConvenioEntity convenio)
+    {
+        await _repo.AddAsync(convenio);
+        await _repo.SaveChangesAsync();
+
+        return convenio;
     }
 
-    public Task<bool> Apagar(int id)
+    public async Task<bool> Apagar(int id)
     {
-        throw new NotImplementedException();
+        await _repo.DeleteAsync(id);
+        await _repo.SaveChangesAsync();
+
+        return true;
     }
 
-    public Task<ConvenioEntity> Atualizar(ConvenioEntity convenio)
+    public async Task<ConvenioEntity> Atualizar(ConvenioEntity convenio)
     {
-        throw new NotImplementedException();
+        await _repo.UpdateAsync(convenio);
+        await _repo.SaveChangesAsync();
+
+        return convenio;
     }
 
-    public Task<ConvenioEntity> BuscarPorId(int id)
+    public async Task<ConvenioEntity> BuscarPorId(int id)
     {
-        throw new NotImplementedException();
+        var convenio = await _repo.GetByIdAsync(id);
+        
+        return convenio;
     }
 }

@@ -1,27 +1,46 @@
 ﻿using GerenciadorHospital.Domain.Entites;
 using GerenciadorHospital.Domain.Repository;
+using GerenciadorHospital.Infraestructure.Data.ORM;
 
 namespace GerenciadorHospital.Infraestructure.Repository;
 
 public class MedicoRepository : IMedico
 {
-    public Task<MedicoEntity> Adicionar(MedicoEntity medico)
+    private readonly IRepositorioORM<MedicoEntity> _repo;
+
+    public MedicoRepository(IRepositorioORM<MedicoEntity> repo)
     {
-        throw new NotImplementedException();
+        _repo = repo;
     }
 
-    public Task<bool> Apagar(int id)
+    public async Task<MedicoEntity> Adicionar(MedicoEntity medico)
     {
-        throw new NotImplementedException();
+        await _repo.AddAsync(medico);
+        await _repo.SaveChangesAsync();
+
+        return medico;
     }
 
-    public Task<MedicoEntity> Atualizar(MedicoEntity medico)
+    public async Task<bool> Apagar(int id)
     {
-        throw new NotImplementedException();
+        await _repo.DeleteAsync(id);
+        await _repo.SaveChangesAsync();
+
+        return true;
     }
 
-    public Task<MedicoEntity> BuscarPorId(int id)
+    public async Task<MedicoEntity> Atualizar(MedicoEntity medico)
     {
-        throw new NotImplementedException();
+        await _repo.UpdateAsync(medico);
+        await _repo.SaveChangesAsync();
+
+        return medico;
+    }
+
+    public async Task<MedicoEntity> BuscarPorId(int id)
+    {
+        var medico = await _repo.GetByIdAsync(id);
+
+        return medico;
     }
 }

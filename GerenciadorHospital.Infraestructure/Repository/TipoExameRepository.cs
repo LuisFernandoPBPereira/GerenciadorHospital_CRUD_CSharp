@@ -1,27 +1,46 @@
 ﻿using GerenciadorHospital.Domain.Entites;
 using GerenciadorHospital.Domain.Repository;
+using GerenciadorHospital.Infraestructure.Data.ORM;
 
 namespace GerenciadorHospital.Infraestructure.Repository;
 
 public class TipoExameRepository : ITipoExame
 {
-    public Task<TipoExameEntity> Adicionar(TipoExameEntity exame)
+    private readonly IRepositorioORM<TipoExameEntity> _repo;
+
+    public TipoExameRepository(IRepositorioORM<TipoExameEntity> repo)
     {
-        throw new NotImplementedException();
+        _repo = repo;
     }
 
-    public Task<bool> Apagar(int id)
+    public async Task<TipoExameEntity> Adicionar(TipoExameEntity exame)
     {
-        throw new NotImplementedException();
+        await _repo.AddAsync(exame);
+        await _repo.SaveChangesAsync();
+
+        return exame;
     }
 
-    public Task<TipoExameEntity> Atualizar(TipoExameEntity exame)
+    public async Task<bool> Apagar(int id)
     {
-        throw new NotImplementedException();
+        await _repo.DeleteAsync(id);
+        await _repo.SaveChangesAsync();
+
+        return true;
+    }
+
+    public async Task<TipoExameEntity> Atualizar(TipoExameEntity exame)
+    {
+        await _repo.UpdateAsync(exame);
+        await _repo.SaveChangesAsync();
+
+        return exame;
     }
 
     public Task<TipoExameEntity> BuscarPorId(int id)
     {
-        throw new NotImplementedException();
+        var exame = _repo.GetByIdAsync(id);
+
+        return exame;
     }
 }
