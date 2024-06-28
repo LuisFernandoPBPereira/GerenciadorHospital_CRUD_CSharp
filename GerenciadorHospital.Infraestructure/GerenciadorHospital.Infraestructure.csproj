@@ -7,11 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Context\**" />
+    <EmbeddedResource Remove="Context\**" />
+    <None Remove="Context\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\GerenciadorHospital.Domain\GerenciadorHospital.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Context\" />
     <Folder Include="Mapper\" />
   </ItemGroup>
 
