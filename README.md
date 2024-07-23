@@ -5,7 +5,7 @@
 <br/>
 
 <p>
-	Este projeto consistem em um sistema que gerencie um hospital, neste sistema é possível cadastrar pacientes, médicos, consultas e etc.
+	Este projeto consiste em um sistema que gerencia um hospital, neste sistema é possível cadastrar pacientes, médicos, consultas e etc.
 	Para um melhor entendimento do funcionamento, estrutura da API, ferramentas, entre outros, acesse a Wiki deste repositório.
 </p>
 <br/>
