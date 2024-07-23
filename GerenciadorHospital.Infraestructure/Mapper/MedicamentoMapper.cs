@@ -9,7 +9,6 @@ public static class MedicamentoMapper
     {
         return new MedicamentoPacienteModel
         {
-            Id = medicamento.Id,
             Nome = medicamento.Nome,
             Composicao = medicamento.Composicao,
             DataFabricacao = medicamento.DataFabricacao,
@@ -21,7 +20,6 @@ public static class MedicamentoMapper
     {
         return new MedicamentoEntity
         {
-            Id = medicamento.Id,
             Nome = medicamento.Nome,
             Composicao = medicamento.Composicao,
             DataFabricacao = medicamento.DataFabricacao,

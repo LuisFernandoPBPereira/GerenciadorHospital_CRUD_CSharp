@@ -1,6 +1,6 @@
 ﻿namespace GerenciadorHospital.Application.DTOs.Requests;
 
-public class MedicamentoResponseDto
+public class MedicamentoRequestDto
 {
     public string Nome { get; set; } = string.Empty;
     public string Composicao { get; set; } = string.Empty;

@@ -4,10 +4,8 @@ namespace GerenciadorHospital.Domain.Entites
 {
     public class MedicoEntity
     {
-        public int Id { get; set; }
         public string Nome { get; set; }
         public string Cpf { get; set; }
-        public string? CaminhoDoc { get; set; }
         public string Senha { get; set; }
         public string Endereco { get; set; }
         public DateTime DataNasc { get; set; }
@@ -25,20 +23,16 @@ namespace GerenciadorHospital.Domain.Entites
         }
 
         public MedicoEntity(
-            int id,
             string nome,
             string cpf,
-            string? caminhoDoc,
             string senha,
             string endereco,
             DateTime dataNasc,
             string crm,
             string especializacao)
         {
-            Id = id;
             Nome = nome;
             Cpf = cpf;
-            CaminhoDoc = caminhoDoc;
             Senha = senha;
             Endereco = endereco;
             DataNasc = dataNasc;
@@ -52,10 +46,8 @@ namespace GerenciadorHospital.Domain.Entites
         {
             DomainValidation domainValidation = new DomainValidation();
 
-            domainValidation.VerificaId(Id);
             domainValidation.VerificaSeStringNulaVaziaOuComNumero(Nome, nameof(Nome));
             domainValidation.VerificaDataDeNascimento(DataNasc);
-            domainValidation.VerificaSeStringNulaVazia(CaminhoDoc, nameof(CaminhoDoc));
             domainValidation.VerificaEndereco(Endereco);
             domainValidation.VerificaCrm(Crm);
             domainValidation.VerificaSeStringNulaVaziaOuComNumero(Especializacao, nameof(Especializacao));

@@ -2,7 +2,7 @@
 
 namespace GerenciadorHospital.Application.DTOs.Requests;
 
-public class PacienteResponseDto
+public class PacienteRequestDto
 {
     public string Nome { get; set; } = string.Empty;
     public string Cpf { get; set; } = string.Empty;

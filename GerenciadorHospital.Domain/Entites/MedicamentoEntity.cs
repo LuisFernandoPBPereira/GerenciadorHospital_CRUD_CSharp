@@ -4,7 +4,6 @@ namespace GerenciadorHospital.Domain.Entites
 {
     public class MedicamentoEntity
     {
-        public int Id { get; set; }
         public string Nome { get; set; }
         public string Composicao { get; set; }
         public DateTime DataFabricacao { get; set; }
@@ -17,13 +16,11 @@ namespace GerenciadorHospital.Domain.Entites
         }
 
         public MedicamentoEntity(
-            int id,
             string nome,
             string composicao,
             DateTime dataFabricacao,
             DateTime dataValidade)
         {
-            Id = id;
             Nome = nome;
             Composicao = composicao;
             DataFabricacao = dataFabricacao;
@@ -36,7 +33,6 @@ namespace GerenciadorHospital.Domain.Entites
         {
             DomainValidation domainValidation = new DomainValidation();
 
-            domainValidation.VerificaId(Id);
             domainValidation.VerificaSeStringNulaVaziaOuComNumero(Nome, nameof(Nome));
             domainValidation.VerificaSeStringNulaVaziaOuComNumero(Composicao, nameof(Composicao));
             domainValidation.VerificaDataNaoPodeSerNoPassado(DataFabricacao, nameof(DataFabricacao));

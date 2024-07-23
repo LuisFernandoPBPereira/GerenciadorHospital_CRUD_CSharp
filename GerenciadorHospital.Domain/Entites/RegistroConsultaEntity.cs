@@ -4,7 +4,6 @@ namespace GerenciadorHospital.Domain.Entites
 {
     public class RegistroConsultaEntity
     {
-        public int Id { get; set; }
         public DateTime DataConsulta { get; set; }
         public decimal? Valor { get; set; }
         public DateTime? DataRetorno { get; set; }
@@ -17,7 +16,6 @@ namespace GerenciadorHospital.Domain.Entites
         public RegistroConsultaEntity() { }
 
         public RegistroConsultaEntity(
-            int id,
             DateTime dataConsulta,
             decimal? valor,
             DateTime? dataRetorno,
@@ -26,7 +24,6 @@ namespace GerenciadorHospital.Domain.Entites
             int? medicoId,
             int? exameId)
         {
-            Id = id;
             DataConsulta = dataConsulta;
             Valor = valor;
             DataRetorno = dataRetorno;
@@ -42,7 +39,6 @@ namespace GerenciadorHospital.Domain.Entites
         {
             DomainValidation domainValidation = new DomainValidation();
 
-            domainValidation.VerificaId(Id);
             domainValidation.VerificaId(PacienteId);
             domainValidation.VerificaId(MedicoId);
             domainValidation.VerificaId(ExameId);

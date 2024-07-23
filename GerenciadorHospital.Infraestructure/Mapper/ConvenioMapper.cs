@@ -9,7 +9,6 @@ public static class ConvenioMapper
     {
         return new ConvenioModel
         {
-            Id = convenio.Id,
             Nome = convenio.Nome,
             Preco = convenio.Preco
         };
@@ -19,7 +18,6 @@ public static class ConvenioMapper
     {
         return new ConvenioEntity
         {
-            Id = convenio.Id,
             Nome = convenio.Nome,
             Preco = convenio.Preco
         };

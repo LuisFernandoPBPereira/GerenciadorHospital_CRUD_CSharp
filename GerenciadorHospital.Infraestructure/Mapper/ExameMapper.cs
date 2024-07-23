@@ -9,7 +9,6 @@ public static class ExameMapper
     {
         return new TipoExameModel
         {
-            Id = exame.Id,
             MedicoId = exame.MedicoId,
             PacienteId = exame.PacienteId
         };
@@ -19,7 +18,6 @@ public static class ExameMapper
     {
         return new TipoExameEntity
         {
-            Id = exame.Id,
             MedicoId = exame.MedicoId,
             PacienteId = exame.PacienteId
         };

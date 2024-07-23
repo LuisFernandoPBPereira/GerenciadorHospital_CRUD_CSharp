@@ -4,7 +4,6 @@ namespace GerenciadorHospital.Domain.Entites
 {
     public class UsuarioEntity
     {
-        public int Id { get; set; }
         public string Nome { get; set; }
         public string Senha { get; set; }
         public string Role { get; set; }
@@ -16,9 +15,8 @@ namespace GerenciadorHospital.Domain.Entites
             Role = string.Empty;
         }
 
-        public UsuarioEntity(int id, string nome, string senha, string role)
+        public UsuarioEntity(string nome, string senha, string role)
         {
-            Id = id;
             Nome = nome;
             Senha = senha;
             Role = role;
@@ -30,7 +28,6 @@ namespace GerenciadorHospital.Domain.Entites
         {
             DomainValidation domainValidation = new DomainValidation();
 
-            domainValidation.VerificaId(Id);
             domainValidation.VerificaSeStringNulaVaziaOuComNumero(Nome, nameof(Nome));
             domainValidation.VerificaSeStringNulaVaziaOuComNumero(Role, nameof(Role));
             domainValidation.VerificaSenha(Senha);

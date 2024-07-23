@@ -1,6 +1,6 @@
 ﻿namespace GerenciadorHospital.Application.DTOs.Requests;
 
-public class TipoExameResponseDto
+public class TipoExameRequestDto
 {
     public string Nome { get; set; } = string.Empty;
     public int? PacienteId { get; set; }

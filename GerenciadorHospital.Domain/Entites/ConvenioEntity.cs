@@ -4,7 +4,6 @@ namespace GerenciadorHospital.Domain.Entites
 {
     public class ConvenioEntity
     {
-        public int Id { get; set; }
         public string Nome { get; set; }
         public decimal? Preco { get; set; }
 
@@ -13,9 +12,8 @@ namespace GerenciadorHospital.Domain.Entites
             Nome = string.Empty;
         }
 
-        public ConvenioEntity(int id, string nome, decimal preco)
+        public ConvenioEntity(string nome, decimal preco)
         {
-            Id = id;
             Nome = nome;
             Preco = preco;
 
@@ -25,8 +23,6 @@ namespace GerenciadorHospital.Domain.Entites
         private void Validate()
         {
             DomainValidation domainValidation = new DomainValidation();
-
-            domainValidation.VerificaId(Id);
             domainValidation.VerificaSeStringNulaVaziaOuComNumero(Nome, nameof(Nome));
             domainValidation.VerificaPreco(Preco);
 

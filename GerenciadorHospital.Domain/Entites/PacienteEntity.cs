@@ -4,7 +4,6 @@ namespace GerenciadorHospital.Domain.Entites
 {
     public class PacienteEntity
     {
-        public int Id { get; set; }
         public string Nome { get; set; }
         public string Cpf { get; set; }
         public string Senha { get; set; }
@@ -23,7 +22,7 @@ namespace GerenciadorHospital.Domain.Entites
             Endereco = string.Empty;
         }
 
-        public PacienteEntity(int id,
+        public PacienteEntity(
             string nome,
             string cpf,
             string senha,
@@ -34,7 +33,6 @@ namespace GerenciadorHospital.Domain.Entites
             string? imgDocumento,
             int? convenioId)
         {
-            Id = id;
             Nome = nome;
             Cpf = cpf;
             Senha = senha;
@@ -52,7 +50,6 @@ namespace GerenciadorHospital.Domain.Entites
         {
             DomainValidation domainValidation = new DomainValidation();
 
-            domainValidation.VerificaId(Id);
             domainValidation.VerificaSeStringNulaVaziaOuComNumero(Nome, nameof(Nome));
             domainValidation.VerificaCpf(Cpf);
             domainValidation.VerificaEndereco(Endereco);

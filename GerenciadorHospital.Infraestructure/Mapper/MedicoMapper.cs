@@ -9,10 +9,8 @@ public static class MedicoMapper
     {
         return new MedicoModel
         {
-            Id = medico.Id,
             Nome = medico.Nome,
             Cpf = medico.Cpf,
-            CaminhoDoc = medico.CaminhoDoc,
             DataNasc = medico.DataNasc,
             Endereco = medico.Endereco,
             Senha = medico.Senha,
@@ -25,10 +23,8 @@ public static class MedicoMapper
     {
         return new MedicoEntity
         {
-            Id = medico.Id,
             Nome = medico.Nome,
             Cpf = medico.Cpf,
-            CaminhoDoc = medico.CaminhoDoc,
             DataNasc = medico.DataNasc,
             Endereco = medico.Endereco,
             Senha = medico.Senha,
