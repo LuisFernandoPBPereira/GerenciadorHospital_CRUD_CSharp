@@ -5,14 +5,14 @@ namespace GerenciadorHospital.Domain.Entites
     public class ConvenioEntity
     {
         public string Nome { get; set; }
-        public decimal? Preco { get; set; }
+        public float Preco { get; set; }
 
         public ConvenioEntity() 
         { 
             Nome = string.Empty;
         }
 
-        public ConvenioEntity(string nome, decimal preco)
+        public ConvenioEntity(string nome, float preco)
         {
             Nome = nome;
             Preco = preco;

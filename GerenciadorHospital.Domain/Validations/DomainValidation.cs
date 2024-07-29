@@ -48,7 +48,7 @@ public class DomainValidation
         }
     }
 
-    public void VerificaPreco(decimal? preco)
+    public void VerificaPreco(float? preco)
     {
         if (preco is null || preco < 0)
             Erros.Add("Preço não pode ser negativo");

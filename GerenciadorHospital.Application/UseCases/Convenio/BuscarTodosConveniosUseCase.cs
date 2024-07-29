@@ -3,19 +3,19 @@ using GerenciadorHospital.Domain.Repository;
 
 namespace GerenciadorHospital.Application.UseCases.Convenio;
 
-public class BuscarPorIdConvenioUseCase
+public class BuscarTodosConveniosUseCase
 {
     private readonly IConvenio _convenio;
 
-    public BuscarPorIdConvenioUseCase(IConvenio convenio)
+    public BuscarTodosConveniosUseCase(IConvenio convenio)
     {
         _convenio = convenio;
     }
 
-    public async Task<ConvenioEntity> Executar(int id)
+    public async Task<IEnumerable<ConvenioEntity>> Executar()
     {
-        var convenioEntity = await _convenio.BuscarPorId(id);
+        var convenios = await _convenio.BuscarTodos();
 
-        return convenioEntity;
+        return convenios;
     }
 }

@@ -22,4 +22,16 @@ public static class ConvenioMapper
             Preco = convenio.Preco
         };
     }
+    
+    public static IEnumerable<ConvenioEntity> ToDomain(IEnumerable<ConvenioModel> convenios)
+    {
+        List<ConvenioEntity> conveniosEntity = [];
+
+        foreach (var convenio in convenios) 
+        {
+            conveniosEntity.Add(new ConvenioEntity { Nome = convenio.Nome, Preco = convenio.Preco });
+        }
+
+        return conveniosEntity;
+    }
 }

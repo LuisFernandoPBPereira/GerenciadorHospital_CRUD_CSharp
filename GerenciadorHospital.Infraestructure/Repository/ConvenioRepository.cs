@@ -30,9 +30,10 @@ public class ConvenioRepository : IConvenio
         return true;
     }
 
-    public async Task<ConvenioEntity> Atualizar(ConvenioEntity convenio)
+    public async Task<ConvenioEntity> Atualizar(int id, ConvenioEntity convenio)
     {
         var convenioModel = ConvenioMapper.ToModel(convenio);
+        convenioModel.Id = id;
         await _repo.UpdateAsync(convenioModel);
         await _repo.SaveChangesAsync();
 
@@ -45,5 +46,13 @@ public class ConvenioRepository : IConvenio
         var convenioEntity = ConvenioMapper.ToDomain(convenio);
 
         return convenioEntity;
+    }
+
+    public async Task<IEnumerable<ConvenioEntity>> BuscarTodos()
+    {
+        var convenios = await _repo.GetAllAsync();
+        var conveniosEntity = ConvenioMapper.ToDomain(convenios);
+
+        return conveniosEntity;
     }
 }

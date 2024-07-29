@@ -44,7 +44,7 @@ namespace GerenciadorHospital.Domain.Entites
             domainValidation.VerificaId(ExameId);
             domainValidation.VerificaDataNaoPodeSerNoPassado(DataConsulta, nameof(DataConsulta));
             domainValidation.VerificaDataNaoPodeSerNoPassado(DataRetorno, nameof(DataRetorno));
-            domainValidation.VerificaPreco(Valor);
+            //domainValidation.VerificaPreco(Valor);
 
             domainValidation.VerificaErros();
         }

@@ -1,13 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using GerenciadorHospital.Infraestructure.Data.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace GerenciadorHospital.Infraestructure.Data.ORM;
 
 public class EntityFrameworkORM<T> : IRepositorioORM<T> where T : class
 {
-    private readonly DbContext _context;
+    private readonly DatabaseContext _context;
     private readonly DbSet<T> _dbSet;
 
-    public EntityFrameworkORM(DbContext context)
+    public EntityFrameworkORM(DatabaseContext context)
     {
         _context = context;
         _dbSet = _context.Set<T>();
