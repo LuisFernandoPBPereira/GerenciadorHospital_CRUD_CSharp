@@ -11,7 +11,7 @@ public class RemoverLaudoUseCase
         _laudo = laudo;
     }
 
-    public async Task<bool> Remover(int id)
+    public async Task<bool> Executar(int id)
     {
         var laudoRemovido = await _laudo.Apagar(id);
 

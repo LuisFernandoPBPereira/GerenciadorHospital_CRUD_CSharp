@@ -19,6 +19,7 @@ public static class ConvenioMapper
     {
         return new ConvenioEntity
         {
+            Id = convenio.Id,
             Nome = convenio.Nome,
             Preco = convenio.Preco
         };
@@ -30,7 +31,7 @@ public static class ConvenioMapper
 
         foreach (var convenio in convenios) 
         {
-            conveniosEntity.Add(new ConvenioEntity { Nome = convenio.Nome, Preco = convenio.Preco });
+            conveniosEntity.Add(new ConvenioEntity { Id = convenio.Id, Nome = convenio.Nome, Preco = convenio.Preco });
         }
 
         return conveniosEntity;

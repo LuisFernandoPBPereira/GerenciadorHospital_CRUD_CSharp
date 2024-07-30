@@ -21,6 +21,7 @@ public static class ExameMapper
     {
         return new TipoExameEntity
         {
+            Id= exame.Id,
             Nome = exame.Nome,
             MedicoId = exame.MedicoId,
             PacienteId = exame.PacienteId
@@ -35,6 +36,7 @@ public static class ExameMapper
         {
             var exameEntity = new TipoExameEntity
             {
+                Id = exame.Id,
                 Nome = exame.Nome,
                 MedicoId = exame.MedicoId,
                 PacienteId = exame.PacienteId

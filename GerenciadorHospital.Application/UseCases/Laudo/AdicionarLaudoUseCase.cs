@@ -13,7 +13,7 @@ public class AdicionarLaudoUseCase
         _laudo = laudo;
     }
 
-    public async Task<LaudoEntity> Adicionar(LaudoRequestDto laudoDto)
+    public async Task<LaudoEntity> Executar(LaudoRequestDto laudoDto)
     {
         var laudoEntity = new LaudoEntity(
             laudoDto.Descricao, 

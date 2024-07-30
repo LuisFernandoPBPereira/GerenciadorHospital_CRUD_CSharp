@@ -48,4 +48,12 @@ public class LaudoRepository : ILaudo
         
         return laudoEntity;
     }
+    
+    public async Task<IEnumerable<LaudoEntity>> BuscarTodos()
+    {
+        var laudos = await _repo.GetAllAsync();
+        var laudosEntity = LaudoMapper.ToDomain(laudos);
+        
+        return laudosEntity;
+    }
 }

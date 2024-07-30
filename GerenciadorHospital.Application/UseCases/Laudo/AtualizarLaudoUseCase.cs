@@ -4,18 +4,19 @@ using GerenciadorHospital.Domain.Repository;
 
 namespace GerenciadorHospital.Application.UseCases.Laudo;
 
-public class AtualizarLaduoUseCase
+public class AtualizarLaudoUseCase
 {
     private readonly ILaudo _laudo;
 
-    public AtualizarLaduoUseCase(ILaudo laudo)
+    public AtualizarLaudoUseCase(ILaudo laudo)
     {
         _laudo = laudo;
     }
 
-    public async Task<LaudoEntity> Atualizar(LaudoRequestDto laudoDto)
+    public async Task<LaudoEntity> Executar(int id, LaudoRequestDto laudoDto)
     {
         var laudoEntity = new LaudoEntity(
+            id,
             laudoDto.Descricao,
             laudoDto.DataCriacao,
             laudoDto.PacienteId,
