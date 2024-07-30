@@ -22,7 +22,7 @@ public class AdicionarConvenioController : ControllerBase
     {
         try
         {
-            var convenio = await _adicionarConvenioUseCase.Adicionar(convenioDto);
+            var convenio = await _adicionarConvenioUseCase.Executar(convenioDto);
 
             return Created();
         }

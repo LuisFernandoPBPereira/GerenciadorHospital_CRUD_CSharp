@@ -12,7 +12,7 @@ public class RemoverConvenioUseCase
         _convenio = convenio;
     }
 
-    public async Task<bool> Remover(int id)
+    public async Task<bool> Executar(int id)
     {
         var convenioRemovido = await _convenio.Apagar(id);
 

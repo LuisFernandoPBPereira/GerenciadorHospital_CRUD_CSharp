@@ -3,11 +3,11 @@ using GerenciadorHospital.Domain.Repository;
 
 namespace GerenciadorHospital.Application.UseCases.Consulta;
 
-public class BuscarPorIdConsultaUseCase
+public class ConsultaPorIdUseCase
 {
     private readonly IRegistroConsulta _consulta;
 
-    public BuscarPorIdConsultaUseCase(IRegistroConsulta consulta)
+    public ConsultaPorIdUseCase(IRegistroConsulta consulta)
     {
         _consulta = consulta;
     }

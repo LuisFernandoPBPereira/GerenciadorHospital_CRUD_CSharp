@@ -18,7 +18,8 @@ public class AdicionarConsultaUseCase
         var consultaEntity = new RegistroConsultaEntity(
             consultaDto.DataConsulta, 
             consultaDto.Valor, 
-            consultaDto.DataRetorno, 
+            consultaDto.DataRetorno,
+            consultaDto.EstadoConsulta,
             consultaDto.Retorno, 
             consultaDto.PacienteId, 
             consultaDto.MedicoId, 

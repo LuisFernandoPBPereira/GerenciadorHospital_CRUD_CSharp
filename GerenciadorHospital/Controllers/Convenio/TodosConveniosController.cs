@@ -9,9 +9,9 @@ namespace GerenciadorHospital.Controllers.Convenio;
 [ApiController]
 public class TodosConveniosController : ControllerBase
 {
-    private readonly BuscarTodosConveniosUseCase _buscarTodosConveniosUseCase;
+    private readonly TodosConveniosUseCase _buscarTodosConveniosUseCase;
 
-    public TodosConveniosController(BuscarTodosConveniosUseCase buscarTodosConveniosUseCase)
+    public TodosConveniosController(TodosConveniosUseCase buscarTodosConveniosUseCase)
     {
         _buscarTodosConveniosUseCase = buscarTodosConveniosUseCase;
     }

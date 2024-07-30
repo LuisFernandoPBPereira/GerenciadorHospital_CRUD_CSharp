@@ -48,4 +48,12 @@ public class TipoExameRepository : ITipoExame
 
         return exameEntity;
     }
+
+    public async Task<IEnumerable<TipoExameEntity>> BuscarTodos()
+    {
+        var exames = await _repo.GetAllAsync();
+        var examesEntity = ExameMapper.ToDomain(exames);
+        
+        return examesEntity;
+    }
 }

@@ -13,7 +13,7 @@ public class AdicionarExameUseCase
         _exame = exame;
     }
 
-    public async Task<TipoExameEntity> Adicionar(TipoExameRequestDto exameDto)
+    public async Task<TipoExameEntity> Executar(TipoExameRequestDto exameDto)
     {
         var exameEntity = new TipoExameEntity(exameDto.Nome, exameDto.PacienteId, exameDto.MedicoId);
         var exameAdicionado = await _exame.Adicionar(exameEntity);

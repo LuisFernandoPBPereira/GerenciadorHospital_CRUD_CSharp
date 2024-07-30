@@ -13,9 +13,9 @@ public class AtualizarExameUseCase
         _exame = exame;
     }
 
-    public async Task<TipoExameEntity> Atualizar(TipoExameRequestDto exameDto)
+    public async Task<TipoExameEntity> Executar(int id, TipoExameRequestDto exameDto)
     {
-        var exameEntity = new TipoExameEntity(exameDto.Nome, exameDto.PacienteId, exameDto.MedicoId);
+        var exameEntity = new TipoExameEntity(id, exameDto.Nome, exameDto.PacienteId, exameDto.MedicoId);
         var exameAtualizado = await _exame.Atualizar(exameEntity);
 
         return exameAtualizado;

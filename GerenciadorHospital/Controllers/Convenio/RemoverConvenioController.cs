@@ -21,7 +21,7 @@ public class RemoverConvenioController : ControllerBase
     {
         try
         {
-            var convenioApagado = await _removerConvenioUseCase.Remover(id);
+            var convenioApagado = await _removerConvenioUseCase.Executar(id);
             
             return Ok(convenioApagado);
         }

@@ -22,7 +22,7 @@ public class AtualizarConvenioController : ControllerBase
     {
         try
         {
-            await _atualizarConvenioUseCase.Atualizar(id, convenioDto);
+            await _atualizarConvenioUseCase.Executar(id, convenioDto);
             return Ok();
         }
         catch (DomainException ex)

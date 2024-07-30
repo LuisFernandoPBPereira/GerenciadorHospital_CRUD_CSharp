@@ -1,4 +1,6 @@
-﻿namespace GerenciadorHospital.Application.DTOs.Responses;
+﻿using GerenciadorHospital.Domain.Entites;
+
+namespace GerenciadorHospital.Application.DTOs.Responses;
 
 public class LaudoResponseDto
 {
@@ -9,4 +11,15 @@ public class LaudoResponseDto
     public int? MedicoId { get; set; }
     public int? MedicamentoId { get; set; }
     public int? RegistroConsultaModelId { get; set; }
+
+    public LaudoResponseDto(LaudoEntity laudo)
+    {
+        Descricao = laudo.Descricao;
+        DataCriacao = laudo.DataCriacao;
+        CaminhoImagemLaudo = laudo.CaminhoImagemLaudo;
+        PacienteId = laudo.PacienteId;
+        MedicoId = laudo.MedicoId;
+        MedicamentoId = laudo.MedicamentoId;
+        RegistroConsultaModelId = laudo.RegistroConsultaModelId;
+    }
 }

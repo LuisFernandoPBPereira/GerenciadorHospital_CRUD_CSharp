@@ -1,4 +1,5 @@
 using GerenciadorHospital.Application.UseCases.Convenio;
+using GerenciadorHospital.Application.UseCases.Exame;
 using GerenciadorHospital.Domain.Repository;
 using GerenciadorHospital.Infraestructure.Data.Context;
 using GerenciadorHospital.Infraestructure.Data.ORM;
@@ -96,13 +97,20 @@ builder.Services.AddSwaggerGen(c =>
 
 #region Configuração das Injeções de Dependência (adição do escopo)
 builder.Services.AddScoped(typeof(IRepositorioORM<>), typeof(EntityFrameworkORM<>));
-builder.Services.AddScoped<IConvenio, ConvenioRepository>();
 
-builder.Services.AddScoped<BuscarTodosConveniosUseCase>();
-builder.Services.AddScoped<BuscarPorIdConvenioUseCase>();
+builder.Services.AddScoped<IConvenio, ConvenioRepository>();
+builder.Services.AddScoped<TodosConveniosUseCase>();
+builder.Services.AddScoped<ConvenioPorIdUseCase>();
 builder.Services.AddScoped<AdicionarConvenioUseCase>();
 builder.Services.AddScoped<RemoverConvenioUseCase>();
 builder.Services.AddScoped<AtualizarConvenioUseCase>();
+
+builder.Services.AddScoped<ITipoExame, TipoExameRepository>();
+builder.Services.AddScoped<TodosExamesUseCase>();
+builder.Services.AddScoped<ExamePorIdUseCase>();
+builder.Services.AddScoped<AdicionarExameUseCase>();
+builder.Services.AddScoped<RemoverExameUseCase>();
+builder.Services.AddScoped<AtualizarExameUseCase>();
 
 #endregion
 

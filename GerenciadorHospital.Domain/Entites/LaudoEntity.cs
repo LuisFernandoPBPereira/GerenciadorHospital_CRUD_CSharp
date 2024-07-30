@@ -7,6 +7,7 @@ namespace GerenciadorHospital.Domain.Entites
         public int Id { get; set; }
         public string Descricao { get; set; }
         public DateTime? DataCriacao { get; set; }
+        public string CaminhoImagemLaudo { get; set; }
         public int? PacienteId { get; set; }
         public int? MedicoId { get; set; }
         public int? MedicamentoId { get; set; }
@@ -14,6 +15,7 @@ namespace GerenciadorHospital.Domain.Entites
         public LaudoEntity() 
         { 
             Descricao = string.Empty;
+            CaminhoImagemLaudo = string.Empty;
         }
 
         public LaudoEntity(

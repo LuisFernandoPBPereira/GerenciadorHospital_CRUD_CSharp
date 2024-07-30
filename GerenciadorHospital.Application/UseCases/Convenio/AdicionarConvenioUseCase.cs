@@ -13,7 +13,7 @@ public class AdicionarConvenioUseCase
         _convenio = convenio;
     }
 
-    public async Task<ConvenioEntity> Adicionar(ConvenioRequestDto convenioDto)
+    public async Task<ConvenioEntity> Executar(ConvenioRequestDto convenioDto)
     {
         var convenioEntity = new ConvenioEntity(convenioDto.Nome, convenioDto.Preco);
         var convenioAdicionado = await _convenio.Adicionar(convenioEntity);

@@ -7,15 +7,15 @@ namespace GerenciadorHospital.Application.UseCases.Convenio;
 public class AtualizarConvenioUseCase
 {
     private readonly IConvenio _convenio;
-    private readonly BuscarPorIdConvenioUseCase _buscarPorIdConvenioUseCase;
+    private readonly ConvenioPorIdUseCase _buscarPorIdConvenioUseCase;
 
-    public AtualizarConvenioUseCase(IConvenio convenio, BuscarPorIdConvenioUseCase buscarPorIdConvenioUseCase)
+    public AtualizarConvenioUseCase(IConvenio convenio, ConvenioPorIdUseCase buscarPorIdConvenioUseCase)
     {
         _convenio = convenio;
         _buscarPorIdConvenioUseCase = buscarPorIdConvenioUseCase;
     }
 
-    public async Task<ConvenioEntity> Atualizar(int id, ConvenioRequestDto convenioDto)
+    public async Task<ConvenioEntity> Executar(int id, ConvenioRequestDto convenioDto)
     {
         var convenio = new ConvenioEntity(id, convenioDto.Nome, convenioDto.Preco);
         

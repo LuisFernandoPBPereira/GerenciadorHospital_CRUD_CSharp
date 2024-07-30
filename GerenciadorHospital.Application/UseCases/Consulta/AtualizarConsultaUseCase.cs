@@ -19,6 +19,7 @@ public class AtualizarConsultaUseCase
             consultaDto.DataConsulta,
             consultaDto.Valor,
             consultaDto.DataRetorno,
+            consultaDto.EstadoConsulta,
             consultaDto.Retorno,
             consultaDto.PacienteId,
             consultaDto.MedicoId,

@@ -7,6 +7,7 @@ namespace GerenciadorHospital.Domain.Entites
         public int Id { get; set; }
         public string Nome { get; set; }
         public string Cpf { get; set; }
+        public string CaminhoDoc { get; set; }
         public string Senha { get; set; }
         public string Endereco { get; set; }
         public DateTime DataNasc { get; set; }
@@ -17,6 +18,7 @@ namespace GerenciadorHospital.Domain.Entites
         {
             Nome = string.Empty;
             Cpf = string.Empty;
+            CaminhoDoc = string.Empty;
             Senha = string.Empty;
             Endereco = string.Empty;
             Crm = string.Empty;
