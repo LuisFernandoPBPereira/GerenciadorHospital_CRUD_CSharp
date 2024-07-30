@@ -34,4 +34,28 @@ public static class MedicoMapper
             Especializacao = medico.Especializacao
         };
     }
+    
+    public static IEnumerable<MedicoEntity> ToDomain(IEnumerable<MedicoModel> medicos)
+    {
+        var medicamentosEntity = new List<MedicoEntity>();
+
+        foreach (var medico in medicos)
+        {
+            var medicoEntity = new MedicoEntity
+            {
+                Id = medico.Id,
+                Nome = medico.Nome,
+                Cpf = medico.Cpf,
+                DataNasc = medico.DataNasc,
+                Endereco = medico.Endereco,
+                Senha = medico.Senha,
+                Crm = medico.Crm,
+                Especializacao = medico.Especializacao
+            };
+
+            medicamentosEntity.Add(medicoEntity);
+        }
+
+        return medicamentosEntity;
+    }
 }
