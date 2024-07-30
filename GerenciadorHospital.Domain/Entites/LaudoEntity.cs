@@ -4,6 +4,7 @@ namespace GerenciadorHospital.Domain.Entites
 {
     public class LaudoEntity
     {
+        public int Id { get; set; }
         public string Descricao { get; set; }
         public DateTime? DataCriacao { get; set; }
         public int? PacienteId { get; set; }
@@ -23,6 +24,26 @@ namespace GerenciadorHospital.Domain.Entites
             int? medicamentoId,
             int? registroConsultaModelId)
         {
+            Descricao = descricao;
+            DataCriacao = dataCriacao;
+            PacienteId = pacienteId;
+            MedicoId = medicoId;
+            MedicamentoId = medicamentoId;
+            RegistroConsultaModelId = registroConsultaModelId;
+
+            Validate();
+        }
+        
+        public LaudoEntity(
+            int id,
+            string descricao,
+            DateTime? dataCriacao,
+            int? pacienteId,
+            int? medicoId,
+            int? medicamentoId,
+            int? registroConsultaModelId)
+        {
+            Id = id;
             Descricao = descricao;
             DataCriacao = dataCriacao;
             PacienteId = pacienteId;

@@ -17,9 +17,9 @@ public class AtualizarConvenioUseCase
 
     public async Task<ConvenioEntity> Atualizar(int id, ConvenioRequestDto convenioDto)
     {
-        var convenio = new ConvenioEntity(convenioDto.Nome, convenioDto.Preco);
+        var convenio = new ConvenioEntity(id, convenioDto.Nome, convenioDto.Preco);
         
-        var convenioAtualizado = await _convenio.Atualizar(id, convenio);
+        var convenioAtualizado = await _convenio.Atualizar(convenio);
 
         return convenioAtualizado;
     }

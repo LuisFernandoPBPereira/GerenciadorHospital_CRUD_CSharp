@@ -4,6 +4,7 @@ namespace GerenciadorHospital.Domain.Entites
 {
     public class ConvenioEntity
     {
+        public int Id { get; set; }
         public string Nome { get; set; }
         public float Preco { get; set; }
 
@@ -12,6 +13,15 @@ namespace GerenciadorHospital.Domain.Entites
             Nome = string.Empty;
         }
 
+        public ConvenioEntity(int id, string nome, float preco)
+        {
+            Id = id;
+            Nome = nome;
+            Preco = preco;
+
+            Validate();
+        }
+        
         public ConvenioEntity(string nome, float preco)
         {
             Nome = nome;

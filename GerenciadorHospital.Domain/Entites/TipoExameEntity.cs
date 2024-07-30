@@ -4,6 +4,7 @@ namespace GerenciadorHospital.Domain.Entites
 {
     public class TipoExameEntity
     {
+        public int Id { get; set; }
         public string Nome { get; set; }
         public int? PacienteId { get; set; }
         public int? MedicoId { get; set; }
@@ -15,6 +16,16 @@ namespace GerenciadorHospital.Domain.Entites
 
         public TipoExameEntity( string nome, int? pacienteId, int? medicoId)
         {
+            Nome = nome;
+            PacienteId = pacienteId;
+            MedicoId = medicoId;
+
+            Validate();
+        }
+        
+        public TipoExameEntity(int id, string nome, int? pacienteId, int? medicoId)
+        {
+            Id = id;
             Nome = nome;
             PacienteId = pacienteId;
             MedicoId = medicoId;

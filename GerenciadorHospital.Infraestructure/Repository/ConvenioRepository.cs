@@ -30,10 +30,9 @@ public class ConvenioRepository : IConvenio
         return true;
     }
 
-    public async Task<ConvenioEntity> Atualizar(int id, ConvenioEntity convenio)
+    public async Task<ConvenioEntity> Atualizar(ConvenioEntity convenio)
     {
         var convenioModel = ConvenioMapper.ToModel(convenio);
-        convenioModel.Id = id;
         await _repo.UpdateAsync(convenioModel);
         await _repo.SaveChangesAsync();
 

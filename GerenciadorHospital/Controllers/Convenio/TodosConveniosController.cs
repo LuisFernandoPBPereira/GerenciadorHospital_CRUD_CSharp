@@ -1,4 +1,5 @@
 ﻿using GerenciadorHospital.Application.UseCases.Convenio;
+using GerenciadorHospital.Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GerenciadorHospital.Controllers.Convenio;
@@ -23,9 +24,14 @@ public class TodosConveniosController : ControllerBase
             var convenios = await _buscarTodosConveniosUseCase.Executar();
             return Ok(convenios);
         }
+        catch (DomainException ex)
+        {
+            return BadRequest(ex.Mensagem);
+        }
+        
         catch (Exception ex)
         {
-            return BadRequest(ex);
+            return BadRequest(ex.Message);
         }
     }
 }

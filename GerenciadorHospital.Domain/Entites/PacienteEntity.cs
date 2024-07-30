@@ -4,6 +4,7 @@ namespace GerenciadorHospital.Domain.Entites
 {
     public class PacienteEntity
     {
+        public int Id { get; set; }
         public string Nome { get; set; }
         public string Cpf { get; set; }
         public string Senha { get; set; }
@@ -33,6 +34,32 @@ namespace GerenciadorHospital.Domain.Entites
             string? imgDocumento,
             int? convenioId)
         {
+            Nome = nome;
+            Cpf = cpf;
+            Senha = senha;
+            Endereco = endereco;
+            DataNasc = dataNasc;
+            TemConvenio = temConvenio;
+            ImgCarteiraDoConvenio = imgCarteiraDoConvenio;
+            ImgDocumento = imgDocumento;
+            ConvenioId = convenioId;
+
+            Validate();
+        }
+        
+        public PacienteEntity(
+            int id,
+            string nome,
+            string cpf,
+            string senha,
+            string endereco,
+            DateTime dataNasc,
+            bool temConvenio,
+            string? imgCarteiraDoConvenio,
+            string? imgDocumento,
+            int? convenioId)
+        {
+            Id = id;
             Nome = nome;
             Cpf = cpf;
             Senha = senha;

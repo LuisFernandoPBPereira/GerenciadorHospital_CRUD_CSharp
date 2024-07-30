@@ -1,5 +1,6 @@
 ﻿using GerenciadorHospital.Application.DTOs.Requests;
 using GerenciadorHospital.Application.UseCases.Convenio;
+using GerenciadorHospital.Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GerenciadorHospital.Controllers.Convenio;
@@ -24,6 +25,10 @@ public class AdicionarConvenioController : ControllerBase
             var convenio = await _adicionarConvenioUseCase.Adicionar(convenioDto);
 
             return Created();
+        }
+        catch (DomainException ex)
+        {
+            return BadRequest(ex.Mensagem);
         }
         catch (Exception ex)
         {

@@ -31,8 +31,7 @@ public class EntityFrameworkORM<T> : IRepositorioORM<T> where T : class
 
     public async Task UpdateAsync(T entity)
     {
-        _dbSet.Attach(entity);
-        _context.Entry(entity).State = EntityState.Modified;
+        _dbSet.Update(entity);
     }
 
     public async Task DeleteAsync(int id)

@@ -1,4 +1,5 @@
 ﻿using GerenciadorHospital.Application.UseCases.Convenio;
+using GerenciadorHospital.Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GerenciadorHospital.Controllers.Convenio;
@@ -24,6 +25,11 @@ public class RemoverConvenioController : ControllerBase
             
             return Ok(convenioApagado);
         }
+        catch (DomainException ex)
+        {
+            return BadRequest(ex.Mensagem);
+        }
+        
         catch (Exception ex)
         {
             return BadRequest(ex.Message);

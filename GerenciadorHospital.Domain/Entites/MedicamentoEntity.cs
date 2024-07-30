@@ -4,6 +4,7 @@ namespace GerenciadorHospital.Domain.Entites
 {
     public class MedicamentoEntity
     {
+        public int Id { get; set; }
         public string Nome { get; set; }
         public string Composicao { get; set; }
         public DateTime DataFabricacao { get; set; }
@@ -21,6 +22,22 @@ namespace GerenciadorHospital.Domain.Entites
             DateTime dataFabricacao,
             DateTime dataValidade)
         {
+            Nome = nome;
+            Composicao = composicao;
+            DataFabricacao = dataFabricacao;
+            DataValidade = dataValidade;
+
+            Validate();
+        }
+        
+        public MedicamentoEntity(
+            int id,
+            string nome,
+            string composicao,
+            DateTime dataFabricacao,
+            DateTime dataValidade)
+        {
+            Id = id;
             Nome = nome;
             Composicao = composicao;
             DataFabricacao = dataFabricacao;

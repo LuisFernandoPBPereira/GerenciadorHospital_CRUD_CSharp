@@ -4,6 +4,7 @@ namespace GerenciadorHospital.Domain.Entites
 {
     public class MedicoEntity
     {
+        public int Id { get; set; }
         public string Nome { get; set; }
         public string Cpf { get; set; }
         public string Senha { get; set; }
@@ -31,6 +32,28 @@ namespace GerenciadorHospital.Domain.Entites
             string crm,
             string especializacao)
         {
+            Nome = nome;
+            Cpf = cpf;
+            Senha = senha;
+            Endereco = endereco;
+            DataNasc = dataNasc;
+            Crm = crm;
+            Especializacao = especializacao;
+
+            Validate();
+        }
+        
+        public MedicoEntity(
+            int id,
+            string nome,
+            string cpf,
+            string senha,
+            string endereco,
+            DateTime dataNasc,
+            string crm,
+            string especializacao)
+        {
+            Id = id;
             Nome = nome;
             Cpf = cpf;
             Senha = senha;
