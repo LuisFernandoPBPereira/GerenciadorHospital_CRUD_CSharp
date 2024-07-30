@@ -48,4 +48,12 @@ public class MedicamentoRepository : IMedicamento
         
         return medicamentoEntity;
     }
+
+    public async Task<IEnumerable<MedicamentoEntity>> BuscarTodos()
+    {
+        var medicamentos = await _repo.GetAllAsync();
+        var medicamentosEntity = MedicamentoMapper.ToDomain(medicamentos);
+
+        return medicamentosEntity;
+    }
 }

@@ -9,6 +9,7 @@ public static class PacienteMapper
     {
         return new PacienteModel
         {
+            Id = paciente.Id,
             Nome = paciente.Nome,
             Cpf = paciente.Cpf,
             DataNasc = paciente.DataNasc,
@@ -25,6 +26,7 @@ public static class PacienteMapper
     {
         return new PacienteEntity
         {
+            Id = paciente.Id,
             Nome = paciente.Nome,
             Cpf = paciente.Cpf,
             DataNasc = paciente.DataNasc,

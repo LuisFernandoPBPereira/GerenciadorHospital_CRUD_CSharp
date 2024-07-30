@@ -9,6 +9,7 @@ public static class MedicoMapper
     {
         return new MedicoModel
         {
+            Id = medico.Id,
             Nome = medico.Nome,
             Cpf = medico.Cpf,
             DataNasc = medico.DataNasc,
@@ -23,6 +24,7 @@ public static class MedicoMapper
     {
         return new MedicoEntity
         {
+            Id = medico.Id,
             Nome = medico.Nome,
             Cpf = medico.Cpf,
             DataNasc = medico.DataNasc,

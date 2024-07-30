@@ -13,7 +13,7 @@ public class AdicionarMedicamentoUseCase
         _medicamento = medicamento;
     }
 
-    public async Task<MedicamentoEntity> Adicionar(MedicamentoRequestDto medicamentoDto)
+    public async Task<MedicamentoEntity> Executar(MedicamentoRequestDto medicamentoDto)
     {
         var medicamentoEntity = new MedicamentoEntity(
             medicamentoDto.Nome,

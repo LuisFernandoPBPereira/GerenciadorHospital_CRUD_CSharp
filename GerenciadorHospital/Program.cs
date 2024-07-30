@@ -1,6 +1,7 @@
 using GerenciadorHospital.Application.UseCases.Convenio;
 using GerenciadorHospital.Application.UseCases.Exame;
 using GerenciadorHospital.Application.UseCases.Laudo;
+using GerenciadorHospital.Application.UseCases.Medicamento;
 using GerenciadorHospital.Domain.Repository;
 using GerenciadorHospital.Infraestructure.Data.Context;
 using GerenciadorHospital.Infraestructure.Data.ORM;
@@ -119,6 +120,13 @@ builder.Services.AddScoped<LaudoPorIdUseCase>();
 builder.Services.AddScoped<AdicionarLaudoUseCase>();
 builder.Services.AddScoped<RemoverLaudoUseCase>();
 builder.Services.AddScoped<AtualizarLaudoUseCase>();
+
+builder.Services.AddScoped<IMedicamento, MedicamentoRepository>();
+builder.Services.AddScoped<TodosMedicamentosUseCase>();
+builder.Services.AddScoped<MedicamentoPorIdUseCase>();
+builder.Services.AddScoped<AdicionarMedicamentoUseCase>();
+builder.Services.AddScoped<RemoverMedicamentoUseCase>();
+builder.Services.AddScoped<AtualizarMedicamentoUseCase>();
 
 #endregion
 

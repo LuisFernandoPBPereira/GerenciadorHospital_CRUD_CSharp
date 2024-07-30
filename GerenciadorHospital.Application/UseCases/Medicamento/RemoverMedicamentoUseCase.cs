@@ -11,7 +11,7 @@ public class RemoverMedicamentoUseCase
         _medicamento = medicamento;
     }
 
-    public async Task<bool> Remover(int id)
+    public async Task<bool> Executar(int id)
     {
         var medicamentoRemovido = await _medicamento.Apagar(id);
 

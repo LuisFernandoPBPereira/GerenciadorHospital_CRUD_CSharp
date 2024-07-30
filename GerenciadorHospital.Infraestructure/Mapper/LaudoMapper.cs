@@ -23,8 +23,10 @@ public static class LaudoMapper
     {
         return new LaudoEntity
         {
+            Id= laudo.Id,
             Descricao = laudo.Descricao,
             DataCriacao = laudo.DataCriacao,
+            CaminhoImagemLaudo = laudo.CaminhoImagemLaudo,
             MedicamentoId = laudo.MedicamentoId,
             MedicoId = laudo.MedicoId,
             PacienteId = laudo.PacienteId,

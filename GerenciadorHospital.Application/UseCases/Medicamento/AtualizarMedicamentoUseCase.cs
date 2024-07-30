@@ -13,9 +13,10 @@ public class AtualizarMedicamentoUseCase
         _medicamento = medicamento;
     }
 
-    public async Task<MedicamentoEntity> Atualizar(MedicamentoRequestDto medicamentoDto)
+    public async Task<MedicamentoEntity> Executar(int id, MedicamentoRequestDto medicamentoDto)
     {
         var medicamentoEntity = new MedicamentoEntity(
+            id,
             medicamentoDto.Nome,
             medicamentoDto.Composicao,
             medicamentoDto.DataFabricacao,

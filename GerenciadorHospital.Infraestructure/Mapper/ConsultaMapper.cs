@@ -9,6 +9,7 @@ public static class ConsultaMapper
     {
         return new RegistroConsultaModel
         {
+            Id = consulta.Id,
             DataConsulta = consulta.DataConsulta,
             DataRetorno = consulta.DataRetorno,
             PacienteId = consulta.PacienteId,
@@ -23,6 +24,7 @@ public static class ConsultaMapper
     {
         return new RegistroConsultaEntity
         {
+            Id = consulta.Id,
             DataConsulta = consulta.DataConsulta,
             DataRetorno = consulta.DataRetorno,
             PacienteId = consulta.PacienteId,
